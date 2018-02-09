@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class TileSpot : MonoBehaviour {
 
-    public int Number; 
+    public int Number;
+    public bool Used = false;
 	// Use this for initialization
 	void Start () {
 		

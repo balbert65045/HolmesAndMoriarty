@@ -4,13 +4,27 @@ using UnityEngine;
 
 public class CardDeck : MonoBehaviour {
 
-    public List<Card> CardsInDeck;
 
+    public List<Card> CardsInDeck;
+    public List<Card> InitialCards;
 	// Use this for initialization
 	void Start () {
-		
-	}
-	
+        foreach (Card card in CardsInDeck)
+        {
+            InitialCards.Add(card);
+        }
+
+    }
+
+    public void ResetCards()
+    {
+        CardsInDeck.Clear();
+        foreach (Card card in InitialCards)
+        {
+            CardsInDeck.Add(card);
+        }
+    }
+
     public Card DrawCard()
     {
         int RandomCardIndex = Random.Range(0, CardsInDeck.Count);

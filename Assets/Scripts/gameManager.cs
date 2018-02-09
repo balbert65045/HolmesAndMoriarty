@@ -10,6 +10,7 @@ public class gameManager : MonoBehaviour {
 
     TileArea tileArea;
 
+    public int CurrentTurnOn = 1;
     public int CurrentCaseOn = 1;
 
     CardArea CrimeArea;
@@ -21,6 +22,7 @@ public class gameManager : MonoBehaviour {
     PlayerController playerController;
     AIController aiController;
     CardHand cardHand;
+    CardDeck cardDeck;
 
     public List<Card> PlayersCards = new List<Card>();
     public List<Card> AICards = new List<Card>();
@@ -29,6 +31,7 @@ public class gameManager : MonoBehaviour {
        
         endTurnButton = FindObjectOfType<EndTurnButton>();
         tileArea = FindObjectOfType<TileArea>();
+        cardDeck = FindObjectOfType<CardDeck>();
         CardArea[] CardAreas = FindObjectsOfType<CardArea>();
         foreach (CardArea carda in CardAreas)
         {
@@ -63,7 +66,7 @@ public class gameManager : MonoBehaviour {
 	
     IEnumerator PlayersDrawCards()
     {
-        yield return new WaitForSeconds(.5f);
+        yield return new WaitForSeconds(1.5f);
         playerController.DrawCards(7);
         aiController.DrawCards(7);
     }
@@ -73,11 +76,11 @@ public class gameManager : MonoBehaviour {
         yield return new WaitForSeconds(1f);
         playerController.ResetCards();
         aiController.ResetCards();
-        //ClueArea
-        //CrimeArea
-        //AClueArea
-        //ACrimeArea
-
+        ClueArea.ClearCards();
+        CrimeArea.ClearCards();
+        AClueArea.ClearCards();
+        ACrimeArea.ClearCards();
+        cardDeck.ResetCards();
     }
 
     public void CheckEndTurn()
@@ -90,19 +93,41 @@ public class gameManager : MonoBehaviour {
 
     public void EndTurn()
     {
-        endTurnButton.DisableEndTurn();
-        if (CurrentCaseOn == 3)
+        if (CurrentCaseOn == 4)
+        {
+            endTurnButton.DisableEndTurn();
+            StartCoroutine("Reset");
+            StartCoroutine("PlayersDrawCards");
+            CurrentCaseOn = 1;
+        }
+        else if (CurrentCaseOn == 3)
         {
             for (int i = 1; i <= 3; i++)
             {
                 CheckForScore(i);
             }
-            CurrentCaseOn = 1;
+            CheckForWin();
+            CurrentTurnOn++;
+            CurrentCaseOn++;
         }
         else
         {
+            endTurnButton.DisableEndTurn();
             CurrentCaseOn++;
             SwapCards();
+        }
+    }
+
+    void CheckForWin()
+    {
+        if (tileArea.CheckForMoriartyWin())
+        {
+            Debug.Log("Moriarty Wins");
+        }
+
+        if (CurrentTurnOn == 5)
+        {
+            Debug.Log("Holmes Wins");
         }
     }
 
@@ -136,10 +161,10 @@ public class gameManager : MonoBehaviour {
            switch (playerController.MyPlayerType)
             {
                 case PlayerType.Holmes:
-                    tileArea.PlaceTile(HolmesTile, PlayerClueCard.Number);
+                    tileArea.PlaceTile(HolmesTile, PlayerClueCard.Number, PlayerType.Holmes);
                     break;
                 case PlayerType.Moriarty:
-                    tileArea.PlaceTile(MoriartTile, PlayerCrimeCard.Number);
+                    tileArea.PlaceTile(MoriartTile, PlayerCrimeCard.Number, PlayerType.Moriarty);
                     break;
             }
         }
@@ -148,10 +173,10 @@ public class gameManager : MonoBehaviour {
             switch (aiController.MyPlayerType)
             {
                 case PlayerType.Holmes:
-                    tileArea.PlaceTile(HolmesTile, AIClueCard.Number);
+                    tileArea.PlaceTile(HolmesTile, AIClueCard.Number, PlayerType.Holmes);
                     break;
                 case PlayerType.Moriarty:
-                    tileArea.PlaceTile(MoriartTile, AICrimeCard.Number);
+                    tileArea.PlaceTile(MoriartTile, AICrimeCard.Number, PlayerType.Moriarty);
                     break;
             }
         }

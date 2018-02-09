@@ -46,6 +46,10 @@ public class PlayerController : MonoBehaviour {
                 //Select Card
                 if (Hit.transform.GetComponent<Card>())
                 {
+                    if (SelectedCard != null)
+                    {
+                        UnselectCard();
+                    }
                     Hit.transform.GetComponent<Card>().SelectCard();
                     SelectedCard = Hit.transform.GetComponent<Card>();
                 }
@@ -66,7 +70,6 @@ public class PlayerController : MonoBehaviour {
                         UnselectCard();
                     }
                 }
-
 
                 //Unselect
                 else

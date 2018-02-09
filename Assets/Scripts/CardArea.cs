@@ -74,6 +74,7 @@ public class CardArea : MonoBehaviour {
     {
         foreach (RowAreaPosition RP in Positions)
         {
+            RP.InUse = false;
             Destroy(RP.GetComponentInChildren<Card>().gameObject);
         }
     }

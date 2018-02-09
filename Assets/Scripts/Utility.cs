@@ -6,3 +6,10 @@ public enum PlayerType
     Moriarty,
 }
 
+public enum TileType
+{
+    None,
+    Holmes,
+    Moriarty
+}
+
