@@ -12,13 +12,26 @@ public class CaseArea : MonoBehaviour {
         caseDeck = FindObjectOfType<CaseDeck>();
     }
 
-    public void PlaceCard(GameObject CaseCard)
+
+    public void ClearCards()
     {
         for (int i = 0; i < Positions.Length; i++)
         {
-            if (!Positions[i].GetComponentInChildren<Transform>())
+            if (Positions[i].GetComponentInChildren<CaseCard>())
             {
-                Instantiate(CaseCard, Positions[i]);
+                Destroy(Positions[i].GetComponentInChildren<CaseCard>().gameObject);
+            }
+        }
+    }
+
+    public void PlaceCards()
+    {
+        for (int i = 0; i < Positions.Length; i++)
+        {
+            Card cardDrawn = caseDeck.DrawCard();
+            if (!Positions[i].GetComponentInChildren<CaseCard>())
+            {
+                Instantiate(cardDrawn.gameObject, Positions[i]);
             }
         }
     }

@@ -69,6 +69,7 @@ public class gameManager : MonoBehaviour {
         yield return new WaitForSeconds(1.5f);
         playerController.DrawCards(7);
         aiController.DrawCards(7);
+        caseArea.PlaceCards();
     }
 
     IEnumerator Reset()
@@ -81,6 +82,7 @@ public class gameManager : MonoBehaviour {
         AClueArea.ClearCards();
         ACrimeArea.ClearCards();
         cardDeck.ResetCards();
+        caseArea.ClearCards();
     }
 
     public void CheckEndTurn()
