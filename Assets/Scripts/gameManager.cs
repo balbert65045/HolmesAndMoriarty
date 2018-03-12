@@ -18,20 +18,21 @@ public class gameManager : MonoBehaviour {
     AICardArea ACrimeArea;
     AICardArea AClueArea;
 
+    CaseArea caseArea;
+
     EndTurnButton endTurnButton;
     PlayerController playerController;
     AIController aiController;
-    CardHand cardHand;
-    CardDeck cardDeck;
+    public ClueDeck cardDeck;
 
-    public List<Card> PlayersCards = new List<Card>();
-    public List<Card> AICards = new List<Card>();
+    public List<ClueCard> PlayersCards = new List<ClueCard>();
+    public List<ClueCard> AICards = new List<ClueCard>();
     // Use this for initialization
     void Start () {
        
         endTurnButton = FindObjectOfType<EndTurnButton>();
         tileArea = FindObjectOfType<TileArea>();
-        cardDeck = FindObjectOfType<CardDeck>();
+        caseArea = FindObjectOfType<CaseArea>();
         CardArea[] CardAreas = FindObjectsOfType<CardArea>();
         foreach (CardArea carda in CardAreas)
         {
@@ -59,7 +60,6 @@ public class gameManager : MonoBehaviour {
 
         playerController = FindObjectOfType<PlayerController>();
         aiController = FindObjectOfType<AIController>();
-        cardHand = FindObjectOfType<CardHand>();
 
         StartCoroutine("PlayersDrawCards");
     }
@@ -74,7 +74,7 @@ public class gameManager : MonoBehaviour {
     IEnumerator Reset()
     {
         yield return new WaitForSeconds(1f);
-        playerController.ResetCards();
+        playerController.RemoveAllCards();
         aiController.ResetCards();
         ClueArea.ClearCards();
         CrimeArea.ClearCards();
@@ -102,6 +102,7 @@ public class gameManager : MonoBehaviour {
         }
         else if (CurrentCaseOn == 3)
         {
+            
             for (int i = 1; i <= 3; i++)
             {
                 CheckForScore(i);
@@ -114,7 +115,7 @@ public class gameManager : MonoBehaviour {
         {
             endTurnButton.DisableEndTurn();
             CurrentCaseOn++;
-            SwapCards();
+            StartCoroutine("SwapCards");
         }
     }
 
@@ -132,30 +133,35 @@ public class gameManager : MonoBehaviour {
     }
 
 
-    void SwapCards()
+    IEnumerator SwapCards()
     {
         PlayersCards.Clear();
         AICards.Clear();
-        foreach (Card card in cardHand.CardsHolding){
+        foreach (ClueCard card in playerController.GetCardsHolding()){
             Debug.Log(card);
             PlayersCards.Add(card); }
-        foreach (Card card in aiController.CardsHolding) { AICards.Add(card); }
+        foreach (ClueCard card in aiController.CardsHolding) { AICards.Add(card); }
+
+
         aiController.RemoveAllCards();
-        cardHand.RemoveAllCards();
+        playerController.RemoveAllCards();
+
+        yield return new WaitForSeconds(.1f);
 
         aiController.AddNewCards(PlayersCards);
-        cardHand.AddNewCards(AICards);
+        playerController.AddNewCards(AICards);
     }
 
     void CheckForScore(int Case)
     {
 
-        Card PlayerCrimeCard;
-        Card PlayerClueCard;
-        Card AICrimeCard;
-        Card AIClueCard;
+        ClueCard PlayerCrimeCard;
+        ClueCard PlayerClueCard;
+        ClueCard AICrimeCard;
+        ClueCard AIClueCard;
+
         FlipCards(Case, out PlayerCrimeCard, out PlayerClueCard, out AICrimeCard, out AIClueCard);
-        Card.CardType Trump = CheckForTrump(PlayerCrimeCard, AICrimeCard);
+        ClueCard.CardType Trump = CheckForTrump(PlayerCrimeCard, AICrimeCard);
         if (CheckForPlayerWin(Trump, PlayerClueCard, AIClueCard))
         {
            switch (playerController.MyPlayerType)
@@ -182,15 +188,16 @@ public class gameManager : MonoBehaviour {
         }
     }
 
-    void FlipCards(int Case, out Card PlayerCrimeCard, out Card PlayerClueCard, out Card AICrimeCard, out Card AIClueCard)
+    void FlipCards(int Case, out ClueCard PlayerCrimeCard, out ClueCard PlayerClueCard, out ClueCard AICrimeCard, out ClueCard AIClueCard)
     {
         PlayerCrimeCard = CrimeArea.FlipCard(Case);
         PlayerClueCard = ClueArea.FlipCard(Case);
         AICrimeCard = ACrimeArea.FlipCard(Case);
         AIClueCard = AClueArea.FlipCard(Case);
+        caseArea.FlipCard(Case);
     }
 
-    Card.CardType CheckForTrump(Card PlayerCrimeCard, Card AICrimeCard)
+    ClueCard.CardType CheckForTrump(ClueCard PlayerCrimeCard, ClueCard AICrimeCard)
     {
         if (PlayerCrimeCard.Number > AICrimeCard.Number)
         {
@@ -203,13 +210,13 @@ public class gameManager : MonoBehaviour {
         else
         {
             Debug.LogError("Player Card and AI card should never be the same");
-            return Card.CardType.Red;
+            return ClueCard.CardType.Red;
         }
     }
 
     // Check to see who has the highest card with trump in play 
     // first check who has trump and then if either both do or do not check for highest card
-    bool CheckForPlayerWin(Card.CardType Trump, Card PlayerClueCard, Card AIClueCard)
+    bool CheckForPlayerWin(ClueCard.CardType Trump, ClueCard PlayerClueCard, ClueCard AIClueCard)
     {
         if (PlayerClueCard.ThisCardType == Trump && AIClueCard.ThisCardType == Trump)
         {

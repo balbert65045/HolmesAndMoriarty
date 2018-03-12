@@ -1,0 +1,38 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class CaseArea : MonoBehaviour {
+
+    // Use this for initialization
+    public Transform[] Positions;
+    CaseDeck caseDeck;
+
+    void Start () {
+        caseDeck = FindObjectOfType<CaseDeck>();
+    }
+
+    public void PlaceCard(GameObject CaseCard)
+    {
+        for (int i = 0; i < Positions.Length; i++)
+        {
+            if (!Positions[i].GetComponentInChildren<Transform>())
+            {
+                Instantiate(CaseCard, Positions[i]);
+            }
+        }
+    }
+
+    public void FlipCard(int CaseNumber)
+    {
+
+        Transform CardTransform = Positions[CaseNumber - 1].GetComponentInChildren<CaseCard>().transform;
+        CardTransform.localRotation = Quaternion.Euler(new Vector3(0, 180, 180));
+    }
+
+	
+	// Update is called once per frame
+	void Update () {
+		
+	}
+}

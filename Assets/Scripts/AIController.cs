@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class AIController : MonoBehaviour {
 
-    public List<Card> CardsHolding;
+    public List<ClueCard> CardsHolding;
     gameManager gameManager;
-    CardDeck cardDeck;
+    public ClueDeck cardDeck;
     AICardArea CrimeArea;
     AICardArea ClueArea;
 
@@ -16,7 +16,7 @@ public class AIController : MonoBehaviour {
     {
         for (int i = 0; i < Number; i++)
         {
-            Card CardDrawn = cardDeck.DrawCard();
+            ClueCard CardDrawn = (cardDeck.DrawCard()) as ClueCard;
             CardsHolding.Add(CardDrawn);
         }
         PlayCards();
@@ -29,13 +29,13 @@ public class AIController : MonoBehaviour {
         int RandomIndex = Random.Range(0, CardsHolding.Count);
         GameObject ClueCard = Instantiate(CardsHolding[RandomIndex].gameObject);
         CardsHolding.Remove(CardsHolding[RandomIndex]);
-        ClueArea.PlaceCard(ClueCard.GetComponent<Card>(), gameManager.CurrentCaseOn);
+        ClueArea.PlaceCard(ClueCard.GetComponent<ClueCard>(), gameManager.CurrentCaseOn);
 
         // Crime Card Place Down
         int RandomIndex2 = Random.Range(0, CardsHolding.Count);
         GameObject CrimeCard = Instantiate(CardsHolding[RandomIndex2].gameObject);
         CardsHolding.Remove(CardsHolding[RandomIndex2]);
-        CrimeArea.PlaceCard(CrimeCard.GetComponent<Card>(), gameManager.CurrentCaseOn);
+        CrimeArea.PlaceCard(CrimeCard.GetComponent<ClueCard>(), gameManager.CurrentCaseOn);
 
 
     }
@@ -50,9 +50,9 @@ public class AIController : MonoBehaviour {
         CardsHolding.Clear();
     }
 
-    public void AddNewCards(List<Card> Cards)
+    public void AddNewCards(List<ClueCard> Cards)
     {
-        foreach (Card card in Cards)
+        foreach (ClueCard card in Cards)
         {
             CardsHolding.Add(card);
         }
@@ -61,7 +61,7 @@ public class AIController : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        cardDeck = FindObjectOfType<CardDeck>();
+       // cardDeck = FindObjectOfType<CardDeck>();
         AICardArea[] CardAreas = FindObjectsOfType<AICardArea>();
         foreach (AICardArea carda in CardAreas)
         {

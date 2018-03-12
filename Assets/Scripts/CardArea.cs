@@ -51,7 +51,7 @@ public class CardArea : MonoBehaviour {
         return false;
     }
 
-    public void PlaceCard(Card card, int CaseN)
+    public void PlaceCard(ClueCard card, int CaseN)
     {
         // simply placing it in position one for now 
         card.transform.SetParent(Positions[CaseN - 1].transform);
@@ -61,9 +61,9 @@ public class CardArea : MonoBehaviour {
 
     }
 
-    public Card FlipCard(int Case)
+    public ClueCard FlipCard(int Case)
     {
-        Card card = Positions[Case - 1].GetComponentInChildren<Card>();
+        ClueCard card = Positions[Case - 1].GetComponentInChildren<ClueCard>();
         float y = card.transform.localRotation.eulerAngles.y + 180;
         float z = card.transform.localRotation.eulerAngles.z + 180;
         card.transform.localRotation = Quaternion.Euler(0, y, z);
@@ -75,7 +75,7 @@ public class CardArea : MonoBehaviour {
         foreach (RowAreaPosition RP in Positions)
         {
             RP.InUse = false;
-            Destroy(RP.GetComponentInChildren<Card>().gameObject);
+            Destroy(RP.GetComponentInChildren<ClueCard>().gameObject);
         }
     }
 

@@ -6,27 +6,51 @@ public class PlayerController : MonoBehaviour {
 
     // Use this for initialization
     CardHand cardHand;
+    public ClueDeck _CardDeck;
     gameManager gamemanager;
-    Card SelectedCard;
+    ClueCard SelectedCard;
 
     public PlayerType MyPlayerType;
 
 	void Start () {
-        cardHand = FindObjectOfType<CardHand>();
+        cardHand = GetComponentInChildren<CardHand>();
+        //_CardDeck = FindObjectOfType<CardDeck>();
         gamemanager = FindObjectOfType<gameManager>();
     }
 
-
+    public List<ClueCard> GetCardsHolding()
+    {
+        return cardHand.GetCardsHolding();
+    }
 
     public void DrawCards(int Number)
     {
-        cardHand.DrawNewCards(Number);
+        for (int i = 0; i < Number; i++)
+        {
+            ClueCard cardDrawn = _CardDeck.DrawCard() as ClueCard;
+            cardHand.AddCard(cardDrawn, 0);
+        }
     }
 
-    public void ResetCards()
+    public void RemoveAllCards()
     {
-        cardHand.ResetCards();
+        cardHand.RemoveAllCards();
     }
+
+    public void AddNewCards(List<ClueCard> NewCards)
+    {
+        int StartingPosition = 0;
+        if (NewCards.Count == 5) { StartingPosition = 1; }
+        else if (NewCards.Count == 3) { StartingPosition = 2; }
+
+        for (int i = 0; i < NewCards.Count; i++)
+        {
+            Debug.Log("Attempting to switch new cards");
+            cardHand.AddCard(NewCards[i], StartingPosition);
+        }
+    }
+
+
 
 
 	// Update is called once per frame
@@ -44,14 +68,14 @@ public class PlayerController : MonoBehaviour {
             if (Physics.Raycast(ray, out Hit))
             {
                 //Select Card
-                if (Hit.transform.GetComponent<Card>())
+                if (Hit.transform.GetComponent<ClueCard>())
                 {
                     if (SelectedCard != null)
                     {
                         UnselectCard();
                     }
-                    Hit.transform.GetComponent<Card>().SelectCard();
-                    SelectedCard = Hit.transform.GetComponent<Card>();
+                    Hit.transform.GetComponent<ClueCard>().SelectCard();
+                    SelectedCard = Hit.transform.GetComponent<ClueCard>();
                 }
 
                 //Place Card Down

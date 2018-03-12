@@ -5,28 +5,35 @@ using UnityEngine;
 public class CardHand : MonoBehaviour {
 
     // Use this for initialization
-    CardDeck cardDeck;
     public Transform[] CardPositions;
-    public List<Card> CardsHolding;
+    private List<ClueCard> CardsHolding = new List<ClueCard>();
+    public List<ClueCard> GetCardsHolding()
+    {
+        return CardsHolding;
+    }
 
 	void Start () {
-        cardDeck = FindObjectOfType<CardDeck>();
 
     }
 	
-    public void DrawNewCards(int numberOfCards)
+    public void AddCard(ClueCard card, int StartingPosition)
     {
-        for (int i = 0; i< numberOfCards; i++)
+        for (int i = StartingPosition; i < CardPositions.Length; i++)
         {
-           Card CardDrawn = cardDeck.DrawCard();
-           CardsHolding.Add(CardDrawn);
-           GameObject Card = Instantiate(CardDrawn.gameObject, CardPositions[i]);
+            if (CardPositions[i].GetComponentInChildren<ClueCard>() == null)
+            {
+                CardsHolding.Add(card);
+                GameObject Card = Instantiate(card.gameObject, CardPositions[i]);
+                return;
+            }
         }
+        Debug.LogWarning("All Card Positions full and cannot add card");
     }
 
-    public void RemoveCard(Card card)
+
+    public void RemoveCard(ClueCard card)
     {
-        foreach (Card HCard in CardsHolding)
+        foreach (ClueCard HCard in CardsHolding)
         {
             if (HCard.Number == card.Number && HCard.ThisCardType == card.ThisCardType)
             {
@@ -36,42 +43,18 @@ public class CardHand : MonoBehaviour {
         }
     }
 
-    public void ResetCards()
-    {
-        RemoveAllCards();
-    }
-
     public void RemoveAllCards()
     {
 
         foreach (Transform position in CardPositions)
         {
-            if (position.GetComponentInChildren<Card>())
+            if (position.GetComponentInChildren<ClueCard>())
             {
-                Destroy((position.GetComponentInChildren<Card>().gameObject));
+                Destroy((position.GetComponentInChildren<ClueCard>().gameObject));
             }
         }
         CardsHolding.Clear();
     }
 
-    public void AddNewCards(List<Card> cards)
-    {
-        int i = 0;
-        if (cards.Count == 5)
-        {
-            i = 1;
-        }
-        else if (cards.Count == 3)
-        {
-            i = 2;
-        }
-
-        foreach (Card card in cards)
-        {
-            GameObject Card = Instantiate(card.gameObject, CardPositions[i]);
-            CardsHolding.Add(card);
-            i++;
-        }
-    }
 
 }
