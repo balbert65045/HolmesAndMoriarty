@@ -83,7 +83,6 @@ public class PlayerController : MonoBehaviour {
                 {
                     if (SelectedCard != null)
                     {
-                        Debug.Log(gamemanager.CurrentCaseOn);
                         if (Hit.transform.GetComponent<CardArea>().CheckForAvailableSpace(gamemanager.CurrentCaseOn))
                         {
                             Hit.transform.GetComponent<CardArea>().PlaceCard(SelectedCard, gamemanager.CurrentCaseOn);

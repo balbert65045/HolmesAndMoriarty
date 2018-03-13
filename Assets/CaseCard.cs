@@ -4,8 +4,13 @@ using UnityEngine;
 
 public class CaseCard : Card {
 
-	// Use this for initialization
-	void Start () {
+    public PlayerType PlayerType;
+
+    public enum CardType { Blue, Yellow, Green, Red }
+    public CardType ThisCardType;
+
+    // Use this for initialization
+    void Start () {
 		
 	}
 	
