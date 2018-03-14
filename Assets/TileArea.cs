@@ -62,7 +62,7 @@ public class TileArea : MonoBehaviour {
         arr[index2] = temp;
     }
 
-    public void PlaceTile(GameObject tile, int Number, PlayerType PT)
+    public bool PlaceTile(GameObject tile, int Number, PlayerType PT)
     {
         if (!TileSpots[Number - 1].Used)
         {
@@ -73,7 +73,6 @@ public class TileArea : MonoBehaviour {
 
             int HIndex = (Number - 1) % 4;
             int VIndex = (Number - 1) / 4;
-            Debug.Log(HIndex + "" + VIndex);
             switch (PT)
             {
                 case PlayerType.Holmes:
@@ -84,8 +83,9 @@ public class TileArea : MonoBehaviour {
                     Tile2D[HIndex, VIndex] = TileType.Moriarty;
                     break;
             }
-
+            return true;
         }
+        return false;
     }
 
     public bool CheckForMoriartyWin()

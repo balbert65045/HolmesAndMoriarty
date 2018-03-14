@@ -9,11 +9,16 @@ public class PlayerController : MonoBehaviour {
     public ClueDeck _CardDeck;
     gameManager gamemanager;
     ClueCard SelectedCard;
+    TileArea tileArea;
+    public GameObject MoriartyTile;
+
+    int MoriartyTilesToPlace = 0;
 
     public PlayerType MyPlayerType;
 
 	void Start () {
         cardHand = GetComponentInChildren<CardHand>();
+        tileArea = FindObjectOfType<TileArea>();
         //_CardDeck = FindObjectOfType<CardDeck>();
         gamemanager = FindObjectOfType<gameManager>();
     }
@@ -45,11 +50,14 @@ public class PlayerController : MonoBehaviour {
 
         for (int i = 0; i < NewCards.Count; i++)
         {
-            Debug.Log("Attempting to switch new cards");
             cardHand.AddCard(NewCards[i], StartingPosition);
         }
     }
 
+    public void PlaceMoriartyTiles(int number)
+    {
+        MoriartyTilesToPlace = number;
+    }
 
 
 
@@ -91,6 +99,15 @@ public class PlayerController : MonoBehaviour {
                             gamemanager.CheckEndTurn();
                         }
                         UnselectCard();
+                    }
+                }
+
+                else if (Hit.transform.GetComponent<TileSpot>())
+                {
+                    if (MoriartyTilesToPlace > 0)
+                    {
+                        if (tileArea.PlaceTile(MoriartyTile, Hit.transform.GetComponent<TileSpot>().Number, PlayerType.Moriarty)) { MoriartyTilesToPlace--; }
+                        if (MoriartyTilesToPlace == 0) { gamemanager.CheckEndTurn(); }
                     }
                 }
 

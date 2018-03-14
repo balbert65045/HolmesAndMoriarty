@@ -10,6 +10,9 @@ public class gameManager : MonoBehaviour {
 
     TileArea tileArea;
 
+    public enum TurnStatus { Turn1, Turn2, Turn3, PickTile, CheckScore }
+    public TurnStatus CurrentTurnStatus = TurnStatus.Turn1;
+
     public int CurrentTurnOn = 1;
     public int CurrentCaseOn = 1;
 
@@ -27,6 +30,9 @@ public class gameManager : MonoBehaviour {
 
     public List<ClueCard> PlayersCards = new List<ClueCard>();
     public List<ClueCard> AICards = new List<ClueCard>();
+
+    int HolmesScoreThisTurn = 0;
+    int MoriartyScoreThisTurn = 0;
     // Use this for initialization
     void Start () {
        
@@ -83,6 +89,8 @@ public class gameManager : MonoBehaviour {
         ACrimeArea.ClearCards();
         cardDeck.ResetCards();
         caseArea.ClearCards();
+        HolmesScoreThisTurn = 0;
+        MoriartyScoreThisTurn = 0;
     }
 
     public void CheckEndTurn()
@@ -95,31 +103,90 @@ public class gameManager : MonoBehaviour {
 
     public void EndTurn()
     {
-        if (CurrentCaseOn == 4)
+        switch (CurrentTurnStatus)
         {
-            endTurnButton.DisableEndTurn();
-            StartCoroutine("Reset");
-            StartCoroutine("PlayersDrawCards");
-            CurrentCaseOn = 1;
+            case TurnStatus.Turn1:
+                endTurnButton.DisableEndTurn();
+                CurrentCaseOn++;
+                StartCoroutine("SwapCards");
+                CurrentTurnStatus = TurnStatus.Turn2;
+                break;
+
+            case TurnStatus.Turn2:
+                endTurnButton.DisableEndTurn();
+                CurrentCaseOn++;
+                StartCoroutine("SwapCards");
+                CurrentTurnStatus = TurnStatus.Turn3;
+                break;
+
+            case TurnStatus.Turn3:
+                for (int i = 1; i <= 3; i++)
+                {
+                    CheckForScore(i);
+                }
+               if (CheckForPickTile()) {
+                    endTurnButton.DisableEndTurn();
+                    CurrentTurnStatus = TurnStatus.PickTile;
+                }
+               else { CurrentTurnStatus = TurnStatus.CheckScore; }
+
+                break;
+
+            case TurnStatus.PickTile:
+                CurrentTurnStatus = TurnStatus.CheckScore;
+                break;
+            case TurnStatus.CheckScore:
+                CurrentCaseOn++;
+                CheckForWin();
+                endTurnButton.DisableEndTurn();
+                StartCoroutine("Reset");
+                StartCoroutine("PlayersDrawCards");
+                CurrentCaseOn = 1;
+                CurrentTurnStatus = TurnStatus.Turn1;
+                break;
+
         }
-        else if (CurrentCaseOn == 3)
+    }
+
+    // if Moriarty won 2 Holmes has to pick one tile to give Moriarty
+    // if Moriarty one all 3 then Holmes has to pick 2 to give Moriarty
+    bool CheckForPickTile()
+    {
+        if (MoriartyScoreThisTurn == 2)
         {
-            
-            for (int i = 1; i <= 3; i++)
+            CurrentTurnStatus = TurnStatus.PickTile;
+            switch (playerController.MyPlayerType)
             {
-                CheckForScore(i);
+                case PlayerType.Holmes:
+                    playerController.PlaceMoriartyTiles(1);
+                    break;
+                case PlayerType.Moriarty:
+
+                    break;
             }
-            CheckForWin();
-            CurrentTurnOn++;
-            CurrentCaseOn++;
+            return true;
+        }
+        else if (MoriartyScoreThisTurn == 3)
+        {
+            switch (playerController.MyPlayerType)
+            {
+                case PlayerType.Holmes:
+                    playerController.PlaceMoriartyTiles(2);
+                    break;
+                case PlayerType.Moriarty:
+
+                    break;
+            }
+            CurrentTurnStatus = TurnStatus.PickTile;
+            return true;
         }
         else
         {
-            endTurnButton.DisableEndTurn();
-            CurrentCaseOn++;
-            StartCoroutine("SwapCards");
+            CurrentTurnStatus = TurnStatus.CheckScore;
+            return false;
         }
     }
+
 
     void CheckForWin()
     {
@@ -140,7 +207,6 @@ public class gameManager : MonoBehaviour {
         PlayersCards.Clear();
         AICards.Clear();
         foreach (ClueCard card in playerController.GetCardsHolding()){
-            Debug.Log(card);
             PlayersCards.Add(card); }
         foreach (ClueCard card in aiController.CardsHolding) { AICards.Add(card); }
 
@@ -169,9 +235,11 @@ public class gameManager : MonoBehaviour {
            switch (playerController.MyPlayerType)
             {
                 case PlayerType.Holmes:
+                    HolmesScoreThisTurn++;
                     tileArea.PlaceTile(HolmesTile, PlayerClueCard.Number, PlayerType.Holmes);
                     break;
                 case PlayerType.Moriarty:
+                    MoriartyScoreThisTurn++;
                     tileArea.PlaceTile(MoriartTile, PlayerCrimeCard.Number, PlayerType.Moriarty);
                     break;
             }
@@ -181,13 +249,18 @@ public class gameManager : MonoBehaviour {
             switch (aiController.MyPlayerType)
             {
                 case PlayerType.Holmes:
+                    HolmesScoreThisTurn++;
                     tileArea.PlaceTile(HolmesTile, AIClueCard.Number, PlayerType.Holmes);
                     break;
                 case PlayerType.Moriarty:
+                    MoriartyScoreThisTurn++;
                     tileArea.PlaceTile(MoriartTile, AICrimeCard.Number, PlayerType.Moriarty);
                     break;
             }
         }
+       
+
+
     }
 
     void FlipCards(int Case, out ClueCard PlayerCrimeCard, out ClueCard PlayerClueCard, out ClueCard AICrimeCard, out ClueCard AIClueCard)

@@ -44,6 +44,8 @@ public class AICardArea : MonoBehaviour {
         card.transform.SetParent(Positions[CaseN - 1].transform);
         card.transform.position = Positions[CaseN - 1].transform.position;
         card.transform.rotation = Positions[CaseN - 1].transform.rotation;
+        // use this for verticle setup
+     //   card.transform.localScale = new Vector3(.7f, .246f, .07f);
         Positions[CaseN - 1].InUse = true;
 
     }
