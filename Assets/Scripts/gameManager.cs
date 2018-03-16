@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class gameManager : MonoBehaviour {
 
@@ -9,6 +10,8 @@ public class gameManager : MonoBehaviour {
     public GameObject MoriartTile;
 
     TileArea tileArea;
+    TileSelectionPrompt tilePromptSelection;
+
 
     public enum TurnStatus { Turn1, Turn2, Turn3, PickTile, CheckScore }
     public TurnStatus CurrentTurnStatus = TurnStatus.Turn1;
@@ -35,7 +38,9 @@ public class gameManager : MonoBehaviour {
     int MoriartyScoreThisTurn = 0;
     // Use this for initialization
     void Start () {
-       
+
+        tilePromptSelection = FindObjectOfType<TileSelectionPrompt>();
+        tilePromptSelection.gameObject.SetActive(false);
         endTurnButton = FindObjectOfType<EndTurnButton>();
         tileArea = FindObjectOfType<TileArea>();
         caseArea = FindObjectOfType<CaseArea>();
@@ -133,6 +138,7 @@ public class gameManager : MonoBehaviour {
                 break;
 
             case TurnStatus.PickTile:
+                tilePromptSelection.gameObject.SetActive(false);
                 CurrentTurnStatus = TurnStatus.CheckScore;
                 break;
             case TurnStatus.CheckScore:
@@ -154,10 +160,14 @@ public class gameManager : MonoBehaviour {
     {
         if (MoriartyScoreThisTurn == 2)
         {
+            
             CurrentTurnStatus = TurnStatus.PickTile;
             switch (playerController.MyPlayerType)
             {
                 case PlayerType.Holmes:
+
+                    tilePromptSelection.gameObject.SetActive(true);
+                    tilePromptSelection.gameObject.GetComponent<Text>().text = " Select 1 Open Tile for Moriarty";
                     playerController.PlaceMoriartyTiles(1);
                     break;
                 case PlayerType.Moriarty:
@@ -171,6 +181,8 @@ public class gameManager : MonoBehaviour {
             switch (playerController.MyPlayerType)
             {
                 case PlayerType.Holmes:
+                    tilePromptSelection.gameObject.SetActive(true);
+                    tilePromptSelection.gameObject.GetComponent<Text>().text = " Select 2 Open Tiles for Moriarty";
                     playerController.PlaceMoriartyTiles(2);
                     break;
                 case PlayerType.Moriarty:

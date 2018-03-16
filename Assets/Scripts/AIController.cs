@@ -59,6 +59,12 @@ public class AIController : MonoBehaviour {
         PlayCards();
     }
 
+
+    public void PickTile()
+    {
+        
+    }
+
     // Use this for initialization
     void Start () {
        // cardDeck = FindObjectOfType<CardDeck>();
