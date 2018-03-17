@@ -130,7 +130,7 @@ public class gameManager : MonoBehaviour {
                     CheckForScore(i);
                 }
                if (CheckForPickTile()) {
-                    endTurnButton.DisableEndTurn();
+                    if (playerController.MyPlayerType == PlayerType.Holmes) { endTurnButton.DisableEndTurn(); }
                     CurrentTurnStatus = TurnStatus.PickTile;
                 }
                else { CurrentTurnStatus = TurnStatus.CheckScore; }
@@ -171,7 +171,7 @@ public class gameManager : MonoBehaviour {
                     playerController.PlaceMoriartyTiles(1);
                     break;
                 case PlayerType.Moriarty:
-
+                    aiController.PickTile();
                     break;
             }
             return true;
@@ -186,7 +186,9 @@ public class gameManager : MonoBehaviour {
                     playerController.PlaceMoriartyTiles(2);
                     break;
                 case PlayerType.Moriarty:
-
+                    //Pick Tile 2 times
+                    aiController.PickTile();
+                    aiController.PickTile();
                     break;
             }
             CurrentTurnStatus = TurnStatus.PickTile;

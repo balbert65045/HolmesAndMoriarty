@@ -10,6 +10,9 @@ public class AIController : MonoBehaviour {
     AICardArea CrimeArea;
     AICardArea ClueArea;
 
+    public GameObject MoriartyTile;
+    TileArea tileArea;
+
     public PlayerType MyPlayerType;
 
     public void DrawCards(int Number)
@@ -62,13 +65,21 @@ public class AIController : MonoBehaviour {
 
     public void PickTile()
     {
-        
+        TileSpot[] TilesSpots = FindObjectsOfType<TileSpot>();
+        List<TileSpot> OpenTileSpots = new List<TileSpot>();
+        foreach (TileSpot TS in TilesSpots)
+        {
+            if (!TS.Used) { OpenTileSpots.Add(TS); }
+        }
+        int RandomOpenTileIndex = Random.Range(0, OpenTileSpots.Count);
+        tileArea.PlaceTile(MoriartyTile, OpenTileSpots[RandomOpenTileIndex].Number, PlayerType.Moriarty);
     }
 
     // Use this for initialization
     void Start () {
-       // cardDeck = FindObjectOfType<CardDeck>();
-        AICardArea[] CardAreas = FindObjectsOfType<AICardArea>();
+        // cardDeck = FindObjectOfType<CardDeck>();
+        tileArea = FindObjectOfType<TileArea>();
+         AICardArea[] CardAreas = FindObjectsOfType<AICardArea>();
         foreach (AICardArea carda in CardAreas)
         {
             if (carda.ThisRow == CardArea.Row.Clue)

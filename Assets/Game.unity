@@ -1684,7 +1684,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CardsHolding: []
   cardDeck: {fileID: 1160658105}
-  MyPlayerType: 1
+  MoriartyTile: {fileID: 1453772672797608, guid: 9c6916d0131be4f44a26afeb0e0983c0,
+    type: 2}
+  MyPlayerType: 0
 --- !u!4 &601319007
 Transform:
   m_ObjectHideFlags: 0
@@ -2019,7 +2021,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c4b5dde90a8db14a9600b1d985412f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Number: 14
+  Number: 15
   Used: 0
 --- !u!1 &700742907
 GameObject:
@@ -2498,7 +2500,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c4b5dde90a8db14a9600b1d985412f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Number: 13
+  Number: 16
   Used: 0
 --- !u!1 &898779288
 GameObject:
@@ -2670,7 +2672,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c4b5dde90a8db14a9600b1d985412f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Number: 15
+  Number: 14
   Used: 0
 --- !u!1 &982626444
 GameObject:
@@ -2842,7 +2844,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c4b5dde90a8db14a9600b1d985412f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Number: 8
+  Number: 5
   Used: 0
 --- !u!1 &1020426697
 GameObject:
@@ -4302,7 +4304,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c4b5dde90a8db14a9600b1d985412f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Number: 5
+  Number: 8
   Used: 0
 --- !u!1 &1417891322
 GameObject:
@@ -5238,7 +5240,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c4b5dde90a8db14a9600b1d985412f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Number: 16
+  Number: 13
   Used: 0
 --- !u!1 &1731397039
 GameObject:
@@ -5337,7 +5339,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c4b5dde90a8db14a9600b1d985412f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Number: 6
+  Number: 7
   Used: 0
 --- !u!1 &1823265296
 GameObject:
@@ -5478,7 +5480,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c4b5dde90a8db14a9600b1d985412f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Number: 7
+  Number: 6
   Used: 0
 --- !u!1 &1893883071
 GameObject:
@@ -5583,7 +5585,7 @@ MonoBehaviour:
   _CardDeck: {fileID: 1160658105}
   MoriartyTile: {fileID: 1453772672797608, guid: 9c6916d0131be4f44a26afeb0e0983c0,
     type: 2}
-  MyPlayerType: 0
+  MyPlayerType: 1
 --- !u!4 &1912034244
 Transform:
   m_ObjectHideFlags: 0
