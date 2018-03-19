@@ -286,6 +286,8 @@ public class gameManager : MonoBehaviour {
         caseArea.FlipCard(Case);
     }
 
+
+    // put these in a score controller class??
     ClueCard.CardType CheckForTrump(ClueCard PlayerCrimeCard, ClueCard AICrimeCard)
     {
         if (PlayerCrimeCard.Number > AICrimeCard.Number)
@@ -307,6 +309,7 @@ public class gameManager : MonoBehaviour {
     // first check who has trump and then if either both do or do not check for highest card
     bool CheckForPlayerWin(ClueCard.CardType Trump, ClueCard PlayerClueCard, ClueCard AIClueCard)
     {
+        // check if both have trump
         if (PlayerClueCard.ThisCardType == Trump && AIClueCard.ThisCardType == Trump)
         {
             if (PlayerClueCard.Number > AIClueCard.Number)
@@ -318,22 +321,51 @@ public class gameManager : MonoBehaviour {
                 return false;
             }
         }
+        // check if both only player has trump
         else if (PlayerClueCard.ThisCardType == Trump)
         {
             return true;
         }
+        // check if both only AI has trump
         else if (AIClueCard.ThisCardType == Trump)
         {
             return false;
         }
+
+        // check if neither has trump
         else
         {
             if (PlayerClueCard.Number > AIClueCard.Number)
             {
+                // check for wrap around effect 
+                switch (AIClueCard.Number)
+                {
+                    case 1:
+                        if (PlayerClueCard.Number > 13) { return false; }
+                        break;
+                    case 2:
+                        if (PlayerClueCard.Number > 14) { return false; }
+                        break;
+                    case 3:
+                        if (PlayerClueCard.Number > 15) { return false; }
+                        break;
+                }
                 return true;
             }
             else
             {
+                switch (PlayerClueCard.Number)
+                {
+                    case 1:
+                        if (AIClueCard.Number > 13) { return true; }
+                        break;
+                    case 2:
+                        if (AIClueCard.Number > 14) { return true; }
+                        break;
+                    case 3:
+                        if (AIClueCard.Number > 15) { return true; }
+                        break;
+                }
                 return false;
             }
         }
