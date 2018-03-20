@@ -11,8 +11,15 @@ public class PlayerController : MonoBehaviour {
     ClueCard SelectedCard;
     TileArea tileArea;
      GameObject MoriartyTile;
+    GameObject HolmesTile;
 
     int MoriartyTilesToPlace = 0;
+    int HolmesTilesToPlace = 0;
+
+    int RedTilestoPlace = 0;
+    int BlueTilestoPlace = 0;
+    int YellowTilestoPlace = 0;
+    int GreenTilestoPlace = 0;
 
     public PlayerType MyPlayerType;
 
@@ -60,6 +67,16 @@ public class PlayerController : MonoBehaviour {
         MoriartyTile = MoriartyTilePrefab;
     }
 
+    public void PlaceHolmesTiles(GameObject HolmesTilePrefab, List<CardType> CardTypes)
+    {
+        HolmesTilesToPlace ++;
+        HolmesTile = HolmesTilePrefab;
+        if (CardTypes.Contains(CardType.Blue)){ BlueTilestoPlace++; }
+        if (CardTypes.Contains(CardType.Red)) { RedTilestoPlace++; }
+        if (CardTypes.Contains(CardType.Yellow)) { YellowTilestoPlace++; }
+        if (CardTypes.Contains(CardType.Green)) { GreenTilestoPlace++; }
+    }
+
 
 
 	// Update is called once per frame
@@ -103,12 +120,69 @@ public class PlayerController : MonoBehaviour {
                     }
                 }
 
+                // Place Tile Down
                 else if (Hit.transform.GetComponent<TileSpot>())
                 {
                     if (MoriartyTilesToPlace > 0)
                     {
                         if (tileArea.PlaceTile(MoriartyTile, Hit.transform.GetComponent<TileSpot>().Number, PlayerType.Moriarty)) { MoriartyTilesToPlace--; }
                         if (MoriartyTilesToPlace == 0) { gamemanager.CheckEndTurn(); }
+                    }
+                    else if (HolmesTilesToPlace > 0)
+                    {
+                        if (Hit.transform.GetComponent<TileSpot>().ThisCardType == CardType.Blue && BlueTilestoPlace > 0)
+                        {
+                            if (tileArea.PlaceTile(HolmesTile, Hit.transform.GetComponent<TileSpot>().Number, PlayerType.Holmes)) {
+                                HolmesTilesToPlace--;
+                                RedTilestoPlace--;
+                                BlueTilestoPlace--;
+                                GreenTilestoPlace--;
+                                BlueTilestoPlace--;
+                            }
+                        }
+                        else if (Hit.transform.GetComponent<TileSpot>().ThisCardType == CardType.Green && GreenTilestoPlace > 0)
+                        {
+                            if (tileArea.PlaceTile(HolmesTile, Hit.transform.GetComponent<TileSpot>().Number, PlayerType.Holmes))
+                            {
+                                HolmesTilesToPlace--;
+                                RedTilestoPlace--;
+                                BlueTilestoPlace--;
+                                GreenTilestoPlace--;
+                                BlueTilestoPlace--;
+                            }
+                        }
+                        else if (Hit.transform.GetComponent<TileSpot>().ThisCardType == CardType.Red && RedTilestoPlace > 0)
+                        {
+                            if (tileArea.PlaceTile(HolmesTile, Hit.transform.GetComponent<TileSpot>().Number, PlayerType.Holmes))
+                            {
+                                HolmesTilesToPlace--;
+                                RedTilestoPlace--;
+                                BlueTilestoPlace--;
+                                GreenTilestoPlace--;
+                                BlueTilestoPlace--;
+                            }
+                        }
+                        else if (Hit.transform.GetComponent<TileSpot>().ThisCardType == CardType.Yellow && YellowTilestoPlace > 0)
+                        {
+                            if (tileArea.PlaceTile(HolmesTile, Hit.transform.GetComponent<TileSpot>().Number, PlayerType.Holmes))
+                            {
+                                HolmesTilesToPlace--;
+                                RedTilestoPlace--;
+                                BlueTilestoPlace--;
+                                GreenTilestoPlace--;
+                                BlueTilestoPlace--;
+                            }
+                        }
+
+                        if (HolmesTilesToPlace == 0)
+                        {
+                            RedTilestoPlace = 0;
+                            BlueTilestoPlace = 0;
+                            GreenTilestoPlace = 0;
+                            BlueTilestoPlace = 0;
+                            gamemanager.CheckEndTurn();
+                        }
+
                     }
                 }
 

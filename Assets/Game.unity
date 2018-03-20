@@ -1686,7 +1686,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CardsHolding: []
   cardDeck: {fileID: 1160658105}
-  MyPlayerType: 0
+  MyPlayerType: 1
 --- !u!4 &601319007
 Transform:
   m_ObjectHideFlags: 0
@@ -5596,7 +5596,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _CardDeck: {fileID: 1160658105}
-  MyPlayerType: 1
+  MyPlayerType: 0
 --- !u!4 &1912034244
 Transform:
   m_ObjectHideFlags: 0

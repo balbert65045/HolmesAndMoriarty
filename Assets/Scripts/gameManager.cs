@@ -138,7 +138,8 @@ public class gameManager : MonoBehaviour {
                 }
                else if (CheckForPickTileHolmes())
                 {
-
+                    if (playerController.MyPlayerType == PlayerType.Holmes) { endTurnButton.DisableEndTurn(); }
+                    CurrentTurnStatus = TurnStatus.PickTileHolmes;
                 }
                else { CurrentTurnStatus = TurnStatus.CheckScore; }
 
@@ -148,7 +149,8 @@ public class gameManager : MonoBehaviour {
                 tilePromptSelection.gameObject.SetActive(false);
                 if (CheckForPickTileHolmes())
                 {
-
+                    if (playerController.MyPlayerType == PlayerType.Holmes) { endTurnButton.DisableEndTurn(); }
+                    CurrentTurnStatus = TurnStatus.PickTileHolmes;
                 }
                 else
                 {
@@ -156,7 +158,7 @@ public class gameManager : MonoBehaviour {
                 }  
                 break;
             case TurnStatus.PickTileHolmes:
-                //put in similar stuff to pick tile Moriarty
+                CurrentTurnStatus = TurnStatus.CheckScore;
                 break;
 
             case TurnStatus.CheckScore:
@@ -174,16 +176,18 @@ public class gameManager : MonoBehaviour {
 
     bool CheckForPickTileHolmes()
     {
+        List<int> HolmesCaseWon = new List<int>(); 
         for (int i = 0; i < 3; i++)
         {
             if (HolmesScoreThisTurn[i])
             {
                 if (caseArea.FindCaseCard(i + 1).PlayerType == PlayerType.Holmes)
                 {
+                    HolmesCaseWon.Add(i);
                     switch (playerController.MyPlayerType)
                     {
                         case PlayerType.Holmes:
-
+                            playerController.PlaceHolmesTiles(HolmesTile, caseArea.FindCaseCard(i + 1).CardTypes);
                             break;
                         case PlayerType.Moriarty:
                             aiController.PlaceHolmesTile(caseArea.FindCaseCard(i + 1).CardTypes, HolmesTile);
@@ -192,7 +196,7 @@ public class gameManager : MonoBehaviour {
                 }
             }
         }
-
+        if (HolmesCaseWon.Count > 0) { return true; }
         return false;
     }
 
