@@ -13,7 +13,7 @@ public class gameManager : MonoBehaviour {
     TileSelectionPrompt tilePromptSelection;
 
 
-    public enum TurnStatus { Turn1, Turn2, Turn3, PickTile, CheckScore }
+    public enum TurnStatus { Turn1, Turn2, Turn3, PickTileMoriarty, PickTileHolmes, CheckScore }
     public TurnStatus CurrentTurnStatus = TurnStatus.Turn1;
 
     public int CurrentTurnOn = 1;
@@ -34,8 +34,8 @@ public class gameManager : MonoBehaviour {
     public List<ClueCard> PlayersCards = new List<ClueCard>();
     public List<ClueCard> AICards = new List<ClueCard>();
 
-    int HolmesScoreThisTurn = 0;
-    int MoriartyScoreThisTurn = 0;
+    bool[] HolmesScoreThisTurn = { false, false, false };
+    bool[] MoriartyScoreThisTurn = { false, false, false };
     // Use this for initialization
     void Start () {
 
@@ -94,8 +94,11 @@ public class gameManager : MonoBehaviour {
         ACrimeArea.ClearCards();
         cardDeck.ResetCards();
         caseArea.ClearCards();
-        HolmesScoreThisTurn = 0;
-        MoriartyScoreThisTurn = 0;
+        for (int i = 0; i < 3; i++)
+        {
+            HolmesScoreThisTurn[i] = false;
+            MoriartyScoreThisTurn[i] = false;
+        }
     }
 
     public void CheckEndTurn()
@@ -129,18 +132,33 @@ public class gameManager : MonoBehaviour {
                 {
                     CheckForScore(i);
                 }
-               if (CheckForPickTile()) {
+               if (CheckForPickTileMoriarty()) {
                     if (playerController.MyPlayerType == PlayerType.Holmes) { endTurnButton.DisableEndTurn(); }
-                    CurrentTurnStatus = TurnStatus.PickTile;
+                    CurrentTurnStatus = TurnStatus.PickTileMoriarty;
+                }
+               else if (CheckForPickTileHolmes())
+                {
+
                 }
                else { CurrentTurnStatus = TurnStatus.CheckScore; }
 
                 break;
 
-            case TurnStatus.PickTile:
+            case TurnStatus.PickTileMoriarty:
                 tilePromptSelection.gameObject.SetActive(false);
-                CurrentTurnStatus = TurnStatus.CheckScore;
+                if (CheckForPickTileHolmes())
+                {
+
+                }
+                else
+                {
+                    CurrentTurnStatus = TurnStatus.CheckScore;
+                }  
                 break;
+            case TurnStatus.PickTileHolmes:
+                //put in similar stuff to pick tile Moriarty
+                break;
+
             case TurnStatus.CheckScore:
                 CurrentCaseOn++;
                 CheckForWin();
@@ -154,49 +172,82 @@ public class gameManager : MonoBehaviour {
         }
     }
 
+    bool CheckForPickTileHolmes()
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            if (HolmesScoreThisTurn[i])
+            {
+                if (caseArea.FindCaseCard(i + 1).PlayerType == PlayerType.Holmes)
+                {
+                    switch (playerController.MyPlayerType)
+                    {
+                        case PlayerType.Holmes:
+
+                            break;
+                        case PlayerType.Moriarty:
+                            aiController.PlaceHolmesTile(caseArea.FindCaseCard(i + 1).CardTypes, HolmesTile);
+                            break;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
+
+
     // if Moriarty won 2 Holmes has to pick one tile to give Moriarty
     // if Moriarty one all 3 then Holmes has to pick 2 to give Moriarty
-    bool CheckForPickTile()
+    bool CheckForPickTileMoriarty()
     {
-        if (MoriartyScoreThisTurn == 2)
+
+
+        int MoriartyScore = 0;
+        for (int i = 0; i <3; i++)
+        {
+            if (MoriartyScoreThisTurn[i]) { MoriartyScore++; }
+        }
+        if (MoriartyScore == 2)
         {
             
-            CurrentTurnStatus = TurnStatus.PickTile;
+            CurrentTurnStatus = TurnStatus.PickTileMoriarty;
             switch (playerController.MyPlayerType)
             {
                 case PlayerType.Holmes:
 
                     tilePromptSelection.gameObject.SetActive(true);
                     tilePromptSelection.gameObject.GetComponent<Text>().text = " Select 1 Open Tile for Moriarty";
-                    playerController.PlaceMoriartyTiles(1);
+                    playerController.PlaceMoriartyTiles(1, MoriartTile);
                     break;
                 case PlayerType.Moriarty:
-                    aiController.PickTile();
+                    aiController.PlaceMoriartyTile(MoriartTile);
                     break;
             }
             return true;
         }
-        else if (MoriartyScoreThisTurn == 3)
+        else if (MoriartyScore == 3)
         {
             switch (playerController.MyPlayerType)
             {
                 case PlayerType.Holmes:
                     tilePromptSelection.gameObject.SetActive(true);
                     tilePromptSelection.gameObject.GetComponent<Text>().text = " Select 2 Open Tiles for Moriarty";
-                    playerController.PlaceMoriartyTiles(2);
+                    playerController.PlaceMoriartyTiles(2, MoriartTile);
                     break;
                 case PlayerType.Moriarty:
                     //Pick Tile 2 times
-                    aiController.PickTile();
-                    aiController.PickTile();
+                    aiController.PlaceMoriartyTile(MoriartTile);
+                    aiController.PlaceMoriartyTile(MoriartTile);
                     break;
             }
-            CurrentTurnStatus = TurnStatus.PickTile;
+    //        CurrentTurnStatus = TurnStatus.PickTileMoriarty;
             return true;
         }
         else
         {
-            CurrentTurnStatus = TurnStatus.CheckScore;
+      //      CurrentTurnStatus = TurnStatus.CheckScore;
             return false;
         }
     }
@@ -243,17 +294,23 @@ public class gameManager : MonoBehaviour {
         ClueCard AIClueCard;
 
         FlipCards(Case, out PlayerCrimeCard, out PlayerClueCard, out AICrimeCard, out AIClueCard);
-        ClueCard.CardType Trump = CheckForTrump(PlayerCrimeCard, AICrimeCard);
+        CardType Trump = CheckForTrump(PlayerCrimeCard, AICrimeCard);
         if (CheckForPlayerWin(Trump, PlayerClueCard, AIClueCard))
         {
            switch (playerController.MyPlayerType)
             {
                 case PlayerType.Holmes:
-                    HolmesScoreThisTurn++;
+                    // HolmesScoreThisTurn++;
+                    HolmesScoreThisTurn[Case - 1] = true;
                     tileArea.PlaceTile(HolmesTile, PlayerClueCard.Number, PlayerType.Holmes);
+                    //CaseCard caseCard = caseArea.FindCaseCard(Case);
+                    //if (caseCard.PlayerType == PlayerType.Holmes)
+                    //{
+                    //    Debug.Log("Holmes won on his case card");
+                    //}
                     break;
                 case PlayerType.Moriarty:
-                    MoriartyScoreThisTurn++;
+                    MoriartyScoreThisTurn[Case - 1] = true;
                     tileArea.PlaceTile(MoriartTile, PlayerCrimeCard.Number, PlayerType.Moriarty);
                     break;
             }
@@ -263,11 +320,11 @@ public class gameManager : MonoBehaviour {
             switch (aiController.MyPlayerType)
             {
                 case PlayerType.Holmes:
-                    HolmesScoreThisTurn++;
+                    HolmesScoreThisTurn[Case - 1] = true;
                     tileArea.PlaceTile(HolmesTile, AIClueCard.Number, PlayerType.Holmes);
                     break;
                 case PlayerType.Moriarty:
-                    MoriartyScoreThisTurn++;
+                    MoriartyScoreThisTurn[Case - 1] = true;
                     tileArea.PlaceTile(MoriartTile, AICrimeCard.Number, PlayerType.Moriarty);
                     break;
             }
@@ -288,7 +345,7 @@ public class gameManager : MonoBehaviour {
 
 
     // put these in a score controller class??
-    ClueCard.CardType CheckForTrump(ClueCard PlayerCrimeCard, ClueCard AICrimeCard)
+   CardType CheckForTrump(ClueCard PlayerCrimeCard, ClueCard AICrimeCard)
     {
         if (PlayerCrimeCard.Number > AICrimeCard.Number)
         {
@@ -301,13 +358,13 @@ public class gameManager : MonoBehaviour {
         else
         {
             Debug.LogError("Player Card and AI card should never be the same");
-            return ClueCard.CardType.Red;
+            return CardType.Red;
         }
     }
 
     // Check to see who has the highest card with trump in play 
     // first check who has trump and then if either both do or do not check for highest card
-    bool CheckForPlayerWin(ClueCard.CardType Trump, ClueCard PlayerClueCard, ClueCard AIClueCard)
+    bool CheckForPlayerWin(CardType Trump, ClueCard PlayerClueCard, ClueCard AIClueCard)
     {
         // check if both have trump
         if (PlayerClueCard.ThisCardType == Trump && AIClueCard.ThisCardType == Trump)

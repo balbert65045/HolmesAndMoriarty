@@ -10,7 +10,7 @@ public class AIController : MonoBehaviour {
     AICardArea CrimeArea;
     AICardArea ClueArea;
 
-    public GameObject MoriartyTile;
+    //public GameObject MoriartyTile;
     TileArea tileArea;
 
     public PlayerType MyPlayerType;
@@ -63,7 +63,23 @@ public class AIController : MonoBehaviour {
     }
 
 
-    public void PickTile()
+    public void PlaceHolmesTile(List<CardType> TypeAllowed, GameObject HolmesTile)
+    {
+        TileSpot[] TilesSpots = FindObjectsOfType<TileSpot>();
+        List<TileSpot> OpenTileSpots = new List<TileSpot>();
+        foreach (TileSpot TS in TilesSpots)
+        {
+            if (!TS.Used)
+            {
+                if (TypeAllowed.Contains(TS.ThisCardType)) { OpenTileSpots.Add(TS); }
+            }
+        }
+        if (OpenTileSpots.Count == 0) { Debug.LogWarning("All tiles are either not open or do not have this type"); }
+        int RandomOpenTileIndex = Random.Range(0, OpenTileSpots.Count);
+        tileArea.PlaceTile(HolmesTile, OpenTileSpots[RandomOpenTileIndex].Number, PlayerType.Holmes);
+    }
+
+    public void PlaceMoriartyTile(GameObject MoriartyTile)
     {
         TileSpot[] TilesSpots = FindObjectsOfType<TileSpot>();
         List<TileSpot> OpenTileSpots = new List<TileSpot>();
@@ -71,6 +87,7 @@ public class AIController : MonoBehaviour {
         {
             if (!TS.Used) { OpenTileSpots.Add(TS); }
         }
+        if (OpenTileSpots.Count == 0) { Debug.LogWarning("All tiles are either not open or do not have this type"); }
         int RandomOpenTileIndex = Random.Range(0, OpenTileSpots.Count);
         tileArea.PlaceTile(MoriartyTile, OpenTileSpots[RandomOpenTileIndex].Number, PlayerType.Moriarty);
     }

@@ -5,9 +5,7 @@ using UnityEngine;
 public class CaseCard : Card {
 
     public PlayerType PlayerType;
-
-    public enum CardType { Blue, Yellow, Green, Red }
-    public CardType ThisCardType;
+    public List<CardType> CardTypes = new List<CardType>(); 
 
     // Use this for initialization
     void Start () {

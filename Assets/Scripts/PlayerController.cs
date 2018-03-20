@@ -10,7 +10,7 @@ public class PlayerController : MonoBehaviour {
     gameManager gamemanager;
     ClueCard SelectedCard;
     TileArea tileArea;
-    public GameObject MoriartyTile;
+     GameObject MoriartyTile;
 
     int MoriartyTilesToPlace = 0;
 
@@ -54,9 +54,10 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
-    public void PlaceMoriartyTiles(int number)
+    public void PlaceMoriartyTiles(int number, GameObject MoriartyTilePrefab)
     {
         MoriartyTilesToPlace = number;
+        MoriartyTile = MoriartyTilePrefab;
     }
 
 

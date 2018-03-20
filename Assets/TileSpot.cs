@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class TileSpot : MonoBehaviour {
 
+    public CardType ThisCardType;
     public int Number;
     public bool Used = false;
 	// Use this for initialization

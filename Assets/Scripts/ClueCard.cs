@@ -6,7 +6,6 @@ public class ClueCard : Card {
 
     // Use this for initialization
     public int Number;
-    public enum CardType { Blue, Yellow, Green, Red}
     public CardType ThisCardType;
 
     public GameObject SelectionOutline;

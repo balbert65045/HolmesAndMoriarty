@@ -167,6 +167,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71c92d49f229a4840a5085581f2dcd92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  PlayerType: 0
+  CardTypes: 00000000010000000300000002000000
 --- !u!212 &212347629842855448
 SpriteRenderer:
   m_ObjectHideFlags: 1

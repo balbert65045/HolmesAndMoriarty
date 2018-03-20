@@ -13,3 +13,12 @@ public enum TileType
     Moriarty
 }
 
+public enum CardType
+{
+   Blue,
+   Yellow,
+   Green,
+   Red
+
+}
+

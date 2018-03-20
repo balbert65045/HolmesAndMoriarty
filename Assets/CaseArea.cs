@@ -43,6 +43,12 @@ public class CaseArea : MonoBehaviour {
         CardTransform.localRotation = Quaternion.Euler(new Vector3(0, 180, 180));
     }
 
+    public CaseCard FindCaseCard(int CaseNumber)
+    {
+        Debug.Log(CaseNumber);
+        return (Positions[CaseNumber - 1].GetComponentInChildren<CaseCard>());
+    }
+
 	
 	// Update is called once per frame
 	void Update () {

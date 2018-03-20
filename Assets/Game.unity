@@ -491,6 +491,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c4b5dde90a8db14a9600b1d985412f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ThisCardType: 3
   Number: 2
   Used: 0
 --- !u!1 &122103644
@@ -590,6 +591,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c4b5dde90a8db14a9600b1d985412f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ThisCardType: 0
   Number: 1
   Used: 0
 --- !u!1 &125362817
@@ -674,7 +676,7 @@ RectTransform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 125362817}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 610.5, y: 394, z: 0}
+  m_LocalPosition: {x: 953, y: 493.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1162619804}
@@ -1684,8 +1686,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CardsHolding: []
   cardDeck: {fileID: 1160658105}
-  MoriartyTile: {fileID: 1453772672797608, guid: 9c6916d0131be4f44a26afeb0e0983c0,
-    type: 2}
   MyPlayerType: 0
 --- !u!4 &601319007
 Transform:
@@ -2021,6 +2021,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c4b5dde90a8db14a9600b1d985412f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ThisCardType: 1
   Number: 15
   Used: 0
 --- !u!1 &700742907
@@ -2120,6 +2121,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c4b5dde90a8db14a9600b1d985412f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ThisCardType: 1
   Number: 10
   Used: 0
 --- !u!1 &725664717
@@ -2500,6 +2502,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c4b5dde90a8db14a9600b1d985412f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ThisCardType: 2
   Number: 16
   Used: 0
 --- !u!1 &898779288
@@ -2672,6 +2675,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c4b5dde90a8db14a9600b1d985412f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ThisCardType: 3
   Number: 14
   Used: 0
 --- !u!1 &982626444
@@ -2844,6 +2848,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c4b5dde90a8db14a9600b1d985412f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ThisCardType: 1
   Number: 5
   Used: 0
 --- !u!1 &1020426697
@@ -3147,6 +3152,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c4b5dde90a8db14a9600b1d985412f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ThisCardType: 1
   Number: 3
   Used: 0
 --- !u!1 &1079501346
@@ -3406,6 +3412,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c4b5dde90a8db14a9600b1d985412f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ThisCardType: 2
   Number: 4
   Used: 0
 --- !u!1 &1106221310
@@ -3795,7 +3802,7 @@ RectTransform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1162619803}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -495.5, y: 351, z: 0}
+  m_LocalPosition: {x: -838, y: 450.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 78143221}
@@ -4106,6 +4113,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c4b5dde90a8db14a9600b1d985412f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ThisCardType: 3
   Number: 11
   Used: 0
 --- !u!1 &1390281637
@@ -4205,6 +4213,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c4b5dde90a8db14a9600b1d985412f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ThisCardType: 0
   Number: 12
   Used: 0
 --- !u!1 &1412809091
@@ -4304,6 +4313,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c4b5dde90a8db14a9600b1d985412f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ThisCardType: 3
   Number: 8
   Used: 0
 --- !u!1 &1417891322
@@ -5240,6 +5250,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c4b5dde90a8db14a9600b1d985412f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ThisCardType: 0
   Number: 13
   Used: 0
 --- !u!1 &1731397039
@@ -5339,6 +5350,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c4b5dde90a8db14a9600b1d985412f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ThisCardType: 0
   Number: 7
   Used: 0
 --- !u!1 &1823265296
@@ -5480,6 +5492,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c4b5dde90a8db14a9600b1d985412f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ThisCardType: 2
   Number: 6
   Used: 0
 --- !u!1 &1893883071
@@ -5583,8 +5596,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _CardDeck: {fileID: 1160658105}
-  MoriartyTile: {fileID: 1453772672797608, guid: 9c6916d0131be4f44a26afeb0e0983c0,
-    type: 2}
   MyPlayerType: 1
 --- !u!4 &1912034244
 Transform:
@@ -5804,6 +5815,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c4b5dde90a8db14a9600b1d985412f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ThisCardType: 2
   Number: 9
   Used: 0
 --- !u!1 &2005821678
