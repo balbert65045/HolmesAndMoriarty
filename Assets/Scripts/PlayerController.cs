@@ -68,6 +68,7 @@ public class PlayerController : MonoBehaviour {
     {
         HolmesTilesToPlace ++;
         HolmesTile = HolmesTilePrefab;
+        HolmesCaseCard.MoveUp(HolmesTilesToPlace);
         HolmesCaseCardsWon.Add(HolmesCaseCard);
     }
 
@@ -132,6 +133,7 @@ public class PlayerController : MonoBehaviour {
                                 if (tileArea.PlaceTile(HolmesTile, Hit.transform.GetComponent<TileSpot>().Number, PlayerType.Holmes))
                                 {
                                     HolmesTilesToPlace--;
+                                    HolmesCaseCardsWon[i].MoveBackDown();
                                     HolmesCaseCardsWon.Remove(HolmesCaseCardsWon[i]);
                                 }
                             }

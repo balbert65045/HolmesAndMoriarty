@@ -6,6 +6,7 @@ public class CaseArea : MonoBehaviour {
 
     // Use this for initialization
     public Transform[] Positions;
+    public Transform[] HighPositions;
     CaseDeck caseDeck;
 
     void Start () {
