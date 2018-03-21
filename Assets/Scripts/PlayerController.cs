@@ -14,12 +14,9 @@ public class PlayerController : MonoBehaviour {
     GameObject HolmesTile;
 
     int MoriartyTilesToPlace = 0;
-    int HolmesTilesToPlace = 0;
+    public int HolmesTilesToPlace = 0;
 
-    int RedTilestoPlace = 0;
-    int BlueTilestoPlace = 0;
-    int YellowTilestoPlace = 0;
-    int GreenTilestoPlace = 0;
+    public List<CaseCard> HolmesCaseCardsWon;
 
     public PlayerType MyPlayerType;
 
@@ -67,14 +64,11 @@ public class PlayerController : MonoBehaviour {
         MoriartyTile = MoriartyTilePrefab;
     }
 
-    public void PlaceHolmesTiles(GameObject HolmesTilePrefab, List<CardType> CardTypes)
+    public void PlaceHolmesTiles(GameObject HolmesTilePrefab, CaseCard HolmesCaseCard)
     {
         HolmesTilesToPlace ++;
         HolmesTile = HolmesTilePrefab;
-        if (CardTypes.Contains(CardType.Blue)){ BlueTilestoPlace++; }
-        if (CardTypes.Contains(CardType.Red)) { RedTilestoPlace++; }
-        if (CardTypes.Contains(CardType.Yellow)) { YellowTilestoPlace++; }
-        if (CardTypes.Contains(CardType.Green)) { GreenTilestoPlace++; }
+        HolmesCaseCardsWon.Add(HolmesCaseCard);
     }
 
 
@@ -130,56 +124,21 @@ public class PlayerController : MonoBehaviour {
                     }
                     else if (HolmesTilesToPlace > 0)
                     {
-                        if (Hit.transform.GetComponent<TileSpot>().ThisCardType == CardType.Blue && BlueTilestoPlace > 0)
+                        // TODO need to check if possiblt to place tile 
+                        for (int i = 0; i < HolmesCaseCardsWon.Count; i++)
                         {
-                            if (tileArea.PlaceTile(HolmesTile, Hit.transform.GetComponent<TileSpot>().Number, PlayerType.Holmes)) {
-                                HolmesTilesToPlace--;
-                                RedTilestoPlace--;
-                                BlueTilestoPlace--;
-                                GreenTilestoPlace--;
-                                BlueTilestoPlace--;
-                            }
-                        }
-                        else if (Hit.transform.GetComponent<TileSpot>().ThisCardType == CardType.Green && GreenTilestoPlace > 0)
-                        {
-                            if (tileArea.PlaceTile(HolmesTile, Hit.transform.GetComponent<TileSpot>().Number, PlayerType.Holmes))
+                            if (HolmesCaseCardsWon[i].CardTypes.Contains(Hit.transform.GetComponent<TileSpot>().ThisCardType))
                             {
-                                HolmesTilesToPlace--;
-                                RedTilestoPlace--;
-                                BlueTilestoPlace--;
-                                GreenTilestoPlace--;
-                                BlueTilestoPlace--;
-                            }
-                        }
-                        else if (Hit.transform.GetComponent<TileSpot>().ThisCardType == CardType.Red && RedTilestoPlace > 0)
-                        {
-                            if (tileArea.PlaceTile(HolmesTile, Hit.transform.GetComponent<TileSpot>().Number, PlayerType.Holmes))
-                            {
-                                HolmesTilesToPlace--;
-                                RedTilestoPlace--;
-                                BlueTilestoPlace--;
-                                GreenTilestoPlace--;
-                                BlueTilestoPlace--;
-                            }
-                        }
-                        else if (Hit.transform.GetComponent<TileSpot>().ThisCardType == CardType.Yellow && YellowTilestoPlace > 0)
-                        {
-                            if (tileArea.PlaceTile(HolmesTile, Hit.transform.GetComponent<TileSpot>().Number, PlayerType.Holmes))
-                            {
-                                HolmesTilesToPlace--;
-                                RedTilestoPlace--;
-                                BlueTilestoPlace--;
-                                GreenTilestoPlace--;
-                                BlueTilestoPlace--;
+                                if (tileArea.PlaceTile(HolmesTile, Hit.transform.GetComponent<TileSpot>().Number, PlayerType.Holmes))
+                                {
+                                    HolmesTilesToPlace--;
+                                    HolmesCaseCardsWon.Remove(HolmesCaseCardsWon[i]);
+                                }
                             }
                         }
 
                         if (HolmesTilesToPlace == 0)
                         {
-                            RedTilestoPlace = 0;
-                            BlueTilestoPlace = 0;
-                            GreenTilestoPlace = 0;
-                            BlueTilestoPlace = 0;
                             gamemanager.CheckEndTurn();
                         }
 

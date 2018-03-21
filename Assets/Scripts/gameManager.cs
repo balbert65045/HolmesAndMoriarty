@@ -158,6 +158,7 @@ public class gameManager : MonoBehaviour {
                 }  
                 break;
             case TurnStatus.PickTileHolmes:
+                tilePromptSelection.gameObject.SetActive(false);
                 CurrentTurnStatus = TurnStatus.CheckScore;
                 break;
 
@@ -187,7 +188,7 @@ public class gameManager : MonoBehaviour {
                     switch (playerController.MyPlayerType)
                     {
                         case PlayerType.Holmes:
-                            playerController.PlaceHolmesTiles(HolmesTile, caseArea.FindCaseCard(i + 1).CardTypes);
+                            playerController.PlaceHolmesTiles(HolmesTile, caseArea.FindCaseCard(i + 1));
                             break;
                         case PlayerType.Moriarty:
                             aiController.PlaceHolmesTile(caseArea.FindCaseCard(i + 1).CardTypes, HolmesTile);
@@ -196,7 +197,14 @@ public class gameManager : MonoBehaviour {
                 }
             }
         }
-        if (HolmesCaseWon.Count > 0) { return true; }
+        if (HolmesCaseWon.Count > 0) {
+            if (playerController.MyPlayerType == PlayerType.Holmes)
+            {
+                tilePromptSelection.gameObject.SetActive(true);
+                tilePromptSelection.gameObject.GetComponent<Text>().text = " Select " + HolmesCaseWon.Count + " Tiles for Holmes that meet the Case";
+            }
+            return true;
+        }
         return false;
     }
 
