@@ -73,6 +73,11 @@ public class TileArea : MonoBehaviour {
 
             int HIndex = (Number - 1) % 4;
             int VIndex = (Number - 1) / 4;
+
+            Debug.Log(Number);
+            Debug.Log(HIndex);
+            Debug.Log(VIndex);
+
             switch (PT)
             {
                 case PlayerType.Holmes:
@@ -92,7 +97,7 @@ public class TileArea : MonoBehaviour {
     {
         if (CheckForHorizontalWin()) { return true; };
         if (CheckForVerticalWin()) { return true; };
-        if (CheckForVerticalWin()) { return true; };
+        if (CheckForDiagonalWin()) { return true; };
         return false;
     }
 
@@ -157,17 +162,21 @@ public class TileArea : MonoBehaviour {
     int CheckDiagnol(int i, int j)
     {
         int MaxValue = 0;
-        int a = CheckUpLeft(i, j);
-        if (a > MaxValue) { MaxValue = a; }
+        if (Tile2D[i, j] == TileType.Moriarty)
+        {
+            int a = CheckUpLeft(i, j);
+            if (a > MaxValue) { MaxValue = a; }
 
-        int b = CheckBottomLeft(i, j);
-        if (b > MaxValue) { MaxValue = b; }
+            int b = CheckBottomLeft(i, j);
+            if (b > MaxValue) { MaxValue = b; }
 
-        int c = CheckUpRight(i, j);
-        if (c > MaxValue) { MaxValue = c; }
+            int c = CheckUpRight(i, j);
+            if (c > MaxValue) { MaxValue = c; }
 
-        int d = CheckBottomRight(i, j);
-        if (d > MaxValue) { MaxValue = d; }
+            int d = CheckBottomRight(i, j);
+            if (d > MaxValue) { MaxValue = d; }
+            MaxValue++;
+        }
 
         return MaxValue;
     }

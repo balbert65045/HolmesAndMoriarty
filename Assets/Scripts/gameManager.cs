@@ -9,11 +9,14 @@ public class gameManager : MonoBehaviour {
     public GameObject HolmesTile;
     public GameObject MoriartTile;
 
+    public GameObject WinScreen;
+    public GameObject LoseScreen;
+
     TileArea tileArea;
     TileSelectionPrompt tilePromptSelection;
 
 
-    public enum TurnStatus { Turn1, Turn2, Turn3, PickTileMoriarty, PickTileHolmes, CheckScore }
+    public enum TurnStatus { Turn1, Turn2, Turn3, PickTileMoriarty, PickTileHolmes }
     public TurnStatus CurrentTurnStatus = TurnStatus.Turn1;
 
     public int CurrentTurnOn = 1;
@@ -41,6 +44,8 @@ public class gameManager : MonoBehaviour {
 
         tilePromptSelection = FindObjectOfType<TileSelectionPrompt>();
         tilePromptSelection.gameObject.SetActive(false);
+        WinScreen.SetActive(false);
+        LoseScreen.SetActive(false);
         endTurnButton = FindObjectOfType<EndTurnButton>();
         tileArea = FindObjectOfType<TileArea>();
         caseArea = FindObjectOfType<CaseArea>();
@@ -141,7 +146,11 @@ public class gameManager : MonoBehaviour {
                     if (playerController.MyPlayerType == PlayerType.Holmes) { endTurnButton.DisableEndTurn(); }
                     CurrentTurnStatus = TurnStatus.PickTileHolmes;
                 }
-               else { CurrentTurnStatus = TurnStatus.CheckScore; }
+               else
+                {
+                    CheckForScore();
+                    CurrentTurnStatus = TurnStatus.Turn1;
+                }
 
                 break;
 
@@ -154,25 +163,26 @@ public class gameManager : MonoBehaviour {
                 }
                 else
                 {
-                    CurrentTurnStatus = TurnStatus.CheckScore;
+                    CheckForScore();
+                    CurrentTurnStatus = TurnStatus.Turn1;
                 }  
                 break;
             case TurnStatus.PickTileHolmes:
                 tilePromptSelection.gameObject.SetActive(false);
-                CurrentTurnStatus = TurnStatus.CheckScore;
-                break;
-
-            case TurnStatus.CheckScore:
-                CurrentCaseOn++;
-                CheckForWin();
-                endTurnButton.DisableEndTurn();
-                StartCoroutine("Reset");
-                StartCoroutine("PlayersDrawCards");
-                CurrentCaseOn = 1;
+                CheckForScore();
                 CurrentTurnStatus = TurnStatus.Turn1;
                 break;
-
         }
+    }
+
+    void CheckForScore()
+    {
+        CurrentCaseOn++;
+        CheckForWin();
+        endTurnButton.DisableEndTurn();
+        StartCoroutine("Reset");
+        StartCoroutine("PlayersDrawCards");
+        CurrentCaseOn = 1;
     }
 
     bool CheckForPickTileHolmes()
@@ -188,8 +198,14 @@ public class gameManager : MonoBehaviour {
                     switch (playerController.MyPlayerType)
                     {
                         case PlayerType.Holmes:
-                            playerController.PlaceHolmesTiles(HolmesTile, caseArea.FindCaseCard(i + 1));
-                            break;
+                            if (playerController.PlaceHolmesTiles(HolmesTile, caseArea.FindCaseCard(i + 1)))
+                            {
+                                return true;
+                            }
+                            else
+                            {
+                                return false; 
+                            }
                         case PlayerType.Moriarty:
                             aiController.PlaceHolmesTile(caseArea.FindCaseCard(i + 1).CardTypes, HolmesTile);
                             break;
@@ -254,27 +270,40 @@ public class gameManager : MonoBehaviour {
                     aiController.PlaceMoriartyTile(MoriartTile);
                     break;
             }
-    //        CurrentTurnStatus = TurnStatus.PickTileMoriarty;
             return true;
         }
         else
         {
-      //      CurrentTurnStatus = TurnStatus.CheckScore;
             return false;
         }
     }
 
-
+    // TODO make Holmes win if Moriarty has no way to win
     void CheckForWin()
     {
         if (tileArea.CheckForMoriartyWin())
         {
-            Debug.Log("Moriarty Wins");
+            if (playerController.MyPlayerType == PlayerType.Moriarty)
+            {
+                WinScreen.SetActive(true);
+            }
+            else
+            {
+                LoseScreen.SetActive(true);
+            }
         }
 
         if (CurrentTurnOn == 5)
         {
-            Debug.Log("Holmes Wins");
+            if (playerController.MyPlayerType == PlayerType.Holmes)
+            {
+                WinScreen.SetActive(true);
+            }
+            else
+            {
+                LoseScreen.SetActive(true);
+            }
+           // Debug.Log("Holmes Wins");
         }
     }
 
@@ -312,17 +341,13 @@ public class gameManager : MonoBehaviour {
            switch (playerController.MyPlayerType)
             {
                 case PlayerType.Holmes:
-                    // HolmesScoreThisTurn++;
                     HolmesScoreThisTurn[Case - 1] = true;
+                    PlayerClueCard.SelectCard();
                     tileArea.PlaceTile(HolmesTile, PlayerClueCard.Number, PlayerType.Holmes);
-                    //CaseCard caseCard = caseArea.FindCaseCard(Case);
-                    //if (caseCard.PlayerType == PlayerType.Holmes)
-                    //{
-                    //    Debug.Log("Holmes won on his case card");
-                    //}
                     break;
                 case PlayerType.Moriarty:
                     MoriartyScoreThisTurn[Case - 1] = true;
+                    PlayerCrimeCard.SelectCard();
                     tileArea.PlaceTile(MoriartTile, PlayerCrimeCard.Number, PlayerType.Moriarty);
                     break;
             }
@@ -333,10 +358,12 @@ public class gameManager : MonoBehaviour {
             {
                 case PlayerType.Holmes:
                     HolmesScoreThisTurn[Case - 1] = true;
+                    AIClueCard.SelectCard();
                     tileArea.PlaceTile(HolmesTile, AIClueCard.Number, PlayerType.Holmes);
                     break;
                 case PlayerType.Moriarty:
                     MoriartyScoreThisTurn[Case - 1] = true;
+                    AICrimeCard.SelectCard();
                     tileArea.PlaceTile(MoriartTile, AICrimeCard.Number, PlayerType.Moriarty);
                     break;
             }

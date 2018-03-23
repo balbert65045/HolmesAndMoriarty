@@ -46,7 +46,6 @@ public class CaseArea : MonoBehaviour {
 
     public CaseCard FindCaseCard(int CaseNumber)
     {
-        Debug.Log(CaseNumber);
         return (Positions[CaseNumber - 1].GetComponentInChildren<CaseCard>());
     }
 

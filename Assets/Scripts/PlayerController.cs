@@ -60,16 +60,35 @@ public class PlayerController : MonoBehaviour {
 
     public void PlaceMoriartyTiles(int number, GameObject MoriartyTilePrefab)
     {
+        TileSpot[] TilesSpots = FindObjectsOfType<TileSpot>();
+        List<TileSpot> OpenTileSpots = new List<TileSpot>();
+        foreach (TileSpot TS in TilesSpots)
+        {
+            if (!TS.Used) { OpenTileSpots.Add(TS); }
+        }
+        if (OpenTileSpots.Count == 0) { return; }
         MoriartyTilesToPlace = number;
         MoriartyTile = MoriartyTilePrefab;
     }
 
-    public void PlaceHolmesTiles(GameObject HolmesTilePrefab, CaseCard HolmesCaseCard)
+    public bool PlaceHolmesTiles(GameObject HolmesTilePrefab, CaseCard HolmesCaseCard)
     {
+        // check tiles to make sure one exist that can be gotten 
+        TileSpot[] TilesSpots = FindObjectsOfType<TileSpot>();
+        List<TileSpot> OpenTileSpots = new List<TileSpot>();
+        foreach (TileSpot TS in TilesSpots)
+        {
+            if (!TS.Used)
+            {
+                if (HolmesCaseCard.CardTypes.Contains(TS.ThisCardType)) { OpenTileSpots.Add(TS); }
+            }
+        }
+        if (OpenTileSpots.Count == 0) { return false; }
         HolmesTilesToPlace ++;
         HolmesTile = HolmesTilePrefab;
         HolmesCaseCard.MoveUp(HolmesTilesToPlace);
         HolmesCaseCardsWon.Add(HolmesCaseCard);
+        return true;
     }
 
 
