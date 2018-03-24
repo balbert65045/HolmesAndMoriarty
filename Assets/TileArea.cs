@@ -74,10 +74,6 @@ public class TileArea : MonoBehaviour {
             int HIndex = (Number - 1) % 4;
             int VIndex = (Number - 1) / 4;
 
-            Debug.Log(Number);
-            Debug.Log(HIndex);
-            Debug.Log(VIndex);
-
             switch (PT)
             {
                 case PlayerType.Holmes:

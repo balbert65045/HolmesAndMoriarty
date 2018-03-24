@@ -112,6 +112,10 @@ public class gameManager : MonoBehaviour {
         {
             endTurnButton.EnableEndTurn();
         }
+        else
+        {
+            endTurnButton.DisableEndTurn();
+        }
     }
 
     public void EndTurn()
@@ -387,19 +391,55 @@ public class gameManager : MonoBehaviour {
     // put these in a score controller class??
    CardType CheckForTrump(ClueCard PlayerCrimeCard, ClueCard AICrimeCard)
     {
+
         if (PlayerCrimeCard.Number > AICrimeCard.Number)
         {
+            // check for wrap around effect 
+            switch (AICrimeCard.Number)
+            {
+                case 1:
+                    if (PlayerCrimeCard.Number > 13) { return AICrimeCard.ThisCardType; }
+                    break;
+                case 2:
+                    if (PlayerCrimeCard.Number > 14) { return AICrimeCard.ThisCardType; }
+                    break;
+                case 3:
+                    if (PlayerCrimeCard.Number > 15) { return AICrimeCard.ThisCardType; }
+                    break;
+            }
             return PlayerCrimeCard.ThisCardType;
-        }
-        else if (AICrimeCard.Number > PlayerCrimeCard.Number)
-        {
-            return AICrimeCard.ThisCardType;
         }
         else
         {
-            Debug.LogError("Player Card and AI card should never be the same");
-            return CardType.Red;
+            switch (PlayerCrimeCard.Number)
+            {
+                case 1:
+                    if (AICrimeCard.Number > 13) { return PlayerCrimeCard.ThisCardType; }
+                    break;
+                case 2:
+                    if (AICrimeCard.Number > 14) { return PlayerCrimeCard.ThisCardType; }
+                    break;
+                case 3:
+                    if (AICrimeCard.Number > 15) { return PlayerCrimeCard.ThisCardType; }
+                    break;
+            }
+            return AICrimeCard.ThisCardType; 
         }
+
+
+        //if (PlayerCrimeCard.Number > AICrimeCard.Number)
+        //{
+        //    return PlayerCrimeCard.ThisCardType;
+        //}
+        //else if (AICrimeCard.Number > PlayerCrimeCard.Number)
+        //{
+        //    return AICrimeCard.ThisCardType;
+        //}
+        //else
+        //{
+        //    Debug.LogError("Player Card and AI card should never be the same");
+        //    return CardType.Red;
+        //}
     }
 
     // Check to see who has the highest card with trump in play 
@@ -434,35 +474,10 @@ public class gameManager : MonoBehaviour {
         {
             if (PlayerClueCard.Number > AIClueCard.Number)
             {
-                // check for wrap around effect 
-                switch (AIClueCard.Number)
-                {
-                    case 1:
-                        if (PlayerClueCard.Number > 13) { return false; }
-                        break;
-                    case 2:
-                        if (PlayerClueCard.Number > 14) { return false; }
-                        break;
-                    case 3:
-                        if (PlayerClueCard.Number > 15) { return false; }
-                        break;
-                }
                 return true;
             }
             else
             {
-                switch (PlayerClueCard.Number)
-                {
-                    case 1:
-                        if (AIClueCard.Number > 13) { return true; }
-                        break;
-                    case 2:
-                        if (AIClueCard.Number > 14) { return true; }
-                        break;
-                    case 3:
-                        if (AIClueCard.Number > 15) { return true; }
-                        break;
-                }
                 return false;
             }
         }

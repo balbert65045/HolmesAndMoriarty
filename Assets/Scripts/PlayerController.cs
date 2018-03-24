@@ -25,7 +25,6 @@ public class PlayerController : MonoBehaviour {
 	void Start () {
         cardHand = GetComponentInChildren<CardHand>();
         tileArea = FindObjectOfType<TileArea>();
-        //_CardDeck = FindObjectOfType<CardDeck>();
         gamemanager = FindObjectOfType<gameManager>();
     }
 
@@ -98,63 +97,105 @@ public class PlayerController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         
-
+        // On Mouse/Finger up 
         if (Input.GetMouseButtonUp(0))
         {
-            RaycastHit Hit;
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out Hit, 50f, BoardLayer))
-            {
-                if (Hit.transform.GetComponent<CardArea>())
-                {
-                    CheckForPlaceCard(Hit.transform);
-                }
-                else
-                {
-                    if (SelectedCard != null)
-                    {
-                        if (SelectedCard.GetComponentInParent<RowAreaPosition>() != null)
-                        {
-                            cardHand.AddCard(SelectedCard, gamemanager.CurrentCaseOn - 1);
-                            SelectedCard.transform.position = SelectedCardOriginalPosition;
-                            ClueCard card = SelectedCard;
-                            UnselectCard();
-                            card.GetComponentInParent<CardArea>().RemoveCard(card);
-                        }
-                        else
-                        {
-                            SelectedCard.transform.position = SelectedCardOriginalPosition;
-                            UnselectCard();
-                        }
-                        
-                    }
-                }
-            }
+            Remove_Unselect_PlaceDownCard();
         }
-        // When mouse id down look for something to select. TODO change this to touch input
+        // On Mouse/finger pressed Down 
         else if (Input.GetMouseButtonDown(0))
         {
-            RaycastHit Hit;
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out Hit))
-            {
-                //Select Card
-                if (Hit.transform.GetComponent<ClueCard>())
-                {
-                    CheckToSelectCard(Hit.transform);
-                }
-                // Place Tile Down
-                else if (Hit.transform.GetComponent<TileSpot>())
-                {
-                    CheckToPlaceDownTile(Hit.transform);
-                }
-            }
+            SelectCard_PlaceTileDown();
         }
+
+        // On Holding Down Mouse/Finger 
         else if (Input.GetMouseButton(0))
         {
             CheckForCardFollow();
         }
 	}
+
+
+    void SelectCard_PlaceTileDown()
+    {
+        RaycastHit Hit;
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out Hit))
+        {
+            //Select Card
+            if (Hit.transform.GetComponent<ClueCard>())
+            {
+                CheckToSelectCard(Hit.transform);
+            }
+            // Place Tile Down
+            else if (Hit.transform.GetComponent<TileSpot>())
+            {
+                CheckToPlaceDownTile(Hit.transform);
+            }
+        }
+    }
+
+    void Remove_Unselect_PlaceDownCard()
+    {
+        RaycastHit Hit;
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out Hit, 50f, BoardLayer))
+        {
+            if (Hit.transform.GetComponent<CardArea>())
+            {
+                CheckForPlaceCard(Hit.transform);
+            }
+            else
+            {
+                CheckToRemoveCard();
+            }
+            gamemanager.CheckEndTurn();
+        }
+        UnselectCard();
+    }
+
+
+    void CheckToRemoveCard()
+    {
+        if (SelectedCard != null)
+        {
+            if (SelectedCard.GetComponentInParent<RowAreaPosition>() != null)
+            {
+                cardHand.AddCard(SelectedCard, gamemanager.CurrentCaseOn - 1);
+                SelectedCard.transform.position = SelectedCardOriginalPosition;
+                ClueCard card = SelectedCard;
+                card.GetComponentInParent<CardArea>().RemoveCard(card);
+                return;
+            }
+            SelectedCard.transform.position = SelectedCardOriginalPosition;
+        }
+    }
+
+    void CheckForPlaceCard(Transform HitTransform)
+    {
+        if (SelectedCard != null)
+        {
+            if (HitTransform.GetComponent<CardArea>().CheckForAvailableSpace(gamemanager.CurrentCaseOn))
+            {
+                // Moving from another row area
+                if (SelectedCard.GetComponentInParent<RowAreaPosition>() != null)
+                {
+                    SelectedCard.GetComponentInParent<CardArea>().MoveCard(SelectedCard);
+                    HitTransform.GetComponent<CardArea>().PlaceCard(SelectedCard, gamemanager.CurrentCaseOn);
+                }
+                // Moving card from hand
+                else
+                {
+                    HitTransform.GetComponent<CardArea>().PlaceCard(SelectedCard, gamemanager.CurrentCaseOn);
+                    FindObjectOfType<CardHand>().RemoveCard(SelectedCard);
+                }
+                return;  
+            }
+            SelectedCard.transform.position = SelectedCardOriginalPosition;
+        }
+    }
+
+
 
     void CheckToPlaceDownTile(Transform HitTransform)
     {
@@ -227,30 +268,15 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
-    void CheckForPlaceCard(Transform HitTransform)
-    {
-        if (SelectedCard != null)
-        {
-            if (HitTransform.GetComponent<CardArea>().CheckForAvailableSpace(gamemanager.CurrentCaseOn))
-            {
-                HitTransform.GetComponent<CardArea>().PlaceCard(SelectedCard, gamemanager.CurrentCaseOn);
-                SelectedCard.PlacedDown();
-                FindObjectOfType<CardHand>().RemoveCard(SelectedCard);
-                gamemanager.CheckEndTurn();
-            }
-            else
-            {
-                SelectedCard.transform.position = SelectedCardOriginalPosition;
-            }
-            UnselectCard();
-        }
-    }
 
 
     void UnselectCard()
     {
-        SelectedCard.DeSelectCard();
-        SelectedCard = null;
-        SelectedCardOriginalPosition = Vector3.zero;
+        if (SelectedCard != null)
+        {
+            SelectedCard.DeSelectCard();
+            SelectedCard = null;
+            SelectedCardOriginalPosition = Vector3.zero;
+        }
     }
 }

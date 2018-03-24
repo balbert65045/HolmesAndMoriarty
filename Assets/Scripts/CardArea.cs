@@ -67,6 +67,21 @@ public class CardArea : MonoBehaviour {
         }
     }
 
+    public void MoveCard(ClueCard card)
+    {
+        foreach (RowAreaPosition RP in Positions)
+        {
+            if (RP.GetComponentInChildren<ClueCard>())
+            {
+                if (RP.GetComponentInChildren<ClueCard>().Number == card.Number)
+                {
+                    RP.InUse = false;
+                }
+            }
+        }
+    }
+
+
     public void PlaceCard(ClueCard card, int CaseN)
     {
         // simply placing it in position one for now 
