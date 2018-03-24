@@ -178,6 +178,7 @@ public class gameManager : MonoBehaviour {
     void CheckForScore()
     {
         CurrentCaseOn++;
+        CurrentTurnOn++;
         CheckForWin();
         endTurnButton.DisableEndTurn();
         StartCoroutine("Reset");

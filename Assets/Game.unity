@@ -337,7 +337,7 @@ GameObject:
   - component: {fileID: 68343091}
   - component: {fileID: 68343090}
   - component: {fileID: 68343089}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: OponentClueArea
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -527,7 +527,7 @@ GameObject:
   - component: {fileID: 106346998}
   - component: {fileID: 106347002}
   - component: {fileID: 106346999}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Quad (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -627,7 +627,7 @@ GameObject:
   - component: {fileID: 122103645}
   - component: {fileID: 122103649}
   - component: {fileID: 122103646}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Quad
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -797,7 +797,7 @@ RectTransform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 125362817}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 953, y: 493.5, z: 0}
+  m_LocalPosition: {x: 596.5, y: 237, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1162619804}
@@ -943,7 +943,7 @@ GameObject:
   m_Component:
   - component: {fileID: 156999673}
   - component: {fileID: 156999674}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Card (10)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1017,7 +1017,7 @@ GameObject:
   - component: {fileID: 167625588}
   - component: {fileID: 167625587}
   - component: {fileID: 167625586}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: CrimeAreaText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1215,7 +1215,7 @@ GameObject:
   - component: {fileID: 260042004}
   - component: {fileID: 260042007}
   - component: {fileID: 260042005}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Case1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1347,7 +1347,7 @@ GameObject:
   - component: {fileID: 321940907}
   - component: {fileID: 321940906}
   - component: {fileID: 321940905}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ClueAreaText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1553,7 +1553,7 @@ GameObject:
   m_Component:
   - component: {fileID: 394475201}
   - component: {fileID: 394475202}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Card (11)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1626,7 +1626,7 @@ GameObject:
   m_Component:
   - component: {fileID: 440516502}
   - component: {fileID: 440516503}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Card (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1699,7 +1699,7 @@ GameObject:
   m_Component:
   - component: {fileID: 450529032}
   - component: {fileID: 450529033}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Card (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1773,7 +1773,7 @@ GameObject:
   - component: {fileID: 460035779}
   - component: {fileID: 460035781}
   - component: {fileID: 460035780}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ClueAreaText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2001,7 +2001,7 @@ GameObject:
   - component: {fileID: 544590444}
   - component: {fileID: 544590447}
   - component: {fileID: 544590445}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Case2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2052,7 +2052,7 @@ GameObject:
   m_Component:
   - component: {fileID: 553711128}
   - component: {fileID: 553711129}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Card (13)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2396,7 +2396,7 @@ GameObject:
   - component: {fileID: 631502740}
   - component: {fileID: 631502739}
   - component: {fileID: 631502738}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Field
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2480,7 +2480,7 @@ GameObject:
   m_Component:
   - component: {fileID: 663817635}
   - component: {fileID: 663817636}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Card (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2621,7 +2621,7 @@ GameObject:
   - component: {fileID: 675726635}
   - component: {fileID: 675726639}
   - component: {fileID: 675726636}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Quad (14)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2721,7 +2721,7 @@ GameObject:
   - component: {fileID: 700742908}
   - component: {fileID: 700742912}
   - component: {fileID: 700742909}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Quad (9)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2820,7 +2820,7 @@ GameObject:
   - component: {fileID: 725664718}
   - component: {fileID: 725664720}
   - component: {fileID: 725664719}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Case3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2873,7 +2873,7 @@ GameObject:
   - component: {fileID: 754919658}
   - component: {fileID: 754919660}
   - component: {fileID: 754919659}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Case1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2975,7 +2975,7 @@ GameObject:
   - component: {fileID: 779389439}
   - component: {fileID: 779389442}
   - component: {fileID: 779389440}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Case1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3026,7 +3026,7 @@ GameObject:
   m_Component:
   - component: {fileID: 793600139}
   - component: {fileID: 793600140}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Card (9)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3102,7 +3102,7 @@ GameObject:
   - component: {fileID: 821068716}
   - component: {fileID: 821068720}
   - component: {fileID: 821068717}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Quad (15)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3395,7 +3395,7 @@ GameObject:
   m_Component:
   - component: {fileID: 898779289}
   - component: {fileID: 898779290}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Card (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3471,7 +3471,7 @@ GameObject:
   - component: {fileID: 940286120}
   - component: {fileID: 940286124}
   - component: {fileID: 940286121}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Quad (13)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3568,7 +3568,7 @@ GameObject:
   m_Component:
   - component: {fileID: 982626446}
   - component: {fileID: 982626445}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Board
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3644,7 +3644,7 @@ GameObject:
   - component: {fileID: 984053502}
   - component: {fileID: 984053506}
   - component: {fileID: 984053503}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Quad (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3843,7 +3843,7 @@ GameObject:
   - component: {fileID: 1054227445}
   - component: {fileID: 1054227447}
   - component: {fileID: 1054227446}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Case2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3896,7 +3896,7 @@ GameObject:
   - component: {fileID: 1062396822}
   - component: {fileID: 1062396825}
   - component: {fileID: 1062396823}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Case3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3950,7 +3950,7 @@ GameObject:
   - component: {fileID: 1065744958}
   - component: {fileID: 1065744962}
   - component: {fileID: 1065744959}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Quad (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4048,7 +4048,7 @@ GameObject:
   - component: {fileID: 1079501347}
   - component: {fileID: 1079501349}
   - component: {fileID: 1079501348}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: CrimeAreaText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4134,7 +4134,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1086669546}
   - component: {fileID: 1086669547}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Card (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4210,7 +4210,7 @@ GameObject:
   - component: {fileID: 1088721396}
   - component: {fileID: 1088721400}
   - component: {fileID: 1088721397}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Quad (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4311,7 +4311,7 @@ GameObject:
   - component: {fileID: 1106221314}
   - component: {fileID: 1106221313}
   - component: {fileID: 1106221312}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: OponentCrimeArea
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4557,7 +4557,7 @@ GameObject:
   - component: {fileID: 1133020699}
   - component: {fileID: 1133020701}
   - component: {fileID: 1133020700}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Case1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4642,7 +4642,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1156269478}
   - component: {fileID: 1156269479}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Card (14)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4790,7 +4790,7 @@ RectTransform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1162619803}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 833, y: 11, z: 0}
+  m_LocalPosition: {x: 476.5, y: 11, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 78143221}
@@ -4909,7 +4909,7 @@ GameObject:
   - component: {fileID: 1171637537}
   - component: {fileID: 1171637539}
   - component: {fileID: 1171637538}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Case2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4962,7 +4962,7 @@ GameObject:
   - component: {fileID: 1198554682}
   - component: {fileID: 1198554684}
   - component: {fileID: 1198554683}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Case3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5016,7 +5016,7 @@ GameObject:
   - component: {fileID: 1278206786}
   - component: {fileID: 1278206790}
   - component: {fileID: 1278206787}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Quad (10)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5238,7 +5238,7 @@ GameObject:
   - component: {fileID: 1390281638}
   - component: {fileID: 1390281642}
   - component: {fileID: 1390281639}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Quad (11)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5379,7 +5379,7 @@ GameObject:
   - component: {fileID: 1412809092}
   - component: {fileID: 1412809096}
   - component: {fileID: 1412809093}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Quad (7)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5476,7 +5476,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1417891323}
   - component: {fileID: 1417891324}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Card (15)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5553,7 +5553,7 @@ GameObject:
   - component: {fileID: 1461315315}
   - component: {fileID: 1461315319}
   - component: {fileID: 1461315318}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: CrimeArea
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5670,7 +5670,7 @@ GameObject:
   - component: {fileID: 1467032705}
   - component: {fileID: 1467032709}
   - component: {fileID: 1467032708}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: 'ClueArea '
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5848,7 +5848,7 @@ RectTransform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1478860732}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -493, y: 280.5, z: 0}
+  m_LocalPosition: {x: -136.5, y: 24, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 125362821}
@@ -5919,7 +5919,7 @@ GameObject:
   - component: {fileID: 1496074026}
   - component: {fileID: 1496074029}
   - component: {fileID: 1496074027}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Board
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6006,7 +6006,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1503747220}
   - component: {fileID: 1503747221}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Card (12)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6203,7 +6203,7 @@ GameObject:
   - component: {fileID: 1586749515}
   - component: {fileID: 1586749518}
   - component: {fileID: 1586749516}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Case2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6256,7 +6256,7 @@ GameObject:
   - component: {fileID: 1623211010}
   - component: {fileID: 1623211013}
   - component: {fileID: 1623211011}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Case3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6338,7 +6338,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1662804203}
   - component: {fileID: 1662804204}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Card (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6469,7 +6469,7 @@ GameObject:
   - component: {fileID: 1720137990}
   - component: {fileID: 1720137994}
   - component: {fileID: 1720137991}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Quad (12)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6645,7 +6645,7 @@ GameObject:
   - component: {fileID: 1731397040}
   - component: {fileID: 1731397044}
   - component: {fileID: 1731397041}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Quad (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6742,7 +6742,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1823265297}
   - component: {fileID: 1823265298}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: TileArea
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6787,7 +6787,7 @@ GameObject:
   - component: {fileID: 1838849559}
   - component: {fileID: 1838849563}
   - component: {fileID: 1838849560}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Quad (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6915,7 +6915,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1893883072}
   - component: {fileID: 1893883073}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Card
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7008,6 +7008,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _CardDeck: {fileID: 1160658105}
   HolmesTilesToPlace: 0
+  BoardLayer:
+    serializedVersion: 2
+    m_Bits: 256
   HolmesCaseCardsWon: []
   MyPlayerType: 0
 --- !u!4 &1912034244
@@ -7032,7 +7035,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 1926960122}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Board
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7067,7 +7070,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1927346266}
   - component: {fileID: 1927346267}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Card (7)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7143,7 +7146,7 @@ GameObject:
   - component: {fileID: 1993619416}
   - component: {fileID: 1993619420}
   - component: {fileID: 1993619417}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Quad (8)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7504,7 +7507,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2094789685}
   - component: {fileID: 2094789686}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Card (8)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
