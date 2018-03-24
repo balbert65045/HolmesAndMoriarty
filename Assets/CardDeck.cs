@@ -32,4 +32,19 @@ public class CardDeck : MonoBehaviour {
         CardsInDeck.Remove(CardPicked);
         return (CardPicked);
     }
+
+    public ClueCard FindCardInDeck(ClueCard card)
+    {
+        foreach (Card cardInDeck in InitialCards)
+        {
+            ClueCard clueCard = (ClueCard)cardInDeck;
+            if (clueCard.Number == card.Number)
+            {
+                return clueCard;
+            }
+
+        }
+        Debug.LogWarning("Cant find card in deck");
+        return null;
+    }
 }

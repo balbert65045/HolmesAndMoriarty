@@ -113,8 +113,20 @@ public class PlayerController : MonoBehaviour {
                 {
                     if (SelectedCard != null)
                     {
-                        SelectedCard.transform.position = SelectedCardOriginalPosition;
-                        UnselectCard();
+                        if (SelectedCard.GetComponentInParent<RowAreaPosition>() != null)
+                        {
+                            cardHand.AddCard(SelectedCard, gamemanager.CurrentCaseOn - 1);
+                            SelectedCard.transform.position = SelectedCardOriginalPosition;
+                            ClueCard card = SelectedCard;
+                            UnselectCard();
+                            card.GetComponentInParent<CardArea>().RemoveCard(card);
+                        }
+                        else
+                        {
+                            SelectedCard.transform.position = SelectedCardOriginalPosition;
+                            UnselectCard();
+                        }
+                        
                     }
                 }
             }

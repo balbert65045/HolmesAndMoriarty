@@ -22,8 +22,11 @@ public class CardHand : MonoBehaviour {
         {
             if (CardPositions[i].GetComponentInChildren<ClueCard>() == null)
             {
-                CardsHolding.Add(card);
+                ClueCard clueCard = FindObjectOfType<ClueDeck>().FindCardInDeck(card);
+                CardsHolding.Add(clueCard);
                 GameObject Card = Instantiate(card.gameObject, CardPositions[i]);
+                Card.transform.localPosition = Vector3.zero;
+                Card.transform.localScale = new Vector3(5, 7, .05f);
                 return;
             }
         }
@@ -38,6 +41,16 @@ public class CardHand : MonoBehaviour {
             if (HCard.Number == card.Number && HCard.ThisCardType == card.ThisCardType)
             {
                 CardsHolding.Remove(HCard);
+                foreach (Transform position in CardPositions)
+                {
+                    if (position.GetComponentInChildren<ClueCard>())
+                    {
+                        if (position.GetComponentInChildren<ClueCard>().Number == card.Number)
+                        {
+                            Destroy(position.GetComponentInChildren<ClueCard>().gameObject);
+                        }
+                    }
+                }
                 return;
             }
         }
