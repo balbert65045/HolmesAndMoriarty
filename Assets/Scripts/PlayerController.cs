@@ -195,9 +195,22 @@ public class PlayerController : MonoBehaviour {
             UnselectCard();
         }
 
-        HitTransform.GetComponent<ClueCard>().SelectCard();
-        SelectedCard = HitTransform.GetComponent<ClueCard>();
-        SelectedCardOriginalPosition = SelectedCard.transform.position;
+        if (HitTransform.GetComponent<ClueCard>().GetComponentInParent<RowAreaPosition>() != null)
+        {
+            if (HitTransform.GetComponent<ClueCard>().GetComponentInParent<RowAreaPosition>().Case == gamemanager.CurrentCaseOn)
+            {
+                HitTransform.GetComponent<ClueCard>().SelectCard();
+                SelectedCard = HitTransform.GetComponent<ClueCard>();
+                SelectedCardOriginalPosition = SelectedCard.transform.position;
+            }
+            return;
+        }
+        else
+        {
+            HitTransform.GetComponent<ClueCard>().SelectCard();
+            SelectedCard = HitTransform.GetComponent<ClueCard>();
+            SelectedCardOriginalPosition = SelectedCard.transform.position;
+        }
     }
 
     void CheckForCardFollow()
