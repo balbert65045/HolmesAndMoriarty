@@ -88,6 +88,9 @@ public class CardArea : MonoBehaviour {
         card.transform.SetParent(Positions[CaseN - 1].transform);
         card.transform.position = Positions[CaseN - 1].transform.position;
         card.transform.rotation = Positions[CaseN - 1].transform.rotation;
+        float y = card.transform.localRotation.eulerAngles.y + 180;
+        float z = card.transform.localRotation.eulerAngles.z + 180;
+        card.transform.localRotation = Quaternion.Euler(0, y, z);
         Positions[CaseN - 1].InUse = true;
 
     }
@@ -95,9 +98,12 @@ public class CardArea : MonoBehaviour {
     public ClueCard FlipCard(int Case)
     {
         ClueCard card = Positions[Case - 1].GetComponentInChildren<ClueCard>();
-        float y = card.transform.localRotation.eulerAngles.y + 180;
-        float z = card.transform.localRotation.eulerAngles.z + 180;
-        card.transform.localRotation = Quaternion.Euler(0, y, z);
+
+        // currently flipping card when placing down 
+
+        //float y = card.transform.localRotation.eulerAngles.y + 180;
+        //float z = card.transform.localRotation.eulerAngles.z + 180;
+        //card.transform.localRotation = Quaternion.Euler(0, y, z);
         return card;
     }
 

@@ -32,7 +32,8 @@ public class CaseArea : MonoBehaviour {
             Card cardDrawn = caseDeck.DrawCard();
             if (!Positions[i].GetComponentInChildren<CaseCard>())
             {
-                Instantiate(cardDrawn.gameObject, Positions[i]);
+                GameObject card = Instantiate(cardDrawn.gameObject, Positions[i]);
+                card.transform.localRotation = Quaternion.Euler(new Vector3(0, 0, 0));
             }
         }
     }

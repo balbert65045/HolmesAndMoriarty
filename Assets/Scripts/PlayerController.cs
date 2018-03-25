@@ -297,7 +297,7 @@ public class PlayerController : MonoBehaviour {
             return;
         }
         // if in hand
-        else if (card.GetComponentInParent<CardHand>())
+        else if (card.GetComponentInParent<CardHand>() && !EnableSwapClueCards)
         {
             SelectCard(card);
         }
