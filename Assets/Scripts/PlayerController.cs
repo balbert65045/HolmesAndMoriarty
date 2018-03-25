@@ -21,11 +21,23 @@ public class PlayerController : MonoBehaviour {
 
     int MoriartyTilesToPlace = 0;
 
+    bool EnableSwapClueCards = false;
 
-	void Start () {
+
+    void Start () {
         cardHand = GetComponentInChildren<CardHand>();
         tileArea = FindObjectOfType<TileArea>();
         gamemanager = FindObjectOfType<gameManager>();
+    }
+
+    public void PlayerEnableSwapClueCards()
+    {
+        EnableSwapClueCards = true;
+    }
+
+    public void PlayerDisableSwapClueCards()
+    {
+        EnableSwapClueCards = false;
     }
 
     public List<ClueCard> GetCardsHolding()
@@ -137,62 +149,97 @@ public class PlayerController : MonoBehaviour {
 
     void Remove_Unselect_PlaceDownCard()
     {
-        RaycastHit Hit;
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out Hit, 50f, BoardLayer))
+        if (SelectedCard != null)
         {
-            if (Hit.transform.GetComponent<CardArea>())
+            RaycastHit Hit;
+            Ray ray = new Ray(SelectedCard.transform.position, Vector3.down);
+            if (EnableSwapClueCards)
             {
-                CheckForPlaceCard(Hit.transform);
+                if (Physics.Raycast(ray, out Hit))
+                {
+                    if (Hit.transform.GetComponent<ClueCard>() && Hit.transform.GetComponentInParent<CardArea>() &&
+                        Hit.transform.GetComponentInParent<CardArea>().ThisRow == CardArea.Row.Clue)
+                    {
+                        ClueCard CardSwapping = Hit.transform.GetComponent<ClueCard>();
+                        CardArea ClueArea = Hit.transform.GetComponentInParent<CardArea>();
+                        SwapClueCards(CardSwapping, ClueArea);
+                    }
+                    else
+                    {
+                        ResetCard();
+                    }
+                }
             }
             else
             {
-                CheckToRemoveCard();
-            }
-            gamemanager.CheckEndTurn();
+                if (Physics.Raycast(ray, out Hit, 50f, BoardLayer))
+                {
+                    // check for placing card
+                    if (Hit.transform.GetComponent<CardArea>())
+                    {
+                        CheckForPlaceCard(Hit.transform);
+                    }
+                    // check to remove card
+                    else
+                    {
+                        CheckToRemoveCard();
+                    }
+                    gamemanager.CheckEndTurn();
+                }
+            }       
+            UnselectCard();
         }
-        UnselectCard();
     }
 
+    void ResetCard()
+    {
+        SelectedCard.transform.position = SelectedCardOriginalPosition;
+    }
+
+    void SwapClueCards(ClueCard cardSwapping, CardArea clueArea)
+    {
+        int cardSwappingCase = cardSwapping.GetComponentInParent<RowAreaPosition>().Case;
+        int SelectedCardSwappingCase = SelectedCard.GetComponentInParent<RowAreaPosition>().Case;
+        clueArea.MoveCard(cardSwapping);
+        clueArea.MoveCard(SelectedCard);
+        clueArea.PlaceCard(cardSwapping, SelectedCardSwappingCase);
+        clueArea.PlaceCard(SelectedCard, cardSwappingCase);
+
+    }
 
     void CheckToRemoveCard()
     {
-        if (SelectedCard != null)
+
+        if (SelectedCard.GetComponentInParent<RowAreaPosition>() != null)
         {
-            if (SelectedCard.GetComponentInParent<RowAreaPosition>() != null)
-            {
-                cardHand.AddCard(SelectedCard, gamemanager.CurrentCaseOn - 1);
-                SelectedCard.transform.position = SelectedCardOriginalPosition;
-                ClueCard card = SelectedCard;
-                card.GetComponentInParent<CardArea>().RemoveCard(card);
-                return;
-            }
+            cardHand.AddCard(SelectedCard, gamemanager.CurrentCaseOn - 1);
             SelectedCard.transform.position = SelectedCardOriginalPosition;
+            ClueCard card = SelectedCard;
+            card.GetComponentInParent<CardArea>().RemoveCard(card);
+            return;
         }
+        SelectedCard.transform.position = SelectedCardOriginalPosition;
     }
 
     void CheckForPlaceCard(Transform HitTransform)
     {
-        if (SelectedCard != null)
+        if (HitTransform.GetComponent<CardArea>().CheckForAvailableSpace(gamemanager.CurrentCaseOn))
         {
-            if (HitTransform.GetComponent<CardArea>().CheckForAvailableSpace(gamemanager.CurrentCaseOn))
+            // Moving from another row area
+            if (SelectedCard.GetComponentInParent<RowAreaPosition>() != null)
             {
-                // Moving from another row area
-                if (SelectedCard.GetComponentInParent<RowAreaPosition>() != null)
-                {
-                    SelectedCard.GetComponentInParent<CardArea>().MoveCard(SelectedCard);
-                    HitTransform.GetComponent<CardArea>().PlaceCard(SelectedCard, gamemanager.CurrentCaseOn);
-                }
-                // Moving card from hand
-                else
-                {
-                    HitTransform.GetComponent<CardArea>().PlaceCard(SelectedCard, gamemanager.CurrentCaseOn);
-                    FindObjectOfType<CardHand>().RemoveCard(SelectedCard);
-                }
-                return;  
+                SelectedCard.GetComponentInParent<CardArea>().MoveCard(SelectedCard);
+                HitTransform.GetComponent<CardArea>().PlaceCard(SelectedCard, gamemanager.CurrentCaseOn);
             }
-            SelectedCard.transform.position = SelectedCardOriginalPosition;
+            // Moving card from hand
+            else
+            {
+                HitTransform.GetComponent<CardArea>().PlaceCard(SelectedCard, gamemanager.CurrentCaseOn);
+                FindObjectOfType<CardHand>().RemoveCard(SelectedCard);
+            }
+            return;  
         }
+        SelectedCard.transform.position = SelectedCardOriginalPosition;
     }
 
 
@@ -231,26 +278,28 @@ public class PlayerController : MonoBehaviour {
 
     void CheckToSelectCard(Transform HitTransform)
     {
+        ClueCard card = HitTransform.GetComponent<ClueCard>();
         if (SelectedCard != null)
         {
             UnselectCard();
         }
-
-        if (HitTransform.GetComponent<ClueCard>().GetComponentInParent<RowAreaPosition>() != null)
+        // if in clue or crime area
+        if (card.GetComponentInParent<CardArea>() != null)
         {
-            if (HitTransform.GetComponent<ClueCard>().GetComponentInParent<RowAreaPosition>().Case == gamemanager.CurrentCaseOn)
+            if (card.GetComponentInParent<RowAreaPosition>().Case == gamemanager.CurrentCaseOn && !EnableSwapClueCards)
             {
-                HitTransform.GetComponent<ClueCard>().SelectCard();
-                SelectedCard = HitTransform.GetComponent<ClueCard>();
-                SelectedCardOriginalPosition = SelectedCard.transform.position;
+                SelectCard(card);
+            }
+            else if ((card.GetComponentInParent<CardArea>().ThisRow == CardArea.Row.Clue && EnableSwapClueCards))
+            {
+                SelectCard(card);
             }
             return;
         }
-        else
+        // if in hand
+        else if (card.GetComponentInParent<CardHand>())
         {
-            HitTransform.GetComponent<ClueCard>().SelectCard();
-            SelectedCard = HitTransform.GetComponent<ClueCard>();
-            SelectedCardOriginalPosition = SelectedCard.transform.position;
+            SelectCard(card);
         }
     }
 
@@ -262,13 +311,20 @@ public class PlayerController : MonoBehaviour {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out Hit))
             {
-                Vector3 NewCardPosition = new Vector3(Hit.point.x, SelectedCard.transform.position.y, Hit.point.z);
+                Vector3 NewCardPosition = new Vector3(Hit.point.x, SelectedCardOriginalPosition.y + 2f, Hit.point.z);
                 SelectedCard.transform.position = Vector3.Lerp(SelectedCard.transform.position, NewCardPosition, Time.deltaTime * 20);
             }
         }
     }
 
 
+
+    void SelectCard(ClueCard card)
+    {
+        card.SelectCard();
+        SelectedCard = card;
+        SelectedCardOriginalPosition = SelectedCard.transform.position;
+    }
 
     void UnselectCard()
     {

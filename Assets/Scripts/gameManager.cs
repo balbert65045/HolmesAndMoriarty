@@ -16,7 +16,7 @@ public class gameManager : MonoBehaviour {
     TileSelectionPrompt tilePromptSelection;
 
 
-    public enum TurnStatus { Turn1, Turn2, Turn3, PickTileMoriarty, PickTileHolmes }
+    public enum TurnStatus { Turn1, Turn2, Turn3, SwitchClueCards, PickTileMoriarty, PickTileHolmes }
     public TurnStatus CurrentTurnStatus = TurnStatus.Turn1;
 
     public int CurrentTurnOn = 1;
@@ -137,25 +137,34 @@ public class gameManager : MonoBehaviour {
                 break;
 
             case TurnStatus.Turn3:
+                tilePromptSelection.gameObject.SetActive(true);
+                tilePromptSelection.gameObject.GetComponent<Text>().text = "Move Clue cards";
+                playerController.PlayerEnableSwapClueCards();
+                CurrentTurnStatus = TurnStatus.SwitchClueCards;
+                break;
+
+            case TurnStatus.SwitchClueCards:
+                tilePromptSelection.gameObject.SetActive(false);
+                playerController.PlayerDisableSwapClueCards();
                 for (int i = 1; i <= 3; i++)
                 {
                     CheckForScore(i);
                 }
-               if (CheckForPickTileMoriarty()) {
+                if (CheckForPickTileMoriarty())
+                {
                     if (playerController.MyPlayerType == PlayerType.Holmes) { endTurnButton.DisableEndTurn(); }
                     CurrentTurnStatus = TurnStatus.PickTileMoriarty;
                 }
-               else if (CheckForPickTileHolmes())
+                else if (CheckForPickTileHolmes())
                 {
                     if (playerController.MyPlayerType == PlayerType.Holmes) { endTurnButton.DisableEndTurn(); }
                     CurrentTurnStatus = TurnStatus.PickTileHolmes;
                 }
-               else
+                else
                 {
                     CheckForScore();
                     CurrentTurnStatus = TurnStatus.Turn1;
                 }
-
                 break;
 
             case TurnStatus.PickTileMoriarty:
@@ -425,21 +434,6 @@ public class gameManager : MonoBehaviour {
             }
             return AICrimeCard.ThisCardType; 
         }
-
-
-        //if (PlayerCrimeCard.Number > AICrimeCard.Number)
-        //{
-        //    return PlayerCrimeCard.ThisCardType;
-        //}
-        //else if (AICrimeCard.Number > PlayerCrimeCard.Number)
-        //{
-        //    return AICrimeCard.ThisCardType;
-        //}
-        //else
-        //{
-        //    Debug.LogError("Player Card and AI card should never be the same");
-        //    return CardType.Red;
-        //}
     }
 
     // Check to see who has the highest card with trump in play 
