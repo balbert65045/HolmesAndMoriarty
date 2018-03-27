@@ -91,6 +91,7 @@ public class CardArea : MonoBehaviour {
         float y = card.transform.localRotation.eulerAngles.y + 180;
         float z = card.transform.localRotation.eulerAngles.z + 180;
         card.transform.localRotation = Quaternion.Euler(0, y, z);
+        card.transform.localScale = new Vector3(.7f, .246f, .07f);
         Positions[CaseN - 1].InUse = true;
 
     }

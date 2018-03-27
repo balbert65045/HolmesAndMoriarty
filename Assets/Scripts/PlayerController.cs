@@ -174,6 +174,7 @@ public class PlayerController : MonoBehaviour {
             {
                 if (Physics.Raycast(ray, out Hit, 50f, BoardLayer))
                 {
+                   
                     // check for placing card
                     if (Hit.transform.GetComponent<CardArea>())
                     {
@@ -223,6 +224,7 @@ public class PlayerController : MonoBehaviour {
 
     void CheckForPlaceCard(Transform HitTransform)
     {
+        
         if (HitTransform.GetComponent<CardArea>().CheckForAvailableSpace(gamemanager.CurrentCaseOn))
         {
             // Moving from another row area
@@ -237,6 +239,7 @@ public class PlayerController : MonoBehaviour {
                 HitTransform.GetComponent<CardArea>().PlaceCard(SelectedCard, gamemanager.CurrentCaseOn);
                 FindObjectOfType<CardHand>().RemoveCard(SelectedCard);
             }
+           
             return;  
         }
         SelectedCard.transform.position = SelectedCardOriginalPosition;

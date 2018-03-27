@@ -26,6 +26,7 @@ public class CardHand : MonoBehaviour {
                 CardsHolding.Add(clueCard);
                 GameObject Card = Instantiate(card.gameObject, CardPositions[i]);
                 Card.transform.localPosition = Vector3.zero;
+                Card.transform.localRotation = Quaternion.Euler(Vector3.zero);
                 Card.transform.localScale = new Vector3(5, 7, .05f);
                 return;
             }
