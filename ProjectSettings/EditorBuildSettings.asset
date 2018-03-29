@@ -9,5 +9,5 @@ EditorBuildSettings:
     path: Assets/_Start.unity
     guid: f242334bf60f7a44d9dbeaf308ca7681
   - enabled: 1
-    path: Assets/Game.unity
-    guid: d16f7ef0cd1f3834596e28813570be43
+    path: Assets/VerticleLayout.unity
+    guid: d20d02b5e34a63349a40f93fe6cb856b
