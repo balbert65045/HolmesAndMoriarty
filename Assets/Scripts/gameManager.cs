@@ -12,11 +12,14 @@ public class gameManager : MonoBehaviour {
     public GameObject WinScreen;
     public GameObject LoseScreen;
 
+    public GameObject ShowAreaText;
+    public GameObject ShowArea;
+
     TileArea tileArea;
     TileSelectionPrompt tilePromptSelection;
 
 
-    public enum TurnStatus { Turn1, Turn2, Turn3, SwitchClueCards, PickTileMoriarty, PickTileHolmes }
+    public enum TurnStatus { Turn1, Turn2, Turn3, SwitchClueCards, PickTileMoriarty, PickTileHolmes, BoardInspect }
     public TurnStatus CurrentTurnStatus = TurnStatus.Turn1;
 
     public int CurrentTurnOn = 1;
@@ -46,6 +49,7 @@ public class gameManager : MonoBehaviour {
         tilePromptSelection.gameObject.SetActive(false);
         WinScreen.SetActive(false);
         LoseScreen.SetActive(false);
+        ShowAreaText.SetActive(false);
         endTurnButton = FindObjectOfType<EndTurnButton>();
         tileArea = FindObjectOfType<TileArea>();
         caseArea = FindObjectOfType<CaseArea>();
@@ -152,18 +156,20 @@ public class gameManager : MonoBehaviour {
                 }
                 if (CheckForPickTileMoriarty())
                 {
+                    Debug.Log("Picking a tile for Moriarty");
                     if (playerController.MyPlayerType == PlayerType.Holmes) { endTurnButton.DisableEndTurn(); }
                     CurrentTurnStatus = TurnStatus.PickTileMoriarty;
                 }
                 else if (CheckForPickTileHolmes())
                 {
+                    Debug.Log("Picking a tile for Holmes");
                     if (playerController.MyPlayerType == PlayerType.Holmes) { endTurnButton.DisableEndTurn(); }
                     CurrentTurnStatus = TurnStatus.PickTileHolmes;
                 }
                 else
                 {
-                    CheckForScore();
-                    CurrentTurnStatus = TurnStatus.Turn1;
+                    Debug.Log("Inspecting Board");
+                    CurrentTurnStatus = TurnStatus.BoardInspect;
                 }
                 break;
 
@@ -176,19 +182,24 @@ public class gameManager : MonoBehaviour {
                 }
                 else
                 {
-                    CheckForScore();
+                    CheckForTotalScore();
                     CurrentTurnStatus = TurnStatus.Turn1;
                 }  
                 break;
             case TurnStatus.PickTileHolmes:
                 tilePromptSelection.gameObject.SetActive(false);
-                CheckForScore();
+                CheckForTotalScore();
                 CurrentTurnStatus = TurnStatus.Turn1;
                 break;
+            case TurnStatus.BoardInspect:
+                CheckForTotalScore();
+                CurrentTurnStatus = TurnStatus.Turn1;
+                break;
+
         }
     }
 
-    void CheckForScore()
+    void CheckForTotalScore()
     {
         CurrentCaseOn++;
         CurrentTurnOn++;
@@ -349,6 +360,16 @@ public class gameManager : MonoBehaviour {
         ClueCard AIClueCard;
 
         FlipCards(Case, out PlayerCrimeCard, out PlayerClueCard, out AICrimeCard, out AIClueCard);
+        // Move Crime cards up
+        //IEnumerator MoveCards = MoveCardsUp(AICrimeCard, PlayerCrimeCard);
+        //if (playerController.MyPlayerType == PlayerType.Holmes){ MoveCards = MoveCardsUp(PlayerCrimeCard, AICrimeCard);}
+        //StartCoroutine(MoveCards);
+
+
+        // declare trump
+        // Move Clue Cards up
+        // declare winner and place tile
+
         CardType Trump = CheckForTrump(PlayerCrimeCard, AICrimeCard);
         if (CheckForPlayerWin(Trump, PlayerClueCard, AIClueCard))
         {
@@ -386,6 +407,22 @@ public class gameManager : MonoBehaviour {
 
 
     }
+
+    IEnumerator MoveCardsUp(Card HolmesCard, Card MoriartyCard)
+    {
+        Transform HolmesCardTransform = ShowArea.GetComponentInChildren<HolmesArea>().transform;
+        Transform MoriartyCardTransfrom = ShowArea.GetComponentInChildren<MoriartyArea>().transform;
+        HolmesCard.transform.SetParent(HolmesCardTransform);
+        HolmesCard.transform.position = HolmesCardTransform.position;
+        HolmesCard.transform.localScale = new Vector3(5, 7, .05f);
+
+        MoriartyCard.transform.SetParent(MoriartyCardTransfrom);
+        MoriartyCard.transform.position = MoriartyCardTransfrom.position;
+        MoriartyCard.transform.localScale = new Vector3(5, 7, .05f);
+
+        yield return new WaitForSeconds(10f);
+    }
+
 
     void FlipCards(int Case, out ClueCard PlayerCrimeCard, out ClueCard PlayerClueCard, out ClueCard AICrimeCard, out ClueCard AIClueCard)
     {
