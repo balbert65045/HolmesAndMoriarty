@@ -135,7 +135,6 @@ public class PlayerController : MonoBehaviour {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out Hit, 100f, Card_TileLayer))
         {
-            Debug.Log(Hit.transform.name);
             //Select Card
             if (Hit.transform.GetComponent<ClueCard>())
             {
