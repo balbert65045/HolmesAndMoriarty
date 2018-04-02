@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour {
     public ClueDeck _CardDeck;
     public int HolmesTilesToPlace = 0;
     public LayerMask BoardLayer;
+    public LayerMask Card_TileLayer;
     public List<CaseCard> HolmesCaseCardsWon;
     public PlayerType MyPlayerType;
 
@@ -132,8 +133,9 @@ public class PlayerController : MonoBehaviour {
     {
         RaycastHit Hit;
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out Hit))
+        if (Physics.Raycast(ray, out Hit, 100f, Card_TileLayer))
         {
+            Debug.Log(Hit.transform.name);
             //Select Card
             if (Hit.transform.GetComponent<ClueCard>())
             {

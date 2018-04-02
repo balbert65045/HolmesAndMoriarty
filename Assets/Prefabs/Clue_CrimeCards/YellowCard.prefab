@@ -20,7 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4960439689498472}
   - component: {fileID: 212363921964638922}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: SelectionSprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -36,7 +36,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4016361460316042}
   - component: {fileID: 212218601758922040}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: BackSprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -52,7 +52,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4198494866776888}
   - component: {fileID: 212911481767443540}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: FrontSprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -71,7 +71,7 @@ GameObject:
   - component: {fileID: 65136400750951288}
   - component: {fileID: 23153694658811860}
   - component: {fileID: 114090162278038754}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: YellowCard
   m_TagString: Untagged
   m_Icon: {fileID: 0}

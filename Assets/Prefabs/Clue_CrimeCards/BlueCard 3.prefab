@@ -20,7 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4062942979205632}
   - component: {fileID: 212493408436642710}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: SelectionSprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -36,7 +36,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4900013586978522}
   - component: {fileID: 212459362437330468}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: FrontSprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -52,7 +52,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4508415143594860}
   - component: {fileID: 212173856423124496}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: BackSprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -71,7 +71,7 @@ GameObject:
   - component: {fileID: 65552270840855918}
   - component: {fileID: 23810712901649134}
   - component: {fileID: 114480530555535162}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: BlueCard 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
