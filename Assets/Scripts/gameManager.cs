@@ -40,7 +40,7 @@ public class gameManager : MonoBehaviour {
     public List<ClueCard> PlayersCards = new List<ClueCard>();
     public List<ClueCard> AICards = new List<ClueCard>();
 
-    bool[] HolmesScoreThisTurn = { false, false, false };
+    public bool[] HolmesScoreThisTurn = { false, false, false };
     bool[] MoriartyScoreThisTurn = { false, false, false };
     // Use this for initialization
     void Start () {
@@ -217,20 +217,16 @@ public class gameManager : MonoBehaviour {
         {
             if (HolmesScoreThisTurn[i])
             {
+                Debug.Log("Holmes won case");
                 if (caseArea.FindCaseCard(i + 1).PlayerType == PlayerType.Holmes)
                 {
+                    Debug.Log("Holmes had case card");
                     HolmesCaseWon.Add(i);
                     switch (playerController.MyPlayerType)
                     {
                         case PlayerType.Holmes:
-                            if (playerController.PlaceHolmesTiles(HolmesTile, caseArea.FindCaseCard(i + 1)))
-                            {
-                                return true;
-                            }
-                            else
-                            {
-                                return false; 
-                            }
+                            playerController.PlaceHolmesTiles(HolmesTile, caseArea.FindCaseCard(i + 1));
+                            break;
                         case PlayerType.Moriarty:
                             aiController.PlaceHolmesTile(caseArea.FindCaseCard(i + 1).CardTypes, HolmesTile);
                             break;

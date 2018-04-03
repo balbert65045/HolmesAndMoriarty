@@ -87,6 +87,7 @@ public class PlayerController : MonoBehaviour {
 
     public bool PlaceHolmesTiles(GameObject HolmesTilePrefab, CaseCard HolmesCaseCard)
     {
+        Debug.Log("Looking to add Holmes Tile");
         // check tiles to make sure one exist that can be gotten 
         TileSpot[] TilesSpots = FindObjectsOfType<TileSpot>();
         List<TileSpot> OpenTileSpots = new List<TileSpot>();
