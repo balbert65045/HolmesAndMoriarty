@@ -94,7 +94,22 @@ public class AIController : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        // cardDeck = FindObjectOfType<CardDeck>();
+
+        if (FindObjectOfType<LevelPropertyManager>() != null)
+        {
+            PlayerType playerType = FindObjectOfType<LevelPropertyManager>().GetPlayerType();
+            switch (playerType)
+            {
+                case PlayerType.Holmes:
+                    MyPlayerType = PlayerType.Moriarty;
+                    break;
+                case PlayerType.Moriarty:
+                    MyPlayerType = PlayerType.Holmes;
+                    break;
+            }
+        }
+
+
         tileArea = FindObjectOfType<TileArea>();
          AICardArea[] CardAreas = FindObjectsOfType<AICardArea>();
         foreach (AICardArea carda in CardAreas)

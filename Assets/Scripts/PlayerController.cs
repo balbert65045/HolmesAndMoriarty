@@ -29,6 +29,11 @@ public class PlayerController : MonoBehaviour {
         cardHand = GetComponentInChildren<CardHand>();
         tileArea = FindObjectOfType<TileArea>();
         gamemanager = FindObjectOfType<gameManager>();
+
+        if (FindObjectOfType<LevelPropertyManager>() != null)
+        {
+            MyPlayerType = FindObjectOfType<LevelPropertyManager>().GetPlayerType();
+        }
     }
 
     public void PlayerEnableSwapClueCards()
