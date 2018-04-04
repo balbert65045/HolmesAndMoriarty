@@ -25,9 +25,7 @@ public class CardHand : MonoBehaviour {
                 ClueCard clueCard = FindObjectOfType<ClueDeck>().FindCardInDeck(card);
                 CardsHolding.Add(clueCard);
                 GameObject Card = Instantiate(card.gameObject, CardPositions[i]);
-                Card.transform.localPosition = Vector3.zero;
-                Card.transform.localRotation = Quaternion.Euler(Vector3.zero);
-                Card.transform.localScale = new Vector3(5, 7, .05f);
+                SortCardColor(StartingPosition);
                 return;
             }
         }
@@ -70,5 +68,87 @@ public class CardHand : MonoBehaviour {
         CardsHolding.Clear();
     }
 
+    public void SortCardsNumber(int StartingPosition)
+    {
+        QuickSort QSort = new QuickSort();
+        List<int> CardNumbers = new List<int>();
+        List<ClueCard> Cards = new List<ClueCard>();
+        foreach (Transform T in CardPositions)
+        {
+            if (T.GetComponentInChildren<ClueCard>() != null)
+            {
+                CardNumbers.Add(T.GetComponentInChildren<ClueCard>().Number);
+                Cards.Add(T.GetComponentInChildren<ClueCard>());
+            }
+        }
+
+        int[] ArrCardNumbers = CardNumbers.ToArray();
+        int[] OrderdCardNumbers = QSort.Sort(ArrCardNumbers);
+        for (int i = 0; i < OrderdCardNumbers.Length; i++)
+        {
+            foreach (ClueCard card in Cards)
+            {
+                if (card.Number == OrderdCardNumbers[i])
+                {
+                    card.transform.parent = CardPositions[i + StartingPosition];
+                    card.transform.localPosition = Vector3.zero;
+                    card.transform.localRotation = Quaternion.Euler(Vector3.zero);
+                    card.transform.localScale = new Vector3(5, 7, .05f);
+                    break;
+                }
+            }
+        }
+    }
+
+    public void SortCardColor(int StartingPosition)
+    {
+        QuickSort QSort = new QuickSort();
+        List<CardType> CardColors = new List<CardType>();
+        List<ClueCard> Cards = new List<ClueCard>();
+        foreach (Transform T in CardPositions)
+        {
+            if (T.GetComponentInChildren<ClueCard>() != null)
+            {
+                CardColors.Add(T.GetComponentInChildren<ClueCard>().ThisCardType);
+                Cards.Add(T.GetComponentInChildren<ClueCard>());
+            }
+        }
+
+        int index = 0;
+        foreach (CardType cardType in CardType.GetValues(typeof(CardType)))
+        {
+            List<ClueCard> ColorCard = new List<ClueCard>();
+            List<int> ColorCardNumbers = new List<int>();
+            foreach (ClueCard card in Cards)
+            {
+                if (card.ThisCardType == cardType)
+                {
+                    ColorCard.Add(card);
+                    ColorCardNumbers.Add(card.Number);
+                }
+            }
+            int[] ArrCardNumbers = ColorCardNumbers.ToArray();
+            int[] OrderdCardNumbers = QSort.Sort(ArrCardNumbers);
+
+            for (int i = 0; i < OrderdCardNumbers.Length; i++)
+            {
+                foreach (ClueCard card in ColorCard)
+                {
+                    if (card.Number == OrderdCardNumbers[i])
+                    {
+                        card.transform.parent = CardPositions[i + StartingPosition + index];
+                        card.transform.localPosition = Vector3.zero;
+                        card.transform.localRotation = Quaternion.Euler(Vector3.zero);
+                        card.transform.localScale = new Vector3(5, 7, .05f);
+                        break;
+                    }
+                }
+            }
+            index = OrderdCardNumbers.Length + index;
+
+        }
+
+
+    }
 
 }
