@@ -12,6 +12,9 @@ public class PlayerController : MonoBehaviour {
     public List<CaseCard> HolmesCaseCardsWon;
     public PlayerType MyPlayerType;
 
+    public bool ClueAreaActive = true;
+    public bool CrimeAreaActive = true;
+
     CardHand cardHand;
     gameManager gamemanager;
     ClueCard SelectedCard;
@@ -26,6 +29,8 @@ public class PlayerController : MonoBehaviour {
 
 
     void Start () {
+        ClueAreaActive = true;
+        CrimeAreaActive = true;
         cardHand = GetComponentInChildren<CardHand>();
         tileArea = FindObjectOfType<TileArea>();
         gamemanager = FindObjectOfType<gameManager>();
@@ -125,6 +130,7 @@ public class PlayerController : MonoBehaviour {
         else if (Input.GetMouseButtonDown(0))
         {
             SelectCard_PlaceTileDown();
+            CheckActiveAreas();
         }
 
         // On Holding Down Mouse/Finger 
@@ -134,6 +140,36 @@ public class PlayerController : MonoBehaviour {
         }
 	}
 
+    void CheckActiveAreas()
+    {
+        CardArea[] CardAreas = FindObjectsOfType<CardArea>();
+        foreach (CardArea CA in CardAreas)
+        {
+            switch (CA.ThisRow)
+            {
+                case CardArea.Row.Crime:
+                    if (CA.CheckForAvailableSpace(gamemanager.CurrentCaseOn))
+                    {
+                        CrimeAreaActive = true;
+                    }
+                    else
+                    {
+                        CrimeAreaActive = false;
+                    }
+                    break;
+                case CardArea.Row.Clue:
+                    if (CA.CheckForAvailableSpace(gamemanager.CurrentCaseOn))
+                    {
+                        ClueAreaActive = true;
+                    }
+                    else
+                    {
+                        ClueAreaActive = false;
+                    }
+                    break;
+            }
+        }
+    }
 
     void SelectCard_PlaceTileDown()
     {
@@ -185,12 +221,13 @@ public class PlayerController : MonoBehaviour {
                     // check for placing card
                     if (Hit.transform.GetComponent<CardArea>())
                     {
-                        CheckForPlaceCard(Hit.transform);
+                        //CheckForPlaceCard(Hit.transform);
+                        CheckToRemoveCardOrPlaceDown();
                     }
                     // check to remove card
                     else
                     {
-                        CheckToRemoveCard();
+                        CheckToRemoveCardOrPlaceDown();
                     }
                     gamemanager.CheckEndTurn();
                 }
@@ -215,7 +252,7 @@ public class PlayerController : MonoBehaviour {
 
     }
 
-    void CheckToRemoveCard()
+    void CheckToRemoveCardOrPlaceDown()
     {
 
         if (SelectedCard.GetComponentInParent<RowAreaPosition>() != null)
@@ -225,6 +262,33 @@ public class PlayerController : MonoBehaviour {
             ClueCard card = SelectedCard;
             card.GetComponentInParent<CardArea>().RemoveCard(card);
             return;
+        }
+        else
+        {
+            Debug.Log("Moving card out of hand");
+            Debug.Log(ClueAreaActive);
+            Debug.Log(CrimeAreaActive);
+            CardArea[] CardAreas = FindObjectsOfType<CardArea>();
+            foreach (CardArea CA in CardAreas)
+            {
+                if (CrimeAreaActive)
+                {
+                    if (CA.ThisRow == CardArea.Row.Crime)
+                    {
+                        CheckForPlaceCard(CA.transform);
+                        return;
+                    }
+                }
+                else if (ClueAreaActive)
+                {
+                    if (CA.ThisRow == CardArea.Row.Clue)
+                    {
+                        CheckForPlaceCard(CA.transform);
+                        return;
+                    }
+                }
+            }
+
         }
         SelectedCard.transform.position = SelectedCardOriginalPosition;
     }
@@ -246,7 +310,6 @@ public class PlayerController : MonoBehaviour {
                 HitTransform.GetComponent<CardArea>().PlaceCard(SelectedCard, gamemanager.CurrentCaseOn);
                 FindObjectOfType<CardHand>().RemoveCard(SelectedCard);
             }
-           
             return;  
         }
         SelectedCard.transform.position = SelectedCardOriginalPosition;
