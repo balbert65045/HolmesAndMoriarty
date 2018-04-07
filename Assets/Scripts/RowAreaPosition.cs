@@ -8,13 +8,19 @@ public class RowAreaPosition : MonoBehaviour {
 
     public bool InUse = false;
 
+    GameObject ActiveImage;
+
 	// Use this for initialization
 	void Start () {
-		
-	}
+        if (GetComponentInChildren<SpriteRenderer>() != null)
+        {
+            ActiveImage = GetComponentInChildren<SpriteRenderer>().gameObject;
+            ActiveImage.SetActive(false);
+        }
+    }
 	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+	public void SetActiveImage(bool value)
+    {
+        ActiveImage.SetActive(value);
+    }
 }

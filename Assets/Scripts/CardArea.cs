@@ -45,6 +45,16 @@ public class CardArea : MonoBehaviour {
 		
 	}
 
+    public void ActiveSpot(int CaseN)
+    {
+        Positions[CaseN - 1].GetComponent<RowAreaPosition>().SetActiveImage(true);
+    }
+
+    public void DeActiveSpot(int CaseN)
+    {
+        Positions[CaseN - 1].GetComponent<RowAreaPosition>().SetActiveImage(false);
+    }
+
     public bool CheckForAvailableSpace(int CaseN)
     {
         if (!Positions[CaseN - 1].InUse) { return true; }

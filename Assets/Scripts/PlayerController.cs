@@ -31,7 +31,7 @@ public class PlayerController : MonoBehaviour {
     void Start () {
         ClueAreaActive = true;
         CrimeAreaActive = true;
-        cardHand = GetComponentInChildren<CardHand>();
+         cardHand = GetComponentInChildren<CardHand>();
         tileArea = FindObjectOfType<TileArea>();
         gamemanager = FindObjectOfType<gameManager>();
 
@@ -143,11 +143,14 @@ public class PlayerController : MonoBehaviour {
     void CheckActiveAreas()
     {
         CardArea[] CardAreas = FindObjectsOfType<CardArea>();
+        CardArea CrimeCardArea = null;
+        CardArea ClueCardArea = null;
         foreach (CardArea CA in CardAreas)
         {
             switch (CA.ThisRow)
             {
                 case CardArea.Row.Crime:
+                    CrimeCardArea = CA;
                     if (CA.CheckForAvailableSpace(gamemanager.CurrentCaseOn))
                     {
                         CrimeAreaActive = true;
@@ -158,6 +161,7 @@ public class PlayerController : MonoBehaviour {
                     }
                     break;
                 case CardArea.Row.Clue:
+                    ClueCardArea = CA;
                     if (CA.CheckForAvailableSpace(gamemanager.CurrentCaseOn))
                     {
                         ClueAreaActive = true;
@@ -169,6 +173,20 @@ public class PlayerController : MonoBehaviour {
                     break;
             }
         }
+        //if (CrimeAreaActive) {
+        //    CrimeCardArea.ActiveSpot(gamemanager.CurrentCaseOn);
+        //    ClueCardArea.DeActiveSpot(gamemanager.CurrentCaseOn);
+        //}
+        //else if (ClueAreaActive) {
+        //    ClueCardArea.ActiveSpot(gamemanager.CurrentCaseOn);
+        //    CrimeCardArea.DeActiveSpot(gamemanager.CurrentCaseOn);
+        //}
+        //else
+        //{
+        //    ClueCardArea.DeActiveSpot(gamemanager.CurrentCaseOn);
+        //    CrimeCardArea.DeActiveSpot(gamemanager.CurrentCaseOn);
+        //}
+
     }
 
     void SelectCard_PlaceTileDown()
@@ -265,9 +283,6 @@ public class PlayerController : MonoBehaviour {
         }
         else
         {
-            Debug.Log("Moving card out of hand");
-            Debug.Log(ClueAreaActive);
-            Debug.Log(CrimeAreaActive);
             CardArea[] CardAreas = FindObjectsOfType<CardArea>();
             foreach (CardArea CA in CardAreas)
             {
