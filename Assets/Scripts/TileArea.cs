@@ -68,7 +68,7 @@ public class TileArea : MonoBehaviour {
         {
             GameObject newTile = Instantiate(tile, new Vector3(TileSpots[Number - 1].transform.position.x, TileSpots[Number - 1].transform.position.y + .1f, TileSpots[Number - 1].transform.position.z), Quaternion.Euler(90, 0, 0));
             newTile.transform.SetParent(TileSpots[Number - 1].transform);
-            newTile.transform.localScale = new Vector3(1, 1, 1);
+            newTile.transform.localScale = new Vector3(.7f, .7f, .7f);
             TileSpots[Number - 1].Used = true;
 
             int HIndex = (Number - 1) % 4;
