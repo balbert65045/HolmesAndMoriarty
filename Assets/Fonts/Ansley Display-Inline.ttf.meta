@@ -1,0 +1,26 @@
+fileFormatVersion: 2
+guid: d6d40408acaa9e942be86d4af977135e
+timeCreated: 1523199585
+licenseType: Free
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Ansley Display
+  fontNames:
+  - Ansley Display
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 023355246a718634fa5f64438ec6e3a9, type: 3}
+  - {fileID: 12800000, guid: 4eaa05d480ac77542a5ee47e3eb53e72, type: 3}
+  - {fileID: 12800000, guid: c5b33e6ba3bbf5b46b47b2bcb7899861, type: 3}
+  - {fileID: 12800000, guid: 29b6f85d7c6917f46970826cc488dc83, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
