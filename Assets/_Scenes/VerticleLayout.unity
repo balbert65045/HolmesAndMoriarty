@@ -6306,8 +6306,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1042684522}
-        m_MethodName: EndTurn
+      - m_Target: {fileID: 1912034243}
+        m_MethodName: PlayerEndTurn
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

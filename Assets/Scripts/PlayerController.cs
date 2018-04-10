@@ -22,6 +22,9 @@ public class PlayerController : MonoBehaviour {
     TileArea tileArea;
     GameObject MoriartyTile;
     GameObject HolmesTile;
+    CardArea ClueArea;
+    CardArea CrimeArea;
+    EndTurnButton endTurnButton;
 
     int MoriartyTilesToPlace = 0;
 
@@ -34,10 +37,40 @@ public class PlayerController : MonoBehaviour {
          cardHand = GetComponentInChildren<CardHand>();
         tileArea = FindObjectOfType<TileArea>();
         gamemanager = FindObjectOfType<gameManager>();
+        endTurnButton = FindObjectOfType<EndTurnButton>();
+
+        CardArea[] CardAreas = FindObjectsOfType<CardArea>();
+        foreach (CardArea carda in CardAreas)
+        {
+            if (carda.ThisRow == CardArea.Row.Clue)
+            {
+                ClueArea = carda;
+            }
+            else if (carda.ThisRow == CardArea.Row.Crime)
+            {
+                CrimeArea = carda;
+            }
+        }
+
 
         if (FindObjectOfType<LevelPropertyManager>() != null)
         {
             MyPlayerType = FindObjectOfType<LevelPropertyManager>().GetPlayerType();
+        }
+    }
+
+
+
+    public void PlayerEndTurn()
+    {
+        gamemanager.PlayerEndTurn(MyPlayerType);
+        if (gamemanager.CurrentTurnStatus == gameManager.TurnStatus.SwitchClueCards){}
+        else if (gamemanager.CurrentTurnStatus == gameManager.TurnStatus.BoardInspect) {}
+        else if ((gamemanager.CurrentTurnStatus == gameManager.TurnStatus.PickTileHolmes || gamemanager.CurrentTurnStatus == gameManager.TurnStatus.PickTileMoriarty) &&
+            MyPlayerType == PlayerType.Moriarty) {}
+        else
+        {
+            endTurnButton.DisableEndTurn();
         }
     }
 
@@ -139,6 +172,19 @@ public class PlayerController : MonoBehaviour {
             CheckForCardFollow();
         }
 	}
+
+
+    void CheckEndTurn()
+    {
+        if (!ClueArea.CheckForAvailableSpace(gamemanager.CurrentCaseOn) && !CrimeArea.CheckForAvailableSpace(gamemanager.CurrentCaseOn))
+        {
+            endTurnButton.EnableEndTurn();
+        }
+        else
+        {
+            endTurnButton.DisableEndTurn();
+        }
+    }
 
     void CheckActiveAreas()
     {
@@ -247,7 +293,7 @@ public class PlayerController : MonoBehaviour {
                     {
                         CheckToRemoveCardOrPlaceDown();
                     }
-                    gamemanager.CheckEndTurn();
+                    CheckEndTurn();
                 }
             }       
             UnselectCard();
@@ -337,7 +383,7 @@ public class PlayerController : MonoBehaviour {
         if (MoriartyTilesToPlace > 0)
         {
             if (tileArea.PlaceTile(MoriartyTile, HitTransform.GetComponent<TileSpot>().Number, PlayerType.Moriarty)) { MoriartyTilesToPlace--; }
-            if (MoriartyTilesToPlace == 0) { gamemanager.CheckEndTurn(); }
+            if (MoriartyTilesToPlace == 0) { CheckEndTurn(); }
         }
         else if (HolmesTilesToPlace > 0)
         {
@@ -357,7 +403,7 @@ public class PlayerController : MonoBehaviour {
 
             if (HolmesTilesToPlace == 0)
             {
-                gamemanager.CheckEndTurn();
+                CheckEndTurn();
             }
 
         }

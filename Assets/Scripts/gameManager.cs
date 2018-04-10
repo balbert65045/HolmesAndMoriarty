@@ -32,7 +32,6 @@ public class gameManager : MonoBehaviour {
 
     CaseArea caseArea;
 
-    EndTurnButton endTurnButton;
     PlayerController playerController;
     AIController aiController;
     public ClueDeck cardDeck;
@@ -42,6 +41,11 @@ public class gameManager : MonoBehaviour {
 
     public bool[] HolmesScoreThisTurn = { false, false, false };
     bool[] MoriartyScoreThisTurn = { false, false, false };
+
+    bool HolmesEndTurn = false;
+    bool MoriartyEndTurn = false;
+
+
     // Use this for initialization
     void Start () {
 
@@ -50,7 +54,7 @@ public class gameManager : MonoBehaviour {
         WinScreen.SetActive(false);
         LoseScreen.SetActive(false);
         ShowAreaText.SetActive(false);
-        endTurnButton = FindObjectOfType<EndTurnButton>();
+        //endTurnButton = FindObjectOfType<EndTurnButton>();
         tileArea = FindObjectOfType<TileArea>();
         caseArea = FindObjectOfType<CaseArea>();
         CardArea[] CardAreas = FindObjectsOfType<CardArea>();
@@ -110,16 +114,28 @@ public class gameManager : MonoBehaviour {
         }
     }
 
-    public void CheckEndTurn()
+    public void PlayerEndTurn(PlayerType PT)
     {
-        if (!ClueArea.CheckForAvailableSpace(CurrentCaseOn) && !CrimeArea.CheckForAvailableSpace(CurrentCaseOn))
+        switch (PT)
         {
-            endTurnButton.EnableEndTurn();
+            case PlayerType.Holmes:
+                HolmesEndTurn = true;
+                break;
+            case PlayerType.Moriarty:
+                MoriartyEndTurn = true;
+                break;
         }
-        else
+        if (HolmesEndTurn && MoriartyEndTurn)
         {
-            endTurnButton.DisableEndTurn();
+            HolmesEndTurn = false;
+            MoriartyEndTurn = false;
+            EndTurn();
         }
+        if (CurrentTurnStatus == TurnStatus.PickTileHolmes || CurrentTurnStatus == TurnStatus.PickTileMoriarty)
+        {
+            MoriartyEndTurn = true;
+        }
+
     }
 
     public void EndTurn()
@@ -127,14 +143,12 @@ public class gameManager : MonoBehaviour {
         switch (CurrentTurnStatus)
         {
             case TurnStatus.Turn1:
-                endTurnButton.DisableEndTurn();
                 CurrentCaseOn++;
                 StartCoroutine("SwapCards");
                 CurrentTurnStatus = TurnStatus.Turn2;
                 break;
 
             case TurnStatus.Turn2:
-                endTurnButton.DisableEndTurn();
                 CurrentCaseOn++;
                 StartCoroutine("SwapCards");
                 CurrentTurnStatus = TurnStatus.Turn3;
@@ -144,6 +158,7 @@ public class gameManager : MonoBehaviour {
                 tilePromptSelection.gameObject.SetActive(true);
                 tilePromptSelection.gameObject.GetComponent<Text>().text = "Move Clue cards";
                 playerController.PlayerEnableSwapClueCards();
+                aiController.EnableSwapClueCards();
                 CurrentTurnStatus = TurnStatus.SwitchClueCards;
                 break;
 
@@ -157,18 +172,18 @@ public class gameManager : MonoBehaviour {
                 if (CheckForPickTileMoriarty())
                 {
                     Debug.Log("Picking a tile for Moriarty");
-                    if (playerController.MyPlayerType == PlayerType.Holmes) { endTurnButton.DisableEndTurn(); }
                     CurrentTurnStatus = TurnStatus.PickTileMoriarty;
                 }
                 else if (CheckForPickTileHolmes())
                 {
                     Debug.Log("Picking a tile for Holmes");
-                    if (playerController.MyPlayerType == PlayerType.Holmes) { endTurnButton.DisableEndTurn(); }
                     CurrentTurnStatus = TurnStatus.PickTileHolmes;
                 }
                 else
                 {
                     Debug.Log("Inspecting Board");
+                    // Kind of a HACK
+                    if (aiController.MyPlayerType == PlayerType.Moriarty) { aiController.InspectBoard(); }
                     CurrentTurnStatus = TurnStatus.BoardInspect;
                 }
                 break;
@@ -177,7 +192,6 @@ public class gameManager : MonoBehaviour {
                 tilePromptSelection.gameObject.SetActive(false);
                 if (CheckForPickTileHolmes())
                 {
-                    if (playerController.MyPlayerType == PlayerType.Holmes) { endTurnButton.DisableEndTurn(); }
                     CurrentTurnStatus = TurnStatus.PickTileHolmes;
                 }
                 else
@@ -204,7 +218,6 @@ public class gameManager : MonoBehaviour {
         CurrentCaseOn++;
         CurrentTurnOn++;
         CheckForWin();
-        endTurnButton.DisableEndTurn();
         StartCoroutine("Reset");
         StartCoroutine("PlayersDrawCards");
         CurrentCaseOn = 1;
@@ -234,11 +247,17 @@ public class gameManager : MonoBehaviour {
                 }
             }
         }
+       
+
         if (HolmesCaseWon.Count > 0) {
             if (playerController.MyPlayerType == PlayerType.Holmes)
             {
                 tilePromptSelection.gameObject.SetActive(true);
                 tilePromptSelection.gameObject.GetComponent<Text>().text = " Select " + HolmesCaseWon.Count + " Tiles for Holmes that meet the Case";
+            }
+            else
+            {
+                aiController.InspectBoard();
             }
             return true;
         }
@@ -272,6 +291,7 @@ public class gameManager : MonoBehaviour {
                     break;
                 case PlayerType.Moriarty:
                     aiController.PlaceMoriartyTile(MoriartTile);
+                    aiController.InspectBoard();
                     break;
             }
             return true;
@@ -289,6 +309,7 @@ public class gameManager : MonoBehaviour {
                     //Pick Tile 2 times
                     aiController.PlaceMoriartyTile(MoriartTile);
                     aiController.PlaceMoriartyTile(MoriartTile);
+                    aiController.InspectBoard();
                     break;
             }
             return true;

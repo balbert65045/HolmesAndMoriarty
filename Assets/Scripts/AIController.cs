@@ -39,8 +39,25 @@ public class AIController : MonoBehaviour {
         GameObject CrimeCard = Instantiate(CardsHolding[RandomIndex2].gameObject);
         CardsHolding.Remove(CardsHolding[RandomIndex2]);
         CrimeArea.PlaceCard(CrimeCard.GetComponent<ClueCard>(), gameManager.CurrentCaseOn);
+        AIEndTurn();
 
+    }
+    // Do nothing but simply end turn for the moment 
+    public void EnableSwapClueCards()
+    {
+        Debug.Log("AI swapping clue cards");
+        AIEndTurn();
+    }
 
+    public void InspectBoard()
+    {
+        Debug.Log("AI sinspecting board");
+        AIEndTurn();
+    }
+
+    void AIEndTurn()
+    {
+        gameManager.PlayerEndTurn(MyPlayerType);
     }
 
     public void ResetCards()
