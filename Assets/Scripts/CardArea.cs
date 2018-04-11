@@ -7,6 +7,7 @@ public class CardArea : MonoBehaviour {
     // Use this for initialization
     public enum Row { Clue, Crime }
     public Row ThisRow;
+    public Player PlayerAttached;
 
     public RowAreaPosition[] Positions;
 

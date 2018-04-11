@@ -80,7 +80,7 @@ public class AIController : MonoBehaviour {
     }
 
 
-    public void PlaceHolmesTile(List<CardType> TypeAllowed, GameObject HolmesTile)
+    public bool PlaceHolmesTile(GameObject HolmesTile, CaseCard HolmesCaseCard)
     {
         TileSpot[] TilesSpots = FindObjectsOfType<TileSpot>();
         List<TileSpot> OpenTileSpots = new List<TileSpot>();
@@ -88,25 +88,30 @@ public class AIController : MonoBehaviour {
         {
             if (!TS.Used)
             {
-                if (TypeAllowed.Contains(TS.ThisCardType)) { OpenTileSpots.Add(TS); }
+                if (HolmesCaseCard.CardTypes.Contains(TS.ThisCardType)) { OpenTileSpots.Add(TS); }
             }
         }
-        if (OpenTileSpots.Count == 0) { return; }
+        if (OpenTileSpots.Count == 0) { return false; }
         int RandomOpenTileIndex = Random.Range(0, OpenTileSpots.Count);
         tileArea.PlaceTile(HolmesTile, OpenTileSpots[RandomOpenTileIndex].Number, PlayerType.Holmes);
+        return true;
     }
 
-    public void PlaceMoriartyTile(GameObject MoriartyTile)
+    public bool PlaceMoriartyTile(GameObject MoriartyTile, int number)
     {
-        TileSpot[] TilesSpots = FindObjectsOfType<TileSpot>();
-        List<TileSpot> OpenTileSpots = new List<TileSpot>();
-        foreach (TileSpot TS in TilesSpots)
+        for (int i = 0; i < number; i++)
         {
-            if (!TS.Used) { OpenTileSpots.Add(TS); }
+            TileSpot[] TilesSpots = FindObjectsOfType<TileSpot>();
+            List<TileSpot> OpenTileSpots = new List<TileSpot>();
+            foreach (TileSpot TS in TilesSpots)
+            {
+                if (!TS.Used) { OpenTileSpots.Add(TS); }
+            }
+            if (OpenTileSpots.Count == 0) { return false; }
+            int RandomOpenTileIndex = Random.Range(0, OpenTileSpots.Count);
+            tileArea.PlaceTile(MoriartyTile, OpenTileSpots[RandomOpenTileIndex].Number, PlayerType.Moriarty);
         }
-        if (OpenTileSpots.Count == 0) { return; }
-        int RandomOpenTileIndex = Random.Range(0, OpenTileSpots.Count);
-        tileArea.PlaceTile(MoriartyTile, OpenTileSpots[RandomOpenTileIndex].Number, PlayerType.Moriarty);
+        return true;
     }
 
     // Use this for initialization

@@ -5,7 +5,6 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour {
 
     // Use this for initialization
-    public ClueDeck _CardDeck;
     public int HolmesTilesToPlace = 0;
     public LayerMask BoardLayer;
     public LayerMask Card_TileLayer;
@@ -34,11 +33,10 @@ public class PlayerController : MonoBehaviour {
     void Start () {
         ClueAreaActive = true;
         CrimeAreaActive = true;
-         cardHand = GetComponentInChildren<CardHand>();
         tileArea = FindObjectOfType<TileArea>();
         gamemanager = FindObjectOfType<gameManager>();
         endTurnButton = FindObjectOfType<EndTurnButton>();
-
+        cardHand = GetComponentInChildren<CardHand>();
         CardArea[] CardAreas = FindObjectsOfType<CardArea>();
         foreach (CardArea carda in CardAreas)
         {
@@ -53,69 +51,66 @@ public class PlayerController : MonoBehaviour {
         }
 
 
-        if (FindObjectOfType<LevelPropertyManager>() != null)
-        {
-            MyPlayerType = FindObjectOfType<LevelPropertyManager>().GetPlayerType();
-        }
+       
     }
 
 
 
     public void PlayerEndTurn()
     {
-        gamemanager.PlayerEndTurn(MyPlayerType);
+        gamemanager.PlayerEndTurn(GetComponent<Player>().MyPlayerType);
         if (gamemanager.CurrentTurnStatus == gameManager.TurnStatus.SwitchClueCards){}
         else if (gamemanager.CurrentTurnStatus == gameManager.TurnStatus.BoardInspect) {}
         else if ((gamemanager.CurrentTurnStatus == gameManager.TurnStatus.PickTileHolmes || gamemanager.CurrentTurnStatus == gameManager.TurnStatus.PickTileMoriarty) &&
-            MyPlayerType == PlayerType.Moriarty) {}
+            GetComponent<Player>().MyPlayerType == PlayerType.Moriarty) {}
         else
         {
             endTurnButton.DisableEndTurn();
         }
     }
 
-    public void PlayerEnableSwapClueCards()
-    {
-        EnableSwapClueCards = true;
-    }
+    //public void PlayerEnableSwapClueCards()
+    //{
+    //    EnableSwapClueCards = true;
+    //}
 
-    public void PlayerDisableSwapClueCards()
-    {
-        EnableSwapClueCards = false;
-    }
+    //public void PlayerDisableSwapClueCards()
+    //{
+    //    EnableSwapClueCards = false;
+    //}
 
-    public List<ClueCard> GetCardsHolding()
-    {
-        return cardHand.GetCardsHolding();
-    }
+    //public List<ClueCard> GetCardsHolding()
+    //{
+    //    return cardHand.GetCardsHolding();
+    //}
 
-    public void DrawCards(int Number)
-    {
-        for (int i = 0; i < Number; i++)
-        {
-            ClueCard cardDrawn = _CardDeck.DrawCard() as ClueCard;
-            cardHand.AddCard(cardDrawn, 0);
-        }
-    }
+    //public void DrawCards(int Number)
+    //{
+    //    for (int i = 0; i < Number; i++)
+    //    {
+    //        ClueCard cardDrawn = _CardDeck.DrawCard() as ClueCard;
+    //        cardHand.AddCard(cardDrawn, 0);
+    //    }
+    //}
 
-    public void RemoveAllCards()
-    {
-        cardHand.RemoveAllCards();
-    }
+    //public void RemoveAllCards()
+    //{
+    //    cardHand.RemoveAllCards();
+    //}
 
-    public void AddNewCards(List<ClueCard> NewCards)
-    {
-        int StartingPosition = 0;
-        if (NewCards.Count == 5) { StartingPosition = 1; }
-        else if (NewCards.Count == 3) { StartingPosition = 2; }
+    //public void AddNewCards(List<ClueCard> NewCards)
+    //{
+    //    int StartingPosition = 0;
+    //    if (NewCards.Count == 5) { StartingPosition = 1; }
+    //    else if (NewCards.Count == 3) { StartingPosition = 2; }
 
-        for (int i = 0; i < NewCards.Count; i++)
-        {
-            cardHand.AddCard(NewCards[i], StartingPosition);
-        }
-    }
+    //    for (int i = 0; i < NewCards.Count; i++)
+    //    {
+    //        cardHand.AddCard(NewCards[i], StartingPosition);
+    //    }
+    //}
 
-    public void PlaceMoriartyTiles(int number, GameObject MoriartyTilePrefab)
+    public bool PlaceMoriartyTiles(GameObject MoriartyTilePrefab, int number)
     {
         TileSpot[] TilesSpots = FindObjectsOfType<TileSpot>();
         List<TileSpot> OpenTileSpots = new List<TileSpot>();
@@ -123,9 +118,10 @@ public class PlayerController : MonoBehaviour {
         {
             if (!TS.Used) { OpenTileSpots.Add(TS); }
         }
-        if (OpenTileSpots.Count == 0) { return; }
+        if (OpenTileSpots.Count == 0) { return false; }
         MoriartyTilesToPlace = number;
         MoriartyTile = MoriartyTilePrefab;
+        return true;
     }
 
     public bool PlaceHolmesTiles(GameObject HolmesTilePrefab, CaseCard HolmesCaseCard)
@@ -142,7 +138,7 @@ public class PlayerController : MonoBehaviour {
             }
         }
         if (OpenTileSpots.Count == 0) { return false; }
-        HolmesTilesToPlace ++;
+        HolmesTilesToPlace++;
         HolmesTile = HolmesTilePrefab;
         HolmesCaseCard.MoveUp(HolmesTilesToPlace);
         HolmesCaseCardsWon.Add(HolmesCaseCard);
@@ -151,8 +147,8 @@ public class PlayerController : MonoBehaviour {
 
 
 
-	// Update is called once per frame
-	void Update () {
+    // Update is called once per frame
+    void Update () {
         
         // On Mouse/Finger up 
         if (Input.GetMouseButtonUp(0))
