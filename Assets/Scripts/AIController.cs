@@ -153,4 +153,40 @@ public class AIController : MonoBehaviour {
 	void Update () {
 		
 	}
+
+    IEnumerator CheckToPlayCard()
+    {
+        yield return new WaitForSeconds(.2f);
+        switch (gameManager.CurrentTurnStatus)
+        {
+            case gameManager.TurnStatus.Turn1:
+                LookToPlayCard();
+                break;
+            case gameManager.TurnStatus.Turn2:
+                LookToPlayCard();
+                break;
+            case gameManager.TurnStatus.Turn3:
+                LookToPlayCard();
+                break;
+            case gameManager.TurnStatus.SwitchClueCards:
+                LookToSwapClueCards();
+                break;
+            case gameManager.TurnStatus.PickTileMoriarty:
+                
+                break;
+        }
+
+
+    }
+
+    void LookToPlayCard()
+    {
+
+    }
+
+    void LookToSwapClueCards()
+    {
+
+    }
+
 }
