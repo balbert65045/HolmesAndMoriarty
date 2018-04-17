@@ -9,7 +9,7 @@ public class CardHand : MonoBehaviour {
     public enum SortMethod { NumberSort, ColorSort}
     public SortMethod CurrentSortMethod = SortMethod.NumberSort;
 
-    private List<ClueCard> CardsHolding = new List<ClueCard>();
+    public List<ClueCard> CardsHolding = new List<ClueCard>();
     public List<ClueCard> GetCardsHolding()
     {
         return CardsHolding;
@@ -55,7 +55,7 @@ public class CardHand : MonoBehaviour {
             {
                 ClueCard clueCard = FindObjectOfType<ClueDeck>().FindCardInDeck(card);
                 CardsHolding.Add(clueCard);
-                GameObject Card = Instantiate(card.gameObject, CardPositions[i]);
+                Instantiate(card.gameObject, CardPositions[i]);
                 Sort(StartingPosition);
                 return;
             }

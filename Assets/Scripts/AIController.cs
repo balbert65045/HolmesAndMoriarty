@@ -2,85 +2,53 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AIController : MonoBehaviour {
+public class AIController : Player {
 
-    public List<ClueCard> CardsHolding;
-    gameManager gameManager;
     public ClueDeck cardDeck;
+
+    gameManager gameManager;
     AICardArea CrimeArea;
     AICardArea ClueArea;
-
-    //public GameObject MoriartyTile;
+    CardHand cardHand;
+    int[] cardsPlayedPerCase = {0, 0, 0};
+    bool SwapCards = false;
     TileArea tileArea;
 
-    public PlayerType MyPlayerType;
-
-    public void DrawCards(int Number)
+    public override void SetupPlayer()
     {
-        for (int i = 0; i < Number; i++)
+        base.SetupPlayer();
+        if (FindObjectOfType<LevelPropertyManager>() != null)
         {
-            ClueCard CardDrawn = (cardDeck.DrawCard()) as ClueCard;
-            CardsHolding.Add(CardDrawn);
+
+            switch (FindObjectOfType<LevelPropertyManager>().GetPlayerType())
+            {
+                case PlayerType.Holmes:
+                    MyPlayerType = PlayerType.Moriarty;
+                    break;
+                case PlayerType.Moriarty:
+                    MyPlayerType = PlayerType.Holmes;
+                    break;
+            }
+
         }
-        PlayCards();
     }
 
-    //Basic Random guess. Needs modify to play smart
-    void PlayCards()
+    public override void ResetPlayer()
     {
-        //Clue Card Place Down
-        int RandomIndex = Random.Range(0, CardsHolding.Count);
-        GameObject ClueCard = Instantiate(CardsHolding[RandomIndex].gameObject);
-        CardsHolding.Remove(CardsHolding[RandomIndex]);
-        ClueArea.PlaceCard(ClueCard.GetComponent<ClueCard>(), gameManager.CurrentCaseOn);
-
-        // Crime Card Place Down
-        int RandomIndex2 = Random.Range(0, CardsHolding.Count);
-        GameObject CrimeCard = Instantiate(CardsHolding[RandomIndex2].gameObject);
-        CardsHolding.Remove(CardsHolding[RandomIndex2]);
-        CrimeArea.PlaceCard(CrimeCard.GetComponent<ClueCard>(), gameManager.CurrentCaseOn);
-        AIEndTurn();
-
-    }
-    // Do nothing but simply end turn for the moment 
-    public void EnableSwapClueCards()
-    {
-        Debug.Log("AI swapping clue cards");
-        AIEndTurn();
-    }
-
-    public void InspectBoard()
-    {
-        Debug.Log("AI sinspecting board");
-        AIEndTurn();
-    }
-
-    void AIEndTurn()
-    {
-        gameManager.PlayerEndTurn(MyPlayerType);
-    }
-
-    public void ResetCards()
-    {
+       
+        for (int i = 0; i < cardsPlayedPerCase.Length; i++)
+        {
+            cardsPlayedPerCase[i] = 0;
+        }
         RemoveAllCards();
     }
 
-    public void RemoveAllCards()
+    public override void EnableSwapClueCards()
     {
-        CardsHolding.Clear();
+        SwapCards = true;
     }
 
-    public void AddNewCards(List<ClueCard> Cards)
-    {
-        foreach (ClueCard card in Cards)
-        {
-            CardsHolding.Add(card);
-        }
-        PlayCards();
-    }
-
-
-    public bool PlaceHolmesTile(GameObject HolmesTile, CaseCard HolmesCaseCard)
+    public override bool PlaceHolmesTiles(GameObject HolmesTile, CaseCard HolmesCaseCard)
     {
         TileSpot[] TilesSpots = FindObjectsOfType<TileSpot>();
         List<TileSpot> OpenTileSpots = new List<TileSpot>();
@@ -97,7 +65,7 @@ public class AIController : MonoBehaviour {
         return true;
     }
 
-    public bool PlaceMoriartyTile(GameObject MoriartyTile, int number)
+    public override bool PlaceMoriartyTiles(GameObject MoriartyTile, int number)
     {
         for (int i = 0; i < number; i++)
         {
@@ -117,21 +85,6 @@ public class AIController : MonoBehaviour {
     // Use this for initialization
     void Start () {
 
-        if (FindObjectOfType<LevelPropertyManager>() != null)
-        {
-            PlayerType playerType = FindObjectOfType<LevelPropertyManager>().GetPlayerType();
-            switch (playerType)
-            {
-                case PlayerType.Holmes:
-                    MyPlayerType = PlayerType.Moriarty;
-                    break;
-                case PlayerType.Moriarty:
-                    MyPlayerType = PlayerType.Holmes;
-                    break;
-            }
-        }
-
-
         tileArea = FindObjectOfType<TileArea>();
          AICardArea[] CardAreas = FindObjectsOfType<AICardArea>();
         foreach (AICardArea carda in CardAreas)
@@ -147,44 +100,106 @@ public class AIController : MonoBehaviour {
         }
 
         gameManager = FindObjectOfType<gameManager>();
-    }
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+        cardHand = GetComponentInChildren<CardHand>();
 
+
+        StartCoroutine("CheckToPlayCard");
+       
+    }
+
+    //Basic Random guess. Needs modify to play smart
+    bool PlayCards(int CardPlaced)
+    {
+        if (cardHand.GetCardsHolding().Count == 0) { return false; }
+        //Clue Card Place Down
+        if (CardPlaced == 0)
+        {
+            int RandomIndex = Random.Range(0, cardHand.GetCardsHolding().Count);
+            GameObject ClueCard = Instantiate(cardHand.GetCardsHolding()[RandomIndex].gameObject);
+            cardHand.RemoveCard(cardHand.GetCardsHolding()[RandomIndex]);
+            ClueArea.PlaceCard(ClueCard.GetComponent<ClueCard>(), gameManager.CurrentCaseOn);
+            return true;
+        }
+        else if (CardPlaced == 1)
+        {
+            int RandomIndex2 = Random.Range(0, cardHand.GetCardsHolding().Count);
+            GameObject CrimeCard = Instantiate(cardHand.GetCardsHolding()[RandomIndex2].gameObject);
+            cardHand.RemoveCard(cardHand.GetCardsHolding()[RandomIndex2]);
+            CrimeArea.PlaceCard(CrimeCard.GetComponent<ClueCard>(), gameManager.CurrentCaseOn);
+            return true;
+        }
+        return false;
+        // Crime Card Place Down
+    }
+
+    void AIEndTurn()
+    {
+        gameManager.PlayerEndTurn(MyPlayerType);
+    }
+
+    // Need to wait for reset 
     IEnumerator CheckToPlayCard()
     {
-        yield return new WaitForSeconds(.2f);
-        switch (gameManager.CurrentTurnStatus)
+        yield return new WaitForSeconds(2f);
+        while (true)
         {
-            case gameManager.TurnStatus.Turn1:
-                LookToPlayCard();
-                break;
-            case gameManager.TurnStatus.Turn2:
-                LookToPlayCard();
-                break;
-            case gameManager.TurnStatus.Turn3:
-                LookToPlayCard();
-                break;
-            case gameManager.TurnStatus.SwitchClueCards:
-                LookToSwapClueCards();
-                break;
-            case gameManager.TurnStatus.PickTileMoriarty:
-                
-                break;
+            yield return new WaitForSeconds(.2f);
+            switch (gameManager.CurrentTurnStatus)
+            {
+                case gameManager.TurnStatus.Turn1:
+                    LookToPlayCard();
+                    break;
+                case gameManager.TurnStatus.Turn2:
+                    LookToPlayCard();
+                    break;
+                case gameManager.TurnStatus.Turn3:
+                    LookToPlayCard();
+                    break;
+                case gameManager.TurnStatus.SwitchClueCards:
+                    LookToSwapClueCards();
+                    break;
+                case gameManager.TurnStatus.PickTileMoriarty:
+                    LookToPickMoriartyTile();
+                    AIEndTurn();
+                    break;
+                case gameManager.TurnStatus.PickTileHolmes:
+                    LookToPickHolmesTile();
+                    AIEndTurn();
+                    break;
+                case gameManager.TurnStatus.BoardInspect:
+                    AIEndTurn();
+                    break;
+            }
+
         }
-
-
     }
 
     void LookToPlayCard()
     {
-
+        if (cardsPlayedPerCase[gameManager.CurrentCaseOn - 1] < 2)
+        {
+            if (PlayCards(cardsPlayedPerCase[gameManager.CurrentCaseOn - 1]))
+            {
+                cardsPlayedPerCase[gameManager.CurrentCaseOn - 1]++;
+                if (cardsPlayedPerCase[gameManager.CurrentCaseOn - 1] == 2) { AIEndTurn(); }
+            }
+        }
     }
 
     void LookToSwapClueCards()
+    {
+        if (SwapCards) {
+            AIEndTurn();
+            SwapCards = false;
+        }
+    }
+
+    void LookToPickMoriartyTile()
+    {
+
+    }
+
+    void LookToPickHolmesTile()
     {
 
     }

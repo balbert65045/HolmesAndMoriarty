@@ -6,30 +6,53 @@ public class Player : MonoBehaviour {
 
     // Use this for initialization
     public PlayerType MyPlayerType = PlayerType.Holmes;
-    List<ClueCard> CardsHolding;
-    public List<ClueCard> GetCardsHolding() { return CardsHolding;}
-    public int HolmesTilesToPlace = 0;
-    public int MoriartyTilesToPlace = 0;
     public List<CaseCard> HolmesCaseCardsWon;
+    public List<ClueCard> GetCardsHolding()
+    {
+        return _CardHand.GetCardsHolding();
+    }
 
-    GameObject MoriartyTile;
-    GameObject HolmesTile;
     private ClueDeck _CardDeck;
     private CardHand _CardHand;
-    bool b_EnableSwapClueCards = false;
 
-    void Start () {
+    void Awake () {
         _CardDeck = FindObjectOfType<ClueDeck>();
         _CardHand = GetComponentInChildren<CardHand>();
-
-        if (FindObjectOfType<LevelPropertyManager>() != null)
-        {
-            MyPlayerType = FindObjectOfType<LevelPropertyManager>().GetPlayerType();
-        }
+        SetupPlayer();
     }
 	
-	// Update is called once per frame
-	void Update () {
+    public virtual void SetupPlayer()
+    {
+
+    }
+
+    public virtual void ResetPlayer()
+    {
+        RemoveAllCards();
+    }
+
+    public virtual void EnableSwapClueCards()
+    {
+
+    }
+
+    public virtual void DisableSwapClueCards()
+    {
+
+    }
+
+    public virtual bool PlaceHolmesTiles(GameObject HolmesTilePrefab, CaseCard HolmesCaseCard)
+    {
+        return false;
+    }
+
+    public virtual bool PlaceMoriartyTiles(GameObject MoriartyTilePrefab, int number)
+    {
+        return false;
+    }
+
+    // Update is called once per frame
+    void Update () {
 		
 	}
 
@@ -58,30 +81,6 @@ public class Player : MonoBehaviour {
         {
             _CardHand.AddCard(NewCards[i], StartingPosition);
         }
-    }
-
-   public void EnableSwapClueCards()
-    {
-        b_EnableSwapClueCards = true;
-    }
-
-    public void DisableSwapClueCards()
-    {
-        b_EnableSwapClueCards = false;
-    }
-
-    public bool PlaceHolmesTiles(GameObject HolmesTilePrefab, CaseCard HolmesCaseCard)
-    {
-        if (GetComponent<PlayerController>() != null) { return GetComponent<PlayerController>().PlaceHolmesTiles(HolmesTilePrefab, HolmesCaseCard); }
-        else if (GetComponent<AIController>() != null) { return GetComponent<AIController>().PlaceHolmesTile(HolmesTilePrefab, HolmesCaseCard); }
-        return false;
-    }
-
-    public bool PlaceMoriartyTiles(GameObject MoriartyTilePrefab, int number)
-    {
-        if (GetComponent<PlayerController>() != null) { return GetComponent<PlayerController>().PlaceMoriartyTiles(MoriartyTilePrefab, number); }
-        else if (GetComponent<AIController>() != null) { return GetComponent<AIController>().PlaceMoriartyTile(MoriartyTilePrefab, number); }
-        return false;
     }
 
 

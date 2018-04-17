@@ -2,15 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour {
+public class PlayerController : Player {
 
     // Use this for initialization
     public int HolmesTilesToPlace = 0;
     public LayerMask BoardLayer;
     public LayerMask Card_TileLayer;
-    public List<CaseCard> HolmesCaseCardsWon;
-    public PlayerType MyPlayerType;
-
     public bool ClueAreaActive = true;
     public bool CrimeAreaActive = true;
 
@@ -24,10 +21,8 @@ public class PlayerController : MonoBehaviour {
     CardArea ClueArea;
     CardArea CrimeArea;
     EndTurnButton endTurnButton;
-
     int MoriartyTilesToPlace = 0;
-
-    bool EnableSwapClueCards = false;
+    bool b_EnableSwapClueCards = false;
 
 
     void Start () {
@@ -54,63 +49,28 @@ public class PlayerController : MonoBehaviour {
        
     }
 
-
-
-    public void PlayerEndTurn()
+    public override void SetupPlayer()
     {
-        gamemanager.PlayerEndTurn(GetComponent<Player>().MyPlayerType);
-        if (gamemanager.CurrentTurnStatus == gameManager.TurnStatus.SwitchClueCards){}
-        else if (gamemanager.CurrentTurnStatus == gameManager.TurnStatus.BoardInspect) {}
-        else if ((gamemanager.CurrentTurnStatus == gameManager.TurnStatus.PickTileHolmes || gamemanager.CurrentTurnStatus == gameManager.TurnStatus.PickTileMoriarty) &&
-            GetComponent<Player>().MyPlayerType == PlayerType.Moriarty) {}
-        else
+        base.SetupPlayer();
+        if (FindObjectOfType<LevelPropertyManager>() != null)
         {
-            endTurnButton.DisableEndTurn();
+            MyPlayerType = FindObjectOfType<LevelPropertyManager>().GetPlayerType();
         }
     }
 
-    //public void PlayerEnableSwapClueCards()
-    //{
-    //    EnableSwapClueCards = true;
-    //}
+    public override void EnableSwapClueCards()
+    {
+        base.EnableSwapClueCards();
+        b_EnableSwapClueCards = true;
+    }
 
-    //public void PlayerDisableSwapClueCards()
-    //{
-    //    EnableSwapClueCards = false;
-    //}
+    public override void DisableSwapClueCards()
+    {
+        base.DisableSwapClueCards();
+        b_EnableSwapClueCards = false;
+    }
 
-    //public List<ClueCard> GetCardsHolding()
-    //{
-    //    return cardHand.GetCardsHolding();
-    //}
-
-    //public void DrawCards(int Number)
-    //{
-    //    for (int i = 0; i < Number; i++)
-    //    {
-    //        ClueCard cardDrawn = _CardDeck.DrawCard() as ClueCard;
-    //        cardHand.AddCard(cardDrawn, 0);
-    //    }
-    //}
-
-    //public void RemoveAllCards()
-    //{
-    //    cardHand.RemoveAllCards();
-    //}
-
-    //public void AddNewCards(List<ClueCard> NewCards)
-    //{
-    //    int StartingPosition = 0;
-    //    if (NewCards.Count == 5) { StartingPosition = 1; }
-    //    else if (NewCards.Count == 3) { StartingPosition = 2; }
-
-    //    for (int i = 0; i < NewCards.Count; i++)
-    //    {
-    //        cardHand.AddCard(NewCards[i], StartingPosition);
-    //    }
-    //}
-
-    public bool PlaceMoriartyTiles(GameObject MoriartyTilePrefab, int number)
+    public override bool PlaceMoriartyTiles(GameObject MoriartyTilePrefab, int number)
     {
         TileSpot[] TilesSpots = FindObjectsOfType<TileSpot>();
         List<TileSpot> OpenTileSpots = new List<TileSpot>();
@@ -124,7 +84,7 @@ public class PlayerController : MonoBehaviour {
         return true;
     }
 
-    public bool PlaceHolmesTiles(GameObject HolmesTilePrefab, CaseCard HolmesCaseCard)
+    public override bool PlaceHolmesTiles(GameObject HolmesTilePrefab, CaseCard HolmesCaseCard)
     {
         Debug.Log("Looking to add Holmes Tile");
         // check tiles to make sure one exist that can be gotten 
@@ -145,7 +105,18 @@ public class PlayerController : MonoBehaviour {
         return true;
     }
 
-
+    public void PlayerEndTurn()
+    {
+        gamemanager.PlayerEndTurn(MyPlayerType);
+        if (gamemanager.CurrentTurnStatus == gameManager.TurnStatus.SwitchClueCards){}
+        else if (gamemanager.CurrentTurnStatus == gameManager.TurnStatus.BoardInspect) {}
+        else if ((gamemanager.CurrentTurnStatus == gameManager.TurnStatus.PickTileHolmes || gamemanager.CurrentTurnStatus == gameManager.TurnStatus.PickTileMoriarty) &&
+            MyPlayerType == PlayerType.Moriarty) {}
+        else
+        {
+            endTurnButton.DisableEndTurn();
+        }
+    }
 
     // Update is called once per frame
     void Update () {
@@ -185,14 +156,11 @@ public class PlayerController : MonoBehaviour {
     void CheckActiveAreas()
     {
         CardArea[] CardAreas = FindObjectsOfType<CardArea>();
-        CardArea CrimeCardArea = null;
-        CardArea ClueCardArea = null;
         foreach (CardArea CA in CardAreas)
         {
             switch (CA.ThisRow)
             {
                 case CardArea.Row.Crime:
-                    CrimeCardArea = CA;
                     if (CA.CheckForAvailableSpace(gamemanager.CurrentCaseOn))
                     {
                         CrimeAreaActive = true;
@@ -203,7 +171,6 @@ public class PlayerController : MonoBehaviour {
                     }
                     break;
                 case CardArea.Row.Clue:
-                    ClueCardArea = CA;
                     if (CA.CheckForAvailableSpace(gamemanager.CurrentCaseOn))
                     {
                         ClueAreaActive = true;
@@ -215,20 +182,6 @@ public class PlayerController : MonoBehaviour {
                     break;
             }
         }
-        //if (CrimeAreaActive) {
-        //    CrimeCardArea.ActiveSpot(gamemanager.CurrentCaseOn);
-        //    ClueCardArea.DeActiveSpot(gamemanager.CurrentCaseOn);
-        //}
-        //else if (ClueAreaActive) {
-        //    ClueCardArea.ActiveSpot(gamemanager.CurrentCaseOn);
-        //    CrimeCardArea.DeActiveSpot(gamemanager.CurrentCaseOn);
-        //}
-        //else
-        //{
-        //    ClueCardArea.DeActiveSpot(gamemanager.CurrentCaseOn);
-        //    CrimeCardArea.DeActiveSpot(gamemanager.CurrentCaseOn);
-        //}
-
     }
 
     void SelectCard_PlaceTileDown()
@@ -256,7 +209,7 @@ public class PlayerController : MonoBehaviour {
         {
             RaycastHit Hit;
             Ray ray = new Ray(SelectedCard.transform.position, Vector3.down);
-            if (EnableSwapClueCards)
+            if (b_EnableSwapClueCards)
             {
                 if (Physics.Raycast(ray, out Hit))
                 {
@@ -365,14 +318,12 @@ public class PlayerController : MonoBehaviour {
             else
             {
                 HitTransform.GetComponent<CardArea>().PlaceCard(SelectedCard, gamemanager.CurrentCaseOn);
-                FindObjectOfType<CardHand>().RemoveCard(SelectedCard);
+                GetComponentInChildren<CardHand>().RemoveCard(SelectedCard);
             }
             return;  
         }
         SelectedCard.transform.position = SelectedCardOriginalPosition;
     }
-
-
 
     void CheckToPlaceDownTile(Transform HitTransform)
     {
@@ -405,7 +356,6 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
-
     void CheckToSelectCard(Transform HitTransform)
     {
         ClueCard card = HitTransform.GetComponent<ClueCard>();
@@ -416,18 +366,18 @@ public class PlayerController : MonoBehaviour {
         // if in clue or crime area
         if (card.GetComponentInParent<CardArea>() != null)
         {
-            if (card.GetComponentInParent<RowAreaPosition>().Case == gamemanager.CurrentCaseOn && !EnableSwapClueCards)
+            if (card.GetComponentInParent<RowAreaPosition>().Case == gamemanager.CurrentCaseOn && !b_EnableSwapClueCards)
             {
                 SelectCard(card);
             }
-            else if ((card.GetComponentInParent<CardArea>().ThisRow == CardArea.Row.Clue && EnableSwapClueCards))
+            else if ((card.GetComponentInParent<CardArea>().ThisRow == CardArea.Row.Clue && b_EnableSwapClueCards))
             {
                 SelectCard(card);
             }
             return;
         }
         // if in hand
-        else if (card.GetComponentInParent<CardHand>() && !EnableSwapClueCards)
+        else if (card.GetComponentInParent<CardHand>() && !b_EnableSwapClueCards)
         {
             SelectCard(card);
         }
@@ -446,8 +396,6 @@ public class PlayerController : MonoBehaviour {
             }
         }
     }
-
-
 
     void SelectCard(ClueCard card)
     {
