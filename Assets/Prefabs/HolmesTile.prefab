@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 33028861958698522}
   - component: {fileID: 64808939272011172}
   - component: {fileID: 23676469182086824}
+  - component: {fileID: 114756346097400792}
   m_Layer: 0
   m_Name: HolmesTile
   m_TagString: Untagged
@@ -127,6 +128,17 @@ MeshCollider:
   m_InflateMesh: 0
   m_SkinWidth: 0.01
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &114756346097400792
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1551244332278288}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74b7e2541ce5347449e5c64250e9a594, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!212 &212693157411045212
 SpriteRenderer:
   m_ObjectHideFlags: 1

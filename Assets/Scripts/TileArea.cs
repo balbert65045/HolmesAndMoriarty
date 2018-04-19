@@ -10,6 +10,8 @@ public class TileArea : MonoBehaviour {
 
     public TileType[,] Tile2D = new TileType[4,4];
 
+    PlayerIndicator HolmesIndicator = null;
+    PlayerIndicator MoriartyIndicator = null;
 
     void Start () {
          TileSpots = GetComponentsInChildren<TileSpot>();
@@ -22,6 +24,20 @@ public class TileArea : MonoBehaviour {
                 Tile2D[i, j] = TileType.None;
             }
         }
+
+        PlayerIndicator[] PlayerIndicators = FindObjectsOfType<PlayerIndicator>();
+        foreach (PlayerIndicator PI in PlayerIndicators)
+        {
+            if (PI.ThisIndicator == PlayerType.Holmes)
+            {
+                HolmesIndicator = PI;
+            }
+            else if (PI.ThisIndicator == PlayerType.Moriarty)
+            {
+                MoriartyIndicator = PI;
+            }
+        }
+
     }
 
     void QSort(TileSpot[] arr, int low, int high)
@@ -70,6 +86,13 @@ public class TileArea : MonoBehaviour {
             newTile.transform.SetParent(TileSpots[Number - 1].transform);
             newTile.transform.localScale = new Vector3(.7f, .7f, .7f);
             TileSpots[Number - 1].Used = true;
+
+            
+
+            if (PT == PlayerType.Holmes) { newTile.transform.position = HolmesIndicator.transform.position; }
+            else if (PT == PlayerType.Moriarty) { newTile.transform.position = MoriartyIndicator.transform.position; }
+            Vector3 MovePos = new Vector3(0, 0, -.3f);
+            newTile.GetComponent<ScoreTile>().Move(MovePos);
 
             int HIndex = (Number - 1) % 4;
             int VIndex = (Number - 1) / 4;

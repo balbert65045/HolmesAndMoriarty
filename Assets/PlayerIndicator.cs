@@ -5,10 +5,13 @@ using UnityEngine.UI;
 
 public class PlayerIndicator : MonoBehaviour {
 
+    public enum Player { player,oponnent}
+    public Player myPlayer = Player.player;
     public Sprite HolmesSprtie;
     public Sprite MoriartySprite;
 
-    private PlayerType MyPlayerType = PlayerType.Holmes;
+    public PlayerType MyPlayerType = PlayerType.Holmes;
+    public PlayerType ThisIndicator;
 
 	// Use this for initialization
 	void Start () {
@@ -17,15 +20,37 @@ public class PlayerIndicator : MonoBehaviour {
             MyPlayerType = FindObjectOfType<LevelPropertyManager>().GetPlayerType();
         }
 
-        switch (MyPlayerType)
+        switch (myPlayer)
         {
-            case PlayerType.Holmes:
-                GetComponentInChildren<Image>().sprite = HolmesSprtie;
+            case Player.player:
+                switch (MyPlayerType)
+                {
+                    case PlayerType.Holmes:
+                        GetComponentInChildren<SpriteRenderer>().sprite = HolmesSprtie;
+                        ThisIndicator = PlayerType.Holmes;
+                        break;
+                    case PlayerType.Moriarty:
+                        GetComponentInChildren<SpriteRenderer>().sprite = MoriartySprite;
+                        ThisIndicator = PlayerType.Moriarty;
+                        break;
+                }
                 break;
-            case PlayerType.Moriarty:
-                GetComponentInChildren<Image>().sprite = MoriartySprite;
+
+            case Player.oponnent:
+                switch (MyPlayerType)
+                {
+                    case PlayerType.Holmes:
+                        GetComponentInChildren<SpriteRenderer>().sprite = MoriartySprite;
+                        ThisIndicator = PlayerType.Moriarty;
+                        break;
+                    case PlayerType.Moriarty:
+                        GetComponentInChildren<SpriteRenderer>().sprite = HolmesSprtie;
+                        ThisIndicator = PlayerType.Holmes;
+                        break;
+                }
                 break;
         }
+        
     }
 	
 	// Update is called once per frame

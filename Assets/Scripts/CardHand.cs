@@ -15,6 +15,9 @@ public class CardHand : MonoBehaviour {
         return CardsHolding;
     }
 
+    public Transform CardSpot; 
+
+
 	void Start () {
 
     }
@@ -55,7 +58,7 @@ public class CardHand : MonoBehaviour {
             {
                 ClueCard clueCard = FindObjectOfType<ClueDeck>().FindCardInDeck(card);
                 CardsHolding.Add(clueCard);
-                Instantiate(card.gameObject, CardPositions[i]);
+                GameObject Card = Instantiate(card.gameObject, CardPositions[i]);
                 Sort(StartingPosition);
                 return;
             }
