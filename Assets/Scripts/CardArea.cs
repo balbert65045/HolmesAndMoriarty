@@ -72,7 +72,7 @@ public class CardArea : MonoBehaviour {
                 if (RP.GetComponentInChildren<ClueCard>().Number == card.Number)
                 {
                     RP.InUse = false;
-                    Destroy(RP.GetComponentInChildren<ClueCard>().gameObject);
+                //    Destroy(RP.GetComponentInChildren<ClueCard>().gameObject);
                 }
             }
         }
@@ -124,7 +124,12 @@ public class CardArea : MonoBehaviour {
         foreach (RowAreaPosition RP in Positions)
         {
             RP.InUse = false;
-            Destroy(RP.GetComponentInChildren<ClueCard>().gameObject);
+            ClueCard card = RP.GetComponentInChildren<ClueCard>();
+            card.transform.SetParent(FindObjectOfType<ClueDeck>().transform);
+            card.transform.position = FindObjectOfType<CardSpot>().transform.position;
+            card.transform.localRotation = Quaternion.Euler(new Vector3(90, 0, 0));
+            card.UnfadeCard();
+            //    Destroy(RP.GetComponentInChildren<ClueCard>().gameObject);
         }
     }
 

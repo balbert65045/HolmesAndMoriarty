@@ -115,17 +115,17 @@ public class AIController : Player {
         if (CardPlaced == 0)
         {
             int RandomIndex = Random.Range(0, cardHand.GetCardsHolding().Count);
-            GameObject ClueCard = Instantiate(cardHand.GetCardsHolding()[RandomIndex].gameObject);
+            ClueCard ClueCard = cardHand.GetCardsHolding()[RandomIndex];
             cardHand.RemoveCard(cardHand.GetCardsHolding()[RandomIndex]);
-            ClueArea.PlaceCard(ClueCard.GetComponent<ClueCard>(), gameManager.CurrentCaseOn);
+            ClueArea.PlaceCard(ClueCard, gameManager.CurrentCaseOn);
             return true;
         }
         else if (CardPlaced == 1)
         {
             int RandomIndex2 = Random.Range(0, cardHand.GetCardsHolding().Count);
-            GameObject CrimeCard = Instantiate(cardHand.GetCardsHolding()[RandomIndex2].gameObject);
+            ClueCard CrimeCard = cardHand.GetCardsHolding()[RandomIndex2];
             cardHand.RemoveCard(cardHand.GetCardsHolding()[RandomIndex2]);
-            CrimeArea.PlaceCard(CrimeCard.GetComponent<ClueCard>(), gameManager.CurrentCaseOn);
+            CrimeArea.PlaceCard(CrimeCard, gameManager.CurrentCaseOn);
             return true;
         }
         return false;
@@ -143,7 +143,7 @@ public class AIController : Player {
         yield return new WaitForSeconds(2f);
         while (true)
         {
-            yield return new WaitForSeconds(.2f);
+            yield return new WaitForSeconds(2f);
             switch (gameManager.CurrentTurnStatus)
             {
                 case gameManager.TurnStatus.Turn1:

@@ -119,8 +119,12 @@ public class gameManager : MonoBehaviour {
         CrimeArea.ClearCards();
         AClueArea.ClearCards();
         ACrimeArea.ClearCards();
+
         cardDeck.ResetCards();
+
         caseArea.ClearCards();
+
+
         for (int i = 0; i < 3; i++)
         {
             HolmesScoreThisTurn[i] = false;

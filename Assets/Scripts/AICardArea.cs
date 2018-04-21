@@ -9,6 +9,7 @@ public class AICardArea : MonoBehaviour {
     public Player PlayerAttached;
     public RowAreaPosition[] Positions;
 
+
     void Start () {
         Positions = GetComponentsInChildren<RowAreaPosition>();
         for (int i = 0; i < Positions.Length; i++)
@@ -63,7 +64,13 @@ public class AICardArea : MonoBehaviour {
     {
         foreach (RowAreaPosition RP in Positions)
         {
-            Destroy(RP.GetComponentInChildren<ClueCard>().gameObject);
+            RP.InUse = false;
+            ClueCard card = RP.GetComponentInChildren<ClueCard>();
+            card.transform.SetParent(FindObjectOfType<ClueDeck>().transform);
+            card.transform.position = FindObjectOfType<CardSpot>().transform.position;
+            card.transform.localRotation = Quaternion.Euler(new Vector3(90, 0, 0));
+            card.UnfadeCard();
+            //    Destroy(RP.GetComponentInChildren<ClueCard>().gameObject);
         }
     }
 

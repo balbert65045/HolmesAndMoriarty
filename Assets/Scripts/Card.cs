@@ -4,19 +4,19 @@ using UnityEngine;
 
 public class Card : MonoBehaviour {
 
-    bool Moving = false;
+    public bool b_Move;
     public Vector3 MovePoint = Vector3.zero;
 
 
     public void Move(Vector3 MovePosition)
     {
-        Moving = true;
+        b_Move = true;
         MovePoint = MovePosition;
     }
 
     void Update()
     {
-        if (Moving)
+        if (b_Move)
         {
             if ((transform.localPosition - MovePoint).magnitude > .002f)
             {
@@ -24,7 +24,7 @@ public class Card : MonoBehaviour {
             }
             else
             {
-                Moving = false;
+                b_Move = false;
             }
 
         }

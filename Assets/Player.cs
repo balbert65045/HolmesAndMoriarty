@@ -15,6 +15,8 @@ public class Player : MonoBehaviour {
     private ClueDeck _CardDeck;
     private CardHand _CardHand;
 
+    public Transform CardSpot;
+
     void Awake () {
         _CardDeck = FindObjectOfType<ClueDeck>();
         _CardHand = GetComponentInChildren<CardHand>();
@@ -28,7 +30,7 @@ public class Player : MonoBehaviour {
 
     public virtual void ResetPlayer()
     {
-        RemoveAllCards();
+        _CardHand.PutCardsBack();
     }
 
     public virtual void EnableSwapClueCards()
@@ -59,10 +61,18 @@ public class Player : MonoBehaviour {
     // Draw Cards
     public void DrawCards(int Number)
     {
+        IEnumerator DrawCard = DrawingCards(Number);
+        StartCoroutine(DrawCard);
+    }
+
+    IEnumerator DrawingCards(int Number)
+    {
         for (int i = 0; i < Number; i++)
         {
+            yield return new WaitForSeconds(.2f);
             ClueCard cardDrawn = _CardDeck.DrawCard() as ClueCard;
-            _CardHand.AddCard(cardDrawn, 0);
+            _CardHand.AddCard(cardDrawn, 0, CardSpot.position);
+            if (transform.GetComponent<PlayerController>() != null) { cardDrawn.transform.localRotation = Quaternion.identity; }
         }
     }
 
@@ -79,7 +89,8 @@ public class Player : MonoBehaviour {
 
         for (int i = 0; i < NewCards.Count; i++)
         {
-            _CardHand.AddCard(NewCards[i], StartingPosition);
+            _CardHand.AddCard(NewCards[i], StartingPosition, NewCards[i].transform.position);
+            NewCards[i].transform.localRotation = Quaternion.identity;
         }
     }
 

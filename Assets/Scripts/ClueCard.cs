@@ -19,16 +19,19 @@ public class ClueCard : Card {
 
     }
 	
-	// Update is called once per frame
-	void Update () {
-		
-	}
 
     public void FadeCard()
     {
         BackSprite.enabled = false;
         GetComponent<MeshRenderer>().enabled = false;
         FrontSprite.color = new Color(FrontSprite.color.r, FrontSprite.color.g, FrontSprite.color.b, .5f);
+    }
+
+    public void UnfadeCard()
+    {
+        BackSprite.enabled = true;
+        GetComponent<MeshRenderer>().enabled = true;
+        FrontSprite.color = new Color(FrontSprite.color.r, FrontSprite.color.g, FrontSprite.color.b, 1f);
     }
 
     public void SelectCard()

@@ -15,10 +15,7 @@ public class CardHand : MonoBehaviour {
         return CardsHolding;
     }
 
-    public Transform CardSpot; 
-
-
-	void Start () {
+    void Start () {
 
     }
 	
@@ -47,26 +44,38 @@ public class CardHand : MonoBehaviour {
                 SortCardColor(StartingPosition);
                 break;
         }
+        PutCardsInPlace();
+    }
+
+    void PutCardsInPlace()
+    {
+        foreach (Transform spot in CardPositions)
+        {
+            if (spot.GetComponentInChildren<Card>() != null)
+            {
+                spot.GetComponentInChildren<Card>().transform.localPosition = Vector3.zero;
+                spot.GetComponentInChildren<Card>().transform.localRotation = Quaternion.Euler(Vector3.zero);
+                spot.GetComponentInChildren<Card>().transform.localScale = new Vector3(5, 7, .05f);
+            }
+        }
     }
 
 
-    public void AddCard(ClueCard card, int StartingPosition)
+    public void AddCard(ClueCard card, int StartingPosition, Vector3 OldPosition)
     {
         for (int i = StartingPosition; i < CardPositions.Length; i++)
         {
             if (CardPositions[i].GetComponentInChildren<ClueCard>() == null)
             {
-                ClueCard clueCard = FindObjectOfType<ClueDeck>().FindCardInDeck(card);
-                CardsHolding.Add(clueCard);
-                GameObject Card = Instantiate(card.gameObject, CardPositions[i]);
-                Sort(StartingPosition);
-               // Card.GetComponent<Card>().Move(Vector3.zero);
+                CardsHolding.Add(card);
+                card.transform.parent = CardPositions[i].transform;
+                card.transform.position = OldPosition;
+                card.Move(Vector3.zero);
                 return;
             }
         }
         Debug.LogWarning("All Card Positions full and cannot add card");
     }
-
 
     public void RemoveCard(ClueCard card)
     {
@@ -81,7 +90,8 @@ public class CardHand : MonoBehaviour {
                     {
                         if (position.GetComponentInChildren<ClueCard>().Number == card.Number)
                         {
-                            Destroy(position.GetComponentInChildren<ClueCard>().gameObject);
+                            position.GetComponentInChildren<ClueCard>().transform.SetParent(FindObjectOfType<ClueDeck>().transform);
+                           // Destroy(position.GetComponentInChildren<ClueCard>().gameObject);
                         }
                     }
                 }
@@ -92,16 +102,30 @@ public class CardHand : MonoBehaviour {
 
     public void RemoveAllCards()
     {
-
         foreach (Transform position in CardPositions)
         {
             if (position.GetComponentInChildren<ClueCard>())
             {
-                Destroy((position.GetComponentInChildren<ClueCard>().gameObject));
+                position.GetComponentInChildren<ClueCard>().transform.SetParent(FindObjectOfType<ClueDeck>().transform);
             }
         }
         CardsHolding.Clear();
     }
+
+    public void PutCardsBack()
+    {
+        foreach (Transform position in CardPositions)
+        {
+            if (position.GetComponentInChildren<ClueCard>())
+            {
+                ClueCard card = position.GetComponentInChildren<ClueCard>();
+                position.GetComponentInChildren<ClueCard>().transform.SetParent(FindObjectOfType<ClueDeck>().transform);
+                card.transform.position = FindObjectOfType<CardSpot>().transform.position;
+                card.transform.localRotation = Quaternion.Euler(new Vector3(90, 0, 0));
+            }
+        }
+    }
+
 
     public void SortCardsNumber(int StartingPosition)
     {
@@ -126,10 +150,10 @@ public class CardHand : MonoBehaviour {
                 if (card.Number == OrderdCardNumbers[i])
                 {
                     card.transform.parent = CardPositions[i + StartingPosition];
-                    card.transform.localPosition = Vector3.zero;
-                    //card.GetComponent<Card>().Move(Vector3.zero);
-                    card.transform.localRotation = Quaternion.Euler(Vector3.zero);
-                    card.transform.localScale = new Vector3(5, 7, .05f);
+                    //card.transform.localPosition = Vector3.zero;
+                    ////card.GetComponent<Card>().Move(Vector3.zero);
+                    //card.transform.localRotation = Quaternion.Euler(Vector3.zero);
+                    //card.transform.localScale = new Vector3(5, 7, .05f);
                     break;
                 }
             }
@@ -173,10 +197,10 @@ public class CardHand : MonoBehaviour {
                     if (card.Number == OrderdCardNumbers[i])
                     {
                         card.transform.parent = CardPositions[i + StartingPosition + index];
-                        card.transform.localPosition = Vector3.zero;
-                        //card.GetComponent<Card>().Move(Vector3.zero);
-                        card.transform.localRotation = Quaternion.Euler(Vector3.zero);
-                        card.transform.localScale = new Vector3(5, 7, .05f);
+                        //card.transform.localPosition = Vector3.zero;
+                        ////card.GetComponent<Card>().Move(Vector3.zero);
+                        //card.transform.localRotation = Quaternion.Euler(Vector3.zero);
+                        //card.transform.localScale = new Vector3(5, 7, .05f);
                         break;
                     }
                 }

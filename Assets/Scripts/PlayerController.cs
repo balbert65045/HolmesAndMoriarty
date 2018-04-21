@@ -270,10 +270,9 @@ public class PlayerController : Player {
 
         if (SelectedCard.GetComponentInParent<RowAreaPosition>() != null)
         {
-            cardHand.AddCard(SelectedCard, gamemanager.CurrentCaseOn - 1);
+            SelectedCard.GetComponentInParent<CardArea>().RemoveCard(SelectedCard);
+            cardHand.AddCard(SelectedCard, gamemanager.CurrentCaseOn - 1, SelectedCard.transform.position);
             SelectedCard.transform.position = SelectedCardOriginalPosition;
-            ClueCard card = SelectedCard;
-            card.GetComponentInParent<CardArea>().RemoveCard(card);
             return;
         }
         else
