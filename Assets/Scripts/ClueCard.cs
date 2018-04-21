@@ -11,6 +11,9 @@ public class ClueCard : Card {
     public GameObject SelectionOutline;
     public bool Used = false;
 
+    public SpriteRenderer FrontSprite;
+    public SpriteRenderer BackSprite;
+
 	void Start () {
         SelectionOutline.SetActive(false);
 
@@ -20,6 +23,14 @@ public class ClueCard : Card {
 	void Update () {
 		
 	}
+
+    public void FadeCard()
+    {
+        BackSprite.enabled = false;
+        GetComponent<MeshRenderer>().enabled = false;
+        FrontSprite.color = new Color(FrontSprite.color.r, FrontSprite.color.g, FrontSprite.color.b, .5f);
+    }
+
     public void SelectCard()
     {
        // Debug.Log("Card " + gameObject.name + " Selected");

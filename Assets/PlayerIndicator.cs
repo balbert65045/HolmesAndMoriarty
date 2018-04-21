@@ -14,7 +14,7 @@ public class PlayerIndicator : MonoBehaviour {
     public PlayerType ThisIndicator;
 
 	// Use this for initialization
-	void Start () {
+	void Awake () {
         if (FindObjectOfType<LevelPropertyManager>() != null)
         {
             MyPlayerType = FindObjectOfType<LevelPropertyManager>().GetPlayerType();

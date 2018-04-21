@@ -201,6 +201,8 @@ MonoBehaviour:
   ThisCardType: 2
   SelectionOutline: {fileID: 1605554845086052}
   Used: 0
+  FrontSprite: {fileID: 212700787381495788}
+  BackSprite: {fileID: 212798244194530032}
 --- !u!212 &212119226793974798
 SpriteRenderer:
   m_ObjectHideFlags: 1

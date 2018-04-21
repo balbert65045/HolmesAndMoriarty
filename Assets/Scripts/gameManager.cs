@@ -145,11 +145,6 @@ public class gameManager : MonoBehaviour {
             MoriartyEndTurn = false;
             EndTurn();
         }
-        //if (CurrentTurnStatus == TurnStatus.PickTileHolmes || CurrentTurnStatus == TurnStatus.PickTileMoriarty)
-        //{
-        //    MoriartyEndTurn = true;
-        //}
-
     }
 
     public void EndTurn()
@@ -181,22 +176,9 @@ public class gameManager : MonoBehaviour {
                 HolmesPlayer.DisableSwapClueCards();
                 MoriartyPlayer.DisableSwapClueCards();
 
-                for (int i = 1; i <= 3; i++)
-                {
-                    CheckForScore(i);
-                }
-                if (CheckForPickTileMoriarty())
-                {
-                    CurrentTurnStatus = TurnStatus.PickTileMoriarty;
-                }
-                else if (CheckForPickTileHolmes())
-                {
-                    CurrentTurnStatus = TurnStatus.PickTileHolmes;
-                }
-                else
-                {
-                    CurrentTurnStatus = TurnStatus.BoardInspect;
-                }
+                StartCoroutine("CheckForScore");
+
+               
                 break;
 
             case TurnStatus.PickTileMoriarty:
@@ -342,34 +324,57 @@ public class gameManager : MonoBehaviour {
         MoriartyPlayer.AddNewCards(HolmesCards);
     }
 
-    void CheckForScore(int Case)
+    IEnumerator CheckForScore()
     {
+        int Case = 1;
 
-        ClueCard HolmesCrimeCard;
-        ClueCard HolmesClueCard;
-        ClueCard MoriartyCrimeCard;
-        ClueCard MoriartyClueCard;
-
-        FlipCards(Case, out HolmesCrimeCard, out HolmesClueCard, out MoriartyCrimeCard, out MoriartyClueCard);
-        // Move Crime cards up;
-
-        // declare trump
-        // Move Clue Cards up
-        // declare winner and place tile
-
-        CardType Trump = CheckForTrump(HolmesCrimeCard, MoriartyCrimeCard);
-        if (CheckForHolmesWin(Trump, HolmesClueCard, MoriartyClueCard))
+        while (Case <= 3)
         {
-            HolmesScoreThisTurn[Case - 1] = true;
-            HolmesClueCard.SelectCard();
-            tileArea.PlaceTile(HolmesTile, HolmesClueCard.Number, PlayerType.Holmes);
+            ClueCard HolmesCrimeCard;
+            ClueCard HolmesClueCard;
+            ClueCard MoriartyCrimeCard;
+            ClueCard MoriartyClueCard;
+
+            FlipCards(Case, out HolmesCrimeCard, out HolmesClueCard, out MoriartyCrimeCard, out MoriartyClueCard);
+            // Move Crime cards up;
+
+            // declare trump
+            // Move Clue Cards up
+            // declare winner and place tile
+
+            CardType Trump = CheckForTrump(HolmesCrimeCard, MoriartyCrimeCard);
+            if (CheckForHolmesWin(Trump, HolmesClueCard, MoriartyClueCard))
+            {
+                HolmesScoreThisTurn[Case - 1] = true;
+                HolmesCrimeCard.FadeCard();
+                MoriartyClueCard.FadeCard();
+                MoriartyCrimeCard.FadeCard();
+                tileArea.PlaceTile(HolmesTile, HolmesClueCard.Number, PlayerType.Holmes);
+            }
+            else
+            {
+                MoriartyScoreThisTurn[Case - 1] = true;
+                HolmesCrimeCard.FadeCard();
+                MoriartyClueCard.FadeCard();
+                HolmesClueCard.FadeCard();
+                tileArea.PlaceTile(MoriartTile, MoriartyCrimeCard.Number, PlayerType.Moriarty);
+            }
+            Case ++;
+            yield return new WaitForSeconds(.8f);
+        }
+        if (CheckForPickTileMoriarty())
+        {
+            CurrentTurnStatus = TurnStatus.PickTileMoriarty;
+        }
+        else if (CheckForPickTileHolmes())
+        {
+            CurrentTurnStatus = TurnStatus.PickTileHolmes;
         }
         else
         {
-            MoriartyScoreThisTurn[Case - 1] = true;
-            MoriartyCrimeCard.SelectCard();
-            tileArea.PlaceTile(MoriartTile, MoriartyCrimeCard.Number, PlayerType.Moriarty);
+            CurrentTurnStatus = TurnStatus.BoardInspect;
         }
+        yield return null;
     }
 
     IEnumerator MoveCardsUp(Card HolmesCard, Card MoriartyCard)

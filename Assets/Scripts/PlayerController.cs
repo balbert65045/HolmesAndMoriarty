@@ -399,7 +399,7 @@ public class PlayerController : Player {
 
     void SelectCard(ClueCard card)
     {
-        card.SelectCard();
+       // card.SelectCard();
         SelectedCard = card;
         SelectedCardOriginalPosition = SelectedCard.transform.position;
     }
@@ -408,7 +408,7 @@ public class PlayerController : Player {
     {
         if (SelectedCard != null)
         {
-            SelectedCard.DeSelectCard();
+            //SelectedCard.DeSelectCard();
             SelectedCard = null;
             SelectedCardOriginalPosition = Vector3.zero;
         }
