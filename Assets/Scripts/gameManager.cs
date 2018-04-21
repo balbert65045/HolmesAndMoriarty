@@ -233,9 +233,11 @@ public class gameManager : MonoBehaviour {
 
         if (HolmesCaseWon.Count > 0) {
             if (HolmesPlayer.GetComponent<PlayerController>())
-            {
-                tilePromptSelection.gameObject.SetActive(true);
-                tilePromptSelection.gameObject.GetComponent<Text>().text = " Select " + HolmesCaseWon.Count + " Tiles for Holmes that meet the Case";
+            {         
+                if (HolmesPlayer.GetComponent<PlayerController>() != null) {
+                    tilePromptSelection.gameObject.SetActive(true);
+                    tilePromptSelection.gameObject.GetComponent<Text>().text = " Select " + HolmesCaseWon.Count + " Tiles for Holmes that meet the Case";
+                }
             }
             return true;
         }
@@ -257,16 +259,21 @@ public class gameManager : MonoBehaviour {
         }
         if (MoriartyScore == 2)
         {
-            tilePromptSelection.gameObject.SetActive(true);
-            tilePromptSelection.gameObject.GetComponent<Text>().text = " Select " + (MoriartyScore - 1) + " open tiles for Moriarty";
+            if (HolmesPlayer.GetComponent<PlayerController>() != null) {
+                tilePromptSelection.gameObject.SetActive(true);
+                tilePromptSelection.gameObject.GetComponent<Text>().text = " Select " + (MoriartyScore - 1) + " open tiles for Moriarty";
+            }
             CurrentTurnStatus = TurnStatus.PickTileMoriarty;
             HolmesPlayer.PlaceMoriartyTiles(MoriartTile, 1);
             return true;
         }
         else if (MoriartyScore == 3)
         {
-            tilePromptSelection.gameObject.SetActive(true);
-            tilePromptSelection.gameObject.GetComponent<Text>().text = " Select " + (MoriartyScore - 1) + " open tiles for Moriarty";
+           
+            if (HolmesPlayer.GetComponent<PlayerController>() != null) {
+                tilePromptSelection.gameObject.SetActive(true);
+                tilePromptSelection.gameObject.GetComponent<Text>().text = " Select " + (MoriartyScore - 1) + " open tiles for Moriarty";
+            }
             CurrentTurnStatus = TurnStatus.PickTileMoriarty;
             HolmesPlayer.PlaceMoriartyTiles(MoriartTile, 2);
             return true;
@@ -291,8 +298,19 @@ public class gameManager : MonoBehaviour {
                 LoseScreen.SetActive(true);
             }
         }
+        else if (tileArea.CheckForHolmesWin())
+        {
+            if (HolmesPlayer.GetComponent<PlayerController>())
+            {
+                WinScreen.SetActive(true);
+            }
+            else
+            {
+                LoseScreen.SetActive(true);
+            }
+        }
 
-        if (CurrentTurnOn == 5)
+        else if (CurrentTurnOn == 5)
         {
             if (HolmesPlayer.GetComponent<PlayerController>())
             {

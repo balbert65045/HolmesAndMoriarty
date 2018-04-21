@@ -4,24 +4,23 @@ using UnityEngine;
 
 public class Card : MonoBehaviour {
 
-    // Use this for initialization
-    bool Moving = false; 
+    bool Moving = false;
+    public Vector3 MovePoint = Vector3.zero;
+
 
     public void Move(Vector3 MovePosition)
     {
         Moving = true;
-        IEnumerator MoveEnumerator = MoveTo(MovePosition);
-        StartCoroutine(MoveEnumerator);
+        MovePoint = MovePosition;
     }
 
-    IEnumerator MoveTo(Vector3 MovePosition)
+    void Update()
     {
-        while (Moving)
+        if (Moving)
         {
-            yield return new WaitForSeconds(Time.deltaTime);
-            if ((transform.localPosition - MovePosition).magnitude > .5f)
+            if ((transform.localPosition - MovePoint).magnitude > .002f)
             {
-                transform.localPosition = Vector3.Lerp(transform.position, MovePosition, Time.deltaTime * 10f);
+                transform.localPosition = Vector3.Lerp(transform.localPosition, MovePoint, Time.deltaTime * 2f);
             }
             else
             {

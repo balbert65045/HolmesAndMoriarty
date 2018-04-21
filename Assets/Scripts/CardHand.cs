@@ -60,6 +60,7 @@ public class CardHand : MonoBehaviour {
                 CardsHolding.Add(clueCard);
                 GameObject Card = Instantiate(card.gameObject, CardPositions[i]);
                 Sort(StartingPosition);
+               // Card.GetComponent<Card>().Move(Vector3.zero);
                 return;
             }
         }
@@ -126,6 +127,7 @@ public class CardHand : MonoBehaviour {
                 {
                     card.transform.parent = CardPositions[i + StartingPosition];
                     card.transform.localPosition = Vector3.zero;
+                    //card.GetComponent<Card>().Move(Vector3.zero);
                     card.transform.localRotation = Quaternion.Euler(Vector3.zero);
                     card.transform.localScale = new Vector3(5, 7, .05f);
                     break;
@@ -172,6 +174,7 @@ public class CardHand : MonoBehaviour {
                     {
                         card.transform.parent = CardPositions[i + StartingPosition + index];
                         card.transform.localPosition = Vector3.zero;
+                        //card.GetComponent<Card>().Move(Vector3.zero);
                         card.transform.localRotation = Quaternion.Euler(Vector3.zero);
                         card.transform.localScale = new Vector3(5, 7, .05f);
                         break;

@@ -120,6 +120,140 @@ public class TileArea : MonoBehaviour {
         return false;
     }
 
+    public bool CheckForHolmesWin()
+    {
+        if (!CheckForHorizontalPossible() && !CheckForVerticalPossible() && !CheckForDiagonalPossible())
+        {
+            return true;
+        }
+        return false;
+    }
+
+    bool CheckForHorizontalPossible()
+    {
+        for (int j = 0; j <= 3; j++)
+        {
+            int InARow = 0;
+            for (int i = 0; i <= 3; i++)
+            {
+                if (Tile2D[i, j] == TileType.Moriarty || Tile2D[i, j] == TileType.None)
+                {
+                    InARow++;
+                    if (InARow == 3) { return true; }
+                }
+                else
+                {
+                    InARow = 0;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    bool CheckForVerticalPossible()
+    {
+        for (int i = 0; i <= 3; i++)
+        {
+            int InARow = 0;
+            for (int j = 0; j <= 3; j++)
+            {
+                if (Tile2D[i, j] == TileType.Moriarty || Tile2D[i, j] == TileType.None)
+                {
+                    InARow++;
+                    if (InARow == 3) { return true; }
+                }
+                else
+                {
+                    InARow = 0;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    bool CheckForDiagonalPossible()
+    {
+        for (int i = 0; i <= 3; i++)
+        {
+            for (int j = 0; j <= 3; j++)
+            {
+                if (CheckDiagnolP(i, j) >= 3) { return true; }
+            }
+        }
+
+        return false;
+    }
+
+    int CheckDiagnolP(int i, int j)
+    {
+        int MaxValue = 0;
+        if (Tile2D[i, j] == TileType.Moriarty || Tile2D[i, j] == TileType.None)
+        {
+            int a = CheckUpLeftP(i, j);
+            if (a > MaxValue) { MaxValue = a; }
+
+            int b = CheckBottomLeftP(i, j);
+            if (b > MaxValue) { MaxValue = b; }
+
+            int c = CheckUpRightP(i, j);
+            if (c > MaxValue) { MaxValue = c; }
+
+            int d = CheckBottomRightP(i, j);
+            if (d > MaxValue) { MaxValue = d; }
+            MaxValue++;
+        }
+
+        return MaxValue;
+    }
+
+    int CheckUpLeftP(int i, int j)
+    {
+        //UpLeft
+        if (i > 0 && j > 0)
+        {
+            if (Tile2D[i - 1, j - 1] == TileType.Moriarty || Tile2D[i - 1, j - 1] == TileType.None) { return (1 + CheckUpLeftP(i - 1, j - 1)); }
+        }
+        return 0;
+    }
+
+    int CheckBottomLeftP(int i, int j)
+    {
+        //BottomLeft
+        if (i > 0 && j < 3)
+        {
+            if (Tile2D[i - 1, j + 1] == TileType.Moriarty || Tile2D[i - 1, j + 1] == TileType.None) { return (1 + CheckBottomLeftP(i - 1, j + 1)); }
+        }
+        return 0;
+    }
+
+    int CheckUpRightP(int i, int j)
+    {
+        //UpRight
+        if (i < 3 && j > 0)
+        {
+            if (Tile2D[i + 1, j - 1] == TileType.Moriarty || Tile2D[i + 1, j - 1] == TileType.None) { return (1 + CheckUpRightP(i + 1, j - 1)); }
+        }
+        return 0;
+    }
+
+    int CheckBottomRightP(int i, int j)
+    {
+        //BottomRight
+        if (i < 3 && j < 3)
+        {
+            if (Tile2D[i + 1, j + 1] == TileType.Moriarty || Tile2D[i + 1, j + 1] == TileType.None) { return (1 + CheckBottomRightP(i + 1, j + 1)); }
+        }
+
+        return 0;
+    }
+
+
+
+
+
+
     bool CheckForHorizontalWin()
     {
         for (int j = 0; j <= 3; j++)
@@ -240,6 +374,7 @@ public class TileArea : MonoBehaviour {
 
         return 0;
     }
+
 
 
     // Update is called once per frame
