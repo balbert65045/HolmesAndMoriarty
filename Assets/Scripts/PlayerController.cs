@@ -25,7 +25,7 @@ public class PlayerController : Player {
     bool b_EnableSwapClueCards = false;
 
 
-    void Start () {
+    void Start() {
         ClueAreaActive = true;
         CrimeAreaActive = true;
         tileArea = FindObjectOfType<TileArea>();
@@ -46,8 +46,9 @@ public class PlayerController : Player {
         }
 
 
-       
+
     }
+
 
     public override void SetupPlayer()
     {
@@ -80,6 +81,7 @@ public class PlayerController : Player {
         }
         if (OpenTileSpots.Count == 0) { return false; }
         MoriartyTilesToPlace = number;
+        endTurnButton.DisableEndTurn();
         MoriartyTile = MoriartyTilePrefab;
         return true;
     }
@@ -99,6 +101,7 @@ public class PlayerController : Player {
         }
         if (OpenTileSpots.Count == 0) { return false; }
         HolmesTilesToPlace++;
+        endTurnButton.DisableEndTurn();
         HolmesTile = HolmesTilePrefab;
         HolmesCaseCard.MoveUp(HolmesTilesToPlace);
         HolmesCaseCardsWon.Add(HolmesCaseCard);
@@ -108,10 +111,10 @@ public class PlayerController : Player {
     public void PlayerEndTurn()
     {
         gamemanager.PlayerEndTurn(MyPlayerType);
-        if (gamemanager.CurrentTurnStatus == gameManager.TurnStatus.SwitchClueCards){}
-        else if (gamemanager.CurrentTurnStatus == gameManager.TurnStatus.BoardInspect) {}
+        if (gamemanager.CurrentTurnStatus == gameManager.TurnStatus.SwitchClueCards) { }
+        else if (gamemanager.CurrentTurnStatus == gameManager.TurnStatus.BoardInspect) { }
         else if ((gamemanager.CurrentTurnStatus == gameManager.TurnStatus.PickTileHolmes || gamemanager.CurrentTurnStatus == gameManager.TurnStatus.PickTileMoriarty) &&
-            MyPlayerType == PlayerType.Moriarty) {}
+            MyPlayerType == PlayerType.Moriarty) { }
         else
         {
             endTurnButton.DisableEndTurn();
@@ -119,8 +122,8 @@ public class PlayerController : Player {
     }
 
     // Update is called once per frame
-    void Update () {
-        
+    void Update() {
+
         // On Mouse/Finger up 
         if (Input.GetMouseButtonUp(0))
         {
@@ -138,18 +141,44 @@ public class PlayerController : Player {
         {
             CheckForCardFollow();
         }
-	}
+    }
 
 
-    void CheckEndTurn()
+    public void CheckEndTurn()
     {
-        if (!ClueArea.CheckForAvailableSpace(gamemanager.CurrentCaseOn) && !CrimeArea.CheckForAvailableSpace(gamemanager.CurrentCaseOn))
+        if (gamemanager.CurrentTurnStatus == gameManager.TurnStatus.Turn1 || gamemanager.CurrentTurnStatus == gameManager.TurnStatus.Turn2 
+            || gamemanager.CurrentTurnStatus == gameManager.TurnStatus.Turn3)
+            {
+                if (!ClueArea.CheckForAvailableSpace(gamemanager.CurrentCaseOn) && !CrimeArea.CheckForAvailableSpace(gamemanager.CurrentCaseOn))
+                {
+                    endTurnButton.EnableEndTurn();
+                }
+                else
+                {
+                    endTurnButton.DisableEndTurn();
+                }
+            }
+        else if (gamemanager.CurrentTurnStatus == gameManager.TurnStatus.PickTileHolmes)
         {
-            endTurnButton.EnableEndTurn();
+            if (HolmesTilesToPlace == 0)
+            {
+                endTurnButton.EnableEndTurn();
+            }
+            else
+            {
+                endTurnButton.DisableEndTurn();
+            }
         }
-        else
+        else if( gamemanager.CurrentTurnStatus == gameManager.TurnStatus.PickTileMoriarty)
         {
-            endTurnButton.DisableEndTurn();
+            if (MoriartyTilesToPlace == 0)
+            {
+                endTurnButton.EnableEndTurn();
+            }
+            else
+            {
+                endTurnButton.DisableEndTurn();
+            }
         }
     }
 
@@ -271,7 +300,7 @@ public class PlayerController : Player {
         if (SelectedCard.GetComponentInParent<RowAreaPosition>() != null)
         {
             SelectedCard.GetComponentInParent<CardArea>().RemoveCard(SelectedCard);
-            cardHand.AddCard(SelectedCard, gamemanager.CurrentCaseOn - 1, SelectedCard.transform.position);
+            cardHand.AddCard(SelectedCard, gamemanager.CurrentCaseOn - 1);
             SelectedCard.transform.position = SelectedCardOriginalPosition;
             return;
         }
@@ -316,8 +345,8 @@ public class PlayerController : Player {
             // Moving card from hand
             else
             {
-                HitTransform.GetComponent<CardArea>().PlaceCard(SelectedCard, gamemanager.CurrentCaseOn);
                 GetComponentInChildren<CardHand>().RemoveCard(SelectedCard);
+                HitTransform.GetComponent<CardArea>().PlaceCard(SelectedCard, gamemanager.CurrentCaseOn);
             }
             return;  
         }
@@ -333,7 +362,6 @@ public class PlayerController : Player {
         }
         else if (HolmesTilesToPlace > 0)
         {
-            // TODO need to check if possiblt to place tile 
             for (int i = 0; i < HolmesCaseCardsWon.Count; i++)
             {
                 if (HolmesCaseCardsWon[i].CardTypes.Contains(HitTransform.GetComponent<TileSpot>().ThisCardType))

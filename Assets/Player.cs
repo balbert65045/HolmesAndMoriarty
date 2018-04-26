@@ -67,13 +67,18 @@ public class Player : MonoBehaviour {
 
     IEnumerator DrawingCards(int Number)
     {
+        List<ClueCard> cards = new List<ClueCard>();
         for (int i = 0; i < Number; i++)
         {
-            yield return new WaitForSeconds(.2f);
+            //yield return new WaitForSeconds(.2f);
+            //ClueCard cardDrawn = _CardDeck.DrawCard() as ClueCard;
+            //_CardHand.AddCard(cardDrawn, 0);
             ClueCard cardDrawn = _CardDeck.DrawCard() as ClueCard;
-            _CardHand.AddCard(cardDrawn, 0, CardSpot.position);
-            if (transform.GetComponent<PlayerController>() != null) { cardDrawn.transform.localRotation = Quaternion.identity; }
+            cards.Add(cardDrawn);
+            if (transform.GetComponent<PlayerController>() != null) { cardDrawn.transform.localRotation = Quaternion.Euler(new Vector3(-90, 0, 0)); }
         }
+        _CardHand.AddCards(cards, 0);
+        yield return null;
     }
 
     public void RemoveAllCards()
@@ -89,7 +94,7 @@ public class Player : MonoBehaviour {
 
         for (int i = 0; i < NewCards.Count; i++)
         {
-            _CardHand.AddCard(NewCards[i], StartingPosition, NewCards[i].transform.position);
+            _CardHand.AddCard(NewCards[i], StartingPosition);
             NewCards[i].transform.localRotation = Quaternion.identity;
         }
     }

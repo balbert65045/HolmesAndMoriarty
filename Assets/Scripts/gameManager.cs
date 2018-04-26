@@ -44,8 +44,8 @@ public class gameManager : MonoBehaviour {
     public bool[] HolmesScoreThisTurn = { false, false, false };
     bool[] MoriartyScoreThisTurn = { false, false, false };
 
-    bool HolmesEndTurn = false;
-    bool MoriartyEndTurn = false;
+   public bool HolmesEndTurn = false;
+   public bool MoriartyEndTurn = false;
 
 
     // Use this for initialization
@@ -147,6 +147,8 @@ public class gameManager : MonoBehaviour {
         {
             HolmesEndTurn = false;
             MoriartyEndTurn = false;
+            if (HolmesPlayer.GetComponent<PlayerController>()) { HolmesPlayer.GetComponent<PlayerController>().CheckEndTurn(); }
+            if (MoriartyPlayer.GetComponent<PlayerController>()) { MoriartyPlayer.GetComponent<PlayerController>().CheckEndTurn(); }
             EndTurn();
         }
     }
@@ -288,7 +290,6 @@ public class gameManager : MonoBehaviour {
         }
     }
 
-    // TODO make Holmes win if Moriarty has no way to win
     void CheckForWin()
     {
         if (tileArea.CheckForMoriartyWin())
@@ -340,10 +341,11 @@ public class gameManager : MonoBehaviour {
         HolmesPlayer.RemoveAllCards();
         MoriartyPlayer.RemoveAllCards();
 
-        yield return new WaitForSeconds(.1f);
+       // yield return new WaitForSeconds(.1f);
 
         HolmesPlayer.AddNewCards(MoriartyCards);
         MoriartyPlayer.AddNewCards(HolmesCards);
+        yield return null;
     }
 
     IEnumerator CheckForScore()

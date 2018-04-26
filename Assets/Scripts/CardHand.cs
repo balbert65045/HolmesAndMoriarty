@@ -31,6 +31,7 @@ public class CardHand : MonoBehaviour {
                 break;
         }
         Sort(FindObjectOfType<gameManager>().CurrentCaseOn - 1);
+        PutCardsInPlace();
     }
 
     private void Sort(int StartingPosition)
@@ -44,7 +45,6 @@ public class CardHand : MonoBehaviour {
                 SortCardColor(StartingPosition);
                 break;
         }
-        PutCardsInPlace();
     }
 
     void PutCardsInPlace()
@@ -60,8 +60,21 @@ public class CardHand : MonoBehaviour {
         }
     }
 
+    public void AddCards(List<ClueCard> cards, int StartingPosition)
+    {
+        int index = StartingPosition;
+        foreach (ClueCard card in cards)
+        {
+            CardsHolding.Add(card);
+            card.transform.parent = CardPositions[index].transform;
+            index++;
+            Sort(StartingPosition);
+        }
+        foreach (ClueCard CCard in CardsHolding) { CCard.Move(Vector3.zero); }
+    }
 
-    public void AddCard(ClueCard card, int StartingPosition, Vector3 OldPosition)
+
+    public void AddCard(ClueCard card, int StartingPosition)
     {
         for (int i = StartingPosition; i < CardPositions.Length; i++)
         {
@@ -69,8 +82,9 @@ public class CardHand : MonoBehaviour {
             {
                 CardsHolding.Add(card);
                 card.transform.parent = CardPositions[i].transform;
-                card.transform.position = OldPosition;
-                card.Move(Vector3.zero);
+            //    card.transform.position = OldPosition;
+                Sort(StartingPosition);
+                foreach (ClueCard CCard in CardsHolding) { CCard.Move(Vector3.zero); }
                 return;
             }
         }
@@ -79,41 +93,27 @@ public class CardHand : MonoBehaviour {
 
     public void RemoveCard(ClueCard card)
     {
-        foreach (ClueCard HCard in CardsHolding)
+
+        if (CardsHolding.Contains(card))
         {
-            if (HCard.Number == card.Number && HCard.ThisCardType == card.ThisCardType)
-            {
-                CardsHolding.Remove(HCard);
-                foreach (Transform position in CardPositions)
-                {
-                    if (position.GetComponentInChildren<ClueCard>())
-                    {
-                        if (position.GetComponentInChildren<ClueCard>().Number == card.Number)
-                        {
-                            position.GetComponentInChildren<ClueCard>().transform.SetParent(FindObjectOfType<ClueDeck>().transform);
-                           // Destroy(position.GetComponentInChildren<ClueCard>().gameObject);
-                        }
-                    }
-                }
-                return;
-            }
+            CardsHolding.Remove(card);
+            card.transform.SetParent(FindObjectOfType<ClueDeck>().transform);
         }
+        else { Debug.LogWarning("Removing card that is not in hand"); }
     }
 
     public void RemoveAllCards()
     {
-        foreach (Transform position in CardPositions)
+        foreach (ClueCard card in CardsHolding)
         {
-            if (position.GetComponentInChildren<ClueCard>())
-            {
-                position.GetComponentInChildren<ClueCard>().transform.SetParent(FindObjectOfType<ClueDeck>().transform);
-            }
+            card.transform.SetParent(FindObjectOfType<ClueDeck>().transform);
         }
         CardsHolding.Clear();
     }
 
     public void PutCardsBack()
     {
+        CardsHolding.Clear();
         foreach (Transform position in CardPositions)
         {
             if (position.GetComponentInChildren<ClueCard>())
@@ -150,10 +150,6 @@ public class CardHand : MonoBehaviour {
                 if (card.Number == OrderdCardNumbers[i])
                 {
                     card.transform.parent = CardPositions[i + StartingPosition];
-                    //card.transform.localPosition = Vector3.zero;
-                    ////card.GetComponent<Card>().Move(Vector3.zero);
-                    //card.transform.localRotation = Quaternion.Euler(Vector3.zero);
-                    //card.transform.localScale = new Vector3(5, 7, .05f);
                     break;
                 }
             }
@@ -197,10 +193,6 @@ public class CardHand : MonoBehaviour {
                     if (card.Number == OrderdCardNumbers[i])
                     {
                         card.transform.parent = CardPositions[i + StartingPosition + index];
-                        //card.transform.localPosition = Vector3.zero;
-                        ////card.GetComponent<Card>().Move(Vector3.zero);
-                        //card.transform.localRotation = Quaternion.Euler(Vector3.zero);
-                        //card.transform.localScale = new Vector3(5, 7, .05f);
                         break;
                     }
                 }

@@ -35,12 +35,11 @@ public class AIController : Player {
 
     public override void ResetPlayer()
     {
-       
+        base.ResetPlayer();
         for (int i = 0; i < cardsPlayedPerCase.Length; i++)
         {
             cardsPlayedPerCase[i] = 0;
         }
-        RemoveAllCards();
     }
 
     public override void EnableSwapClueCards()
