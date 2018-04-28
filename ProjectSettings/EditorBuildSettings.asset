@@ -6,8 +6,8 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/_Scenes/_Start.unity
-    guid: f242334bf60f7a44d9dbeaf308ca7681
+    path: Assets/New_Title_Screen.unity
+    guid: 369008f26a1b03d4e9ce2632c238d163
   - enabled: 1
     path: Assets/_Scenes/VerticleLayout.unity
     guid: d20d02b5e34a63349a40f93fe6cb856b
