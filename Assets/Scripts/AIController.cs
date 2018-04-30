@@ -75,7 +75,18 @@ public class AIController : Player {
                 if (!TS.Used) { OpenTileSpots.Add(TS); }
             }
             if (OpenTileSpots.Count == 0) { return false; }
-            int RandomOpenTileIndex = Random.Range(0, OpenTileSpots.Count);
+
+            List<TileSpot> NotLoseTileSpots = new List<TileSpot>();
+            foreach (TileSpot TS in OpenTileSpots)
+            {
+                if (!tileArea.CheckForMoriartyWinWithTile(TS.Number)) { NotLoseTileSpots.Add(TS); }
+                else { Debug.Log("Would have lost with that tile"); }
+            }
+
+
+            int RandomOpenTileIndex = Random.Range(0, NotLoseTileSpots.Count);
+            if (NotLoseTileSpots.Count == 0) { RandomOpenTileIndex = Random.Range(0, OpenTileSpots.Count); }
+            else {RandomOpenTileIndex = Random.Range(0, NotLoseTileSpots.Count); }
             tileArea.PlaceTile(MoriartyTile, OpenTileSpots[RandomOpenTileIndex].Number, PlayerType.Moriarty);
         }
         return true;

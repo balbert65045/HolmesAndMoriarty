@@ -112,6 +112,26 @@ public class TileArea : MonoBehaviour {
         return false;
     }
 
+    public bool CheckForMoriartyWinWithTile(int number)
+    {
+        int HIndex = (number - 1) % 4;
+        int VIndex = (number - 1) / 4;
+        Tile2D[HIndex, VIndex] = TileType.Moriarty;
+
+        if (CheckForHorizontalWin()) {
+            Tile2D[HIndex, VIndex] = TileType.None;
+            return true; };
+        if (CheckForVerticalWin()) {
+            Tile2D[HIndex, VIndex] = TileType.None;
+            return true; };
+        if (CheckForDiagonalWin()) {
+            Tile2D[HIndex, VIndex] = TileType.None;
+            return true; };
+        Tile2D[HIndex, VIndex] = TileType.None;
+        return false;
+    }
+
+
     public bool CheckForMoriartyWin()
     {
         if (CheckForHorizontalWin()) { return true; };
