@@ -9,7 +9,7 @@ public class CanvasManager : MonoBehaviour {
     public GameObject DifficultyMenu;
     public GameObject PlayerChoiceMenu;
     public LevelManager levelManager;
-    private LevelPropertyManager _LevelPropertyManager;
+    public LevelPropertyManager _LevelPropertyManager;
 
 	// Use this for initialization
 	void Start () {

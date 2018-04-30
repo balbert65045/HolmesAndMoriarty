@@ -11,10 +11,10 @@ public class LevelPropertyManager : MonoBehaviour {
 
     public PlayerType PlayerTypePicked;
        
-	void Start () {
+	void Awake () {
         DontDestroyOnLoad(this.gameObject);
         LevelPropertyManager[] LevelManagers = FindObjectsOfType<LevelPropertyManager>();
-        if (LevelManagers.Length > 1) { Destroy(LevelManagers[0].gameObject); }
+        if (LevelManagers.Length > 1) { Destroy(LevelManagers[1].gameObject); }
 
 	}
 	
