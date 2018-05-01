@@ -14,6 +14,11 @@ public class AIController : Player {
     bool SwapCards = false;
     TileArea tileArea;
 
+    ClueCard clueCardUsing;
+    ClueCard crimeCardUsing;
+
+    public LevelPropertyManager.Difficulty difficulty;
+
     public override void SetupPlayer()
     {
         base.SetupPlayer();
@@ -29,7 +34,7 @@ public class AIController : Player {
                     MyPlayerType = PlayerType.Holmes;
                     break;
             }
-
+            difficulty = FindObjectOfType<LevelPropertyManager>().DifficultyPicked;
         }
     }
 
@@ -121,26 +126,98 @@ public class AIController : Player {
     bool PlayCards(int CardPlaced)
     {
         if (cardHand.GetCardsHolding().Count == 0) { return false; }
-        //Clue Card Place Down
-        if (CardPlaced == 0)
+
+        switch (difficulty)
         {
-            int RandomIndex = Random.Range(0, cardHand.GetCardsHolding().Count);
-            ClueCard ClueCard = cardHand.GetCardsHolding()[RandomIndex];
-            cardHand.RemoveCard(cardHand.GetCardsHolding()[RandomIndex]);
-            ClueArea.PlaceCard(ClueCard, gameManager.CurrentCaseOn);
-            return true;
-        }
-        else if (CardPlaced == 1)
-        {
-            int RandomIndex2 = Random.Range(0, cardHand.GetCardsHolding().Count);
-            ClueCard CrimeCard = cardHand.GetCardsHolding()[RandomIndex2];
-            cardHand.RemoveCard(cardHand.GetCardsHolding()[RandomIndex2]);
-            CrimeArea.PlaceCard(CrimeCard, gameManager.CurrentCaseOn);
-            return true;
+            case LevelPropertyManager.Difficulty.Easy:
+                //Clue Card Place Down
+                if (CardPlaced == 0)
+                {
+                    int RandomIndex = Random.Range(0, cardHand.GetCardsHolding().Count);
+                    ClueCard ClueCard = cardHand.GetCardsHolding()[RandomIndex];
+                    cardHand.RemoveCard(cardHand.GetCardsHolding()[RandomIndex]);
+                    ClueArea.PlaceCard(ClueCard, gameManager.CurrentCaseOn);
+                    return true;
+                }
+                // Crime Card Place Down
+                else if (CardPlaced == 1)
+                {
+                    int RandomIndex2 = Random.Range(0, cardHand.GetCardsHolding().Count);
+                    ClueCard CrimeCard = cardHand.GetCardsHolding()[RandomIndex2];
+                    cardHand.RemoveCard(cardHand.GetCardsHolding()[RandomIndex2]);
+                    CrimeArea.PlaceCard(CrimeCard, gameManager.CurrentCaseOn);
+                    return true;
+                }
+                return false;
+            case LevelPropertyManager.Difficulty.Medium:
+                List<ClueCard> cardsHolding = cardHand.GetCardsHolding();
+                if (clueCardUsing == null && crimeCardUsing == null)
+                {
+                    FindBestCrimeClueCard(cardsHolding, out clueCardUsing, out crimeCardUsing);
+                }
+
+                if (CardPlaced == 0)
+                {
+                    cardHand.RemoveCard(clueCardUsing);
+                    ClueArea.PlaceCard(clueCardUsing, gameManager.CurrentCaseOn);
+                    return true;
+                }
+                else if (CardPlaced == 1)
+                {
+                    cardHand.RemoveCard(crimeCardUsing);
+                    CrimeArea.PlaceCard(crimeCardUsing, gameManager.CurrentCaseOn);
+                    clueCardUsing = null;
+                    crimeCardUsing = null;
+
+                    return true;
+                }
+                return false;
         }
         return false;
-        // Crime Card Place Down
     }
+
+
+    bool FindBestCrimeClueCard(List<ClueCard> cards, out ClueCard clueCard, out ClueCard crimeCard)
+    {
+        QuickSort QSort = new QuickSort();
+        List<int> CardNumbers = new List<int>();
+        foreach (ClueCard card in cards){ CardNumbers.Add(card.Number);}
+        int[] ArrCardNumbers = CardNumbers.ToArray();
+        int[] OrderdCardNumbers = QSort.Sort(ArrCardNumbers);
+
+
+        // Order the cards
+        ClueCard[] OrderedCards = new ClueCard[OrderdCardNumbers.Length];
+        for (int i = 0; i < OrderdCardNumbers.Length; i++)
+        {
+            for (int j = 0; j < cards.Count; j++)
+            {
+                if (cards[j].Number == OrderdCardNumbers[i])
+                {
+                    OrderedCards[i] = cards[j];
+                    break;
+                }
+            }
+        }
+
+        // Find highest card and see if it shares a color 
+        for (int i = OrderedCards.Length - 1; i >= 0; i--)
+        {
+            foreach (ClueCard card in OrderedCards)
+            {
+                if (card.ThisCardType == OrderedCards[i].ThisCardType && card != OrderedCards[i])
+                {
+                    clueCard = card;
+                    crimeCard = OrderedCards[i];
+                    return true;
+                }
+            }
+        }
+        crimeCard = OrderedCards[OrderedCards.Length - 1];
+        clueCard = OrderedCards[OrderedCards.Length - 2];
+        return false;
+    }
+
 
     void AIEndTurn()
     {
