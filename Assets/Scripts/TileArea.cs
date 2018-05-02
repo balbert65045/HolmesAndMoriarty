@@ -10,6 +10,9 @@ public class TileArea : MonoBehaviour {
 
     public TileType[,] Tile2D = new TileType[4,4];
 
+    public GameObject HolmesTile;
+    public GameObject MoriartyTile;
+
     PlayerIndicator HolmesIndicator = null;
     PlayerIndicator MoriartyIndicator = null;
 
@@ -395,7 +398,27 @@ public class TileArea : MonoBehaviour {
         return 0;
     }
 
-
+    public void CopyTileArea(TileType[,] NewTile2D)
+    {
+        for (int i = 0; i <= 3; i++)
+        {
+            for (int j = 0; j <= 3; j++)
+            {
+                if (NewTile2D[i, j] == TileType.Holmes)
+                {
+                    GameObject Tile = Instantiate(HolmesTile);
+                    Tile.transform.position = TileSpots[i + 4 * j].transform.position;
+                    Tile.transform.SetParent(TileSpots[i + 4 * j].transform);
+                }
+                else if (NewTile2D[i, j] == TileType.Moriarty)
+                {
+                    GameObject Tile = Instantiate(MoriartyTile);
+                    Tile.transform.position = TileSpots[i + 4 * j].transform.position;
+                    Tile.transform.SetParent(TileSpots[i + 4 * j].transform);
+                }
+            }
+        }
+    }
 
     // Update is called once per frame
     void Update () {

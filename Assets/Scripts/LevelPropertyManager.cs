@@ -10,6 +10,8 @@ public class LevelPropertyManager : MonoBehaviour {
     public Difficulty DifficultyPicked;
 
     public PlayerType PlayerTypePicked;
+
+    public TileType[,] Tile2DSaved;
        
 	void Awake () {
         DontDestroyOnLoad(this.gameObject);
@@ -33,6 +35,11 @@ public class LevelPropertyManager : MonoBehaviour {
     public PlayerType GetPlayerType()
     {
         return PlayerTypePicked;
+    }
+
+    public void SaveTileArea(TileType[,] Tile2D)
+    {
+        Tile2DSaved = Tile2D;
     }
 
     // Update is called once per frame

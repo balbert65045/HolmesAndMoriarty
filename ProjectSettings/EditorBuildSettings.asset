@@ -11,3 +11,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_Scenes/VerticleLayout.unity
     guid: d20d02b5e34a63349a40f93fe6cb856b
+  - enabled: 1
+    path: Assets/_Scenes/ScoreScreen.unity
+    guid: 1d642c708fc48b840bfd2ddc5ade0231

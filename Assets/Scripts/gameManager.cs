@@ -47,6 +47,10 @@ public class gameManager : MonoBehaviour {
    public bool HolmesEndTurn = false;
    public bool MoriartyEndTurn = false;
 
+    private void Awake()
+    {
+        Time.timeScale = 1;
+    }
 
     // Use this for initialization
     void Start () {
@@ -292,10 +296,16 @@ public class gameManager : MonoBehaviour {
 
     void CheckForWin()
     {
+        // Test
+        FindObjectOfType<LevelPropertyManager>().SaveTileArea(tileArea.Tile2D);
+        FindObjectOfType<LevelManager>().LoadNextLevel();
+
+        //
         if (tileArea.CheckForMoriartyWin())
         {
+            Time.timeScale = 0;
             if (MoriartyPlayer.GetComponent<PlayerController>())
-            {
+            { 
                 WinScreen.SetActive(true);
             }
             else
@@ -305,6 +315,7 @@ public class gameManager : MonoBehaviour {
         }
         else if (tileArea.CheckForHolmesWin())
         {
+            Time.timeScale = 0;
             if (HolmesPlayer.GetComponent<PlayerController>())
             {
                 WinScreen.SetActive(true);
@@ -317,6 +328,7 @@ public class gameManager : MonoBehaviour {
 
         else if (CurrentTurnOn == 5)
         {
+            Time.timeScale = 0;
             if (HolmesPlayer.GetComponent<PlayerController>())
             {
                 WinScreen.SetActive(true);

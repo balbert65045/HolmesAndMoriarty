@@ -197,6 +197,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c43c477c8a606949a094ac996fc32cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  b_Move: 0
+  MovePoint: {x: 0, y: 0, z: 0}
   Number: 12
   ThisCardType: 0
   SelectionOutline: {fileID: 1254442229033226}
@@ -281,12 +283,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 3f05a799168d8ee4981fe85394cda757, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 6b25e56e092482a4a8491ddc48f23f85, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 5, y: 7}
+  m_Size: {x: 5.0555553, y: 6.8703704}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
