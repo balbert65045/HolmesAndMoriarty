@@ -44,6 +44,9 @@ public class gameManager : MonoBehaviour {
     public bool[] HolmesScoreThisTurn = { false, false, false };
     bool[] MoriartyScoreThisTurn = { false, false, false };
 
+    int totalHWins = 0;
+    int totalMWins = 0;
+
    public bool HolmesEndTurn = false;
    public bool MoriartyEndTurn = false;
 
@@ -233,6 +236,7 @@ public class gameManager : MonoBehaviour {
         {
             if (HolmesScoreThisTurn[i])
             {
+                totalHWins++;
                 if (caseArea.FindCaseCard(i + 1).PlayerType == PlayerType.Holmes)
                 {
                     HolmesCaseWon.Add(i);
@@ -265,7 +269,11 @@ public class gameManager : MonoBehaviour {
         int MoriartyScore = 0;
         for (int i = 0; i <3; i++)
         {
-            if (MoriartyScoreThisTurn[i]) { MoriartyScore++; }
+            if (MoriartyScoreThisTurn[i])
+            {
+                MoriartyScore++;
+                totalMWins++;
+            }
         }
         if (MoriartyScore == 2)
         {
@@ -296,48 +304,31 @@ public class gameManager : MonoBehaviour {
 
     void CheckForWin()
     {
-        // Test
-        FindObjectOfType<LevelPropertyManager>().SaveTileArea(tileArea.Tile2D);
-        FindObjectOfType<LevelManager>().LoadNextLevel();
 
         //
         if (tileArea.CheckForMoriartyWin())
         {
-            Time.timeScale = 0;
-            if (MoriartyPlayer.GetComponent<PlayerController>())
-            { 
-                WinScreen.SetActive(true);
-            }
-            else
-            {
-                LoseScreen.SetActive(true);
-            }
+            MoveToScoreScreen(PlayerType.Moriarty);
         }
         else if (tileArea.CheckForHolmesWin())
         {
-            Time.timeScale = 0;
-            if (HolmesPlayer.GetComponent<PlayerController>())
-            {
-                WinScreen.SetActive(true);
-            }
-            else
-            {
-                LoseScreen.SetActive(true);
-            }
+            MoveToScoreScreen(PlayerType.Holmes);
         }
 
-        else if (CurrentTurnOn == 5)
+        else if (CurrentTurnOn - 1 == 5)
         {
-            Time.timeScale = 0;
-            if (HolmesPlayer.GetComponent<PlayerController>())
-            {
-                WinScreen.SetActive(true);
-            }
-            else
-            {
-                LoseScreen.SetActive(true);
-            }
+            MoveToScoreScreen(PlayerType.Holmes);
         }
+    }
+
+    void MoveToScoreScreen(PlayerType PTWon)
+    {
+        Time.timeScale = 0;
+        FindObjectOfType<LevelPropertyManager>().SaveTileArea(tileArea.Tile2D);
+        FindObjectOfType<LevelPropertyManager>().SetPlayerWon(PTWon);
+        FindObjectOfType<LevelPropertyManager>().SetDetails(CurrentTurnOn - 1, totalHWins, totalMWins);
+
+        FindObjectOfType<LevelManager>().LoadNextLevel();
     }
 
 

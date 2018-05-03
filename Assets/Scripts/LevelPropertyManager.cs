@@ -8,8 +8,12 @@ public class LevelPropertyManager : MonoBehaviour {
 
     public enum Difficulty { Easy, Medium, Hard}
     public Difficulty DifficultyPicked;
-
+    public PlayerType PlayerWon;
     public PlayerType PlayerTypePicked;
+
+    public int TotalNumberofRounds;
+    public int NumberofHolmesCaseWon;
+    public int NumberofMoriartyCaseWon;
 
     public TileType[,] Tile2DSaved;
        
@@ -40,6 +44,18 @@ public class LevelPropertyManager : MonoBehaviour {
     public void SaveTileArea(TileType[,] Tile2D)
     {
         Tile2DSaved = Tile2D;
+    }
+
+    public void SetPlayerWon(PlayerType PT)
+    {
+        PlayerWon = PT;
+    }
+
+    public void SetDetails(int TotRounds, int HolmsWins, int MoriartyWins)
+    {
+        TotalNumberofRounds = TotRounds;
+        NumberofHolmesCaseWon = HolmsWins;
+        NumberofMoriartyCaseWon = MoriartyWins;
     }
 
     // Update is called once per frame
