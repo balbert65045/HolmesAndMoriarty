@@ -177,6 +177,7 @@ public class gameManager : MonoBehaviour {
                 break;
 
             case TurnStatus.Turn3:
+                CurrentCaseOn++;
                 tilePromptSelection.gameObject.SetActive(true);
                 tilePromptSelection.gameObject.GetComponent<Text>().text = "Move Clue cards";
                 HolmesPlayer.EnableSwapClueCards();
@@ -221,7 +222,6 @@ public class gameManager : MonoBehaviour {
 
     void CheckForTotalScore()
     {
-        CurrentCaseOn++;
         CurrentTurnOn++;
         CheckForWin();
         StartCoroutine("Reset");

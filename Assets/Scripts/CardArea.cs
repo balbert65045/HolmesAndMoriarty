@@ -58,7 +58,8 @@ public class CardArea : MonoBehaviour {
 
     public bool CheckForAvailableSpace(int CaseN)
     {
-        if (!Positions[CaseN - 1].InUse) { return true; }
+        if (CaseN > 3) { return false; }
+        else if (!Positions[CaseN - 1].InUse) { return true; }
         return false;
     }
 

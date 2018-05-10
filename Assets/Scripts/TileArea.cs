@@ -420,6 +420,18 @@ public class TileArea : MonoBehaviour {
         }
     }
 
+    public bool CheckForOpenTiles()
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            for (int j = 0; j< 4; j++)
+            {
+                if (Tile2D[i,j] == TileType.None) { return true; }
+            }
+        }
+        return false; 
+    }
+
     // Update is called once per frame
     void Update () {
 		

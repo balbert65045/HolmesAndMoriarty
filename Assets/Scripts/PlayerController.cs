@@ -164,6 +164,11 @@ public class PlayerController : Player {
             {
                 endTurnButton.EnableEndTurn();
             }
+            else if (!tileArea.CheckForOpenTiles())
+            {
+                endTurnButton.EnableEndTurn();
+            }
+
             else
             {
                 endTurnButton.DisableEndTurn();
@@ -175,6 +180,11 @@ public class PlayerController : Player {
             {
                 endTurnButton.EnableEndTurn();
             }
+            else if (!tileArea.CheckForOpenTiles())
+            {
+                endTurnButton.EnableEndTurn();
+            }
+
             else
             {
                 endTurnButton.DisableEndTurn();
