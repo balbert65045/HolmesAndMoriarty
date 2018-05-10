@@ -46,6 +46,11 @@ public class CardArea : MonoBehaviour {
 		
 	}
 
+    public ClueCard GetCard(int Pos)
+    {
+        return Positions[Pos - 1].GetComponent<RowAreaPosition>().GetComponentInChildren<ClueCard>();
+    }
+
     public void ActiveSpot(int CaseN)
     {
         Positions[CaseN - 1].GetComponent<RowAreaPosition>().SetActiveImage(true);

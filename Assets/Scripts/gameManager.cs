@@ -50,6 +50,9 @@ public class gameManager : MonoBehaviour {
    public bool HolmesEndTurn = false;
    public bool MoriartyEndTurn = false;
 
+    public GameObject[] SwapButtonsObj;
+
+
     private void Awake()
     {
         Time.timeScale = 1;
@@ -65,6 +68,11 @@ public class gameManager : MonoBehaviour {
         ShowAreaText.SetActive(false);
         tileArea = FindObjectOfType<TileArea>();
         caseArea = FindObjectOfType<CaseArea>();
+
+        foreach (GameObject obj in SwapButtonsObj)
+        {
+            obj.SetActive(false);
+        }
 
         Players = FindObjectsOfType<Player>();
         foreach (Player player in Players)
@@ -180,12 +188,20 @@ public class gameManager : MonoBehaviour {
                 CurrentCaseOn++;
                 tilePromptSelection.gameObject.SetActive(true);
                 tilePromptSelection.gameObject.GetComponent<Text>().text = "Move Clue cards";
+                foreach (GameObject obj in SwapButtonsObj)
+                {
+                    obj.SetActive(true);
+                }
                 HolmesPlayer.EnableSwapClueCards();
                 MoriartyPlayer.EnableSwapClueCards();
                 CurrentTurnStatus = TurnStatus.SwitchClueCards;
                 break;
 
             case TurnStatus.SwitchClueCards:
+                foreach (GameObject obj in SwapButtonsObj)
+                {
+                    obj.SetActive(false);
+                }
                 tilePromptSelection.gameObject.SetActive(false);
                 HolmesPlayer.DisableSwapClueCards();
                 MoriartyPlayer.DisableSwapClueCards();

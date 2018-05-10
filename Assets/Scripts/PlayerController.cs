@@ -88,7 +88,6 @@ public class PlayerController : Player {
 
     public override bool PlaceHolmesTiles(GameObject HolmesTilePrefab, CaseCard HolmesCaseCard)
     {
-        Debug.Log("Looking to add Holmes Tile");
         // check tiles to make sure one exist that can be gotten 
         TileSpot[] TilesSpots = FindObjectsOfType<TileSpot>();
         List<TileSpot> OpenTileSpots = new List<TileSpot>();
@@ -134,12 +133,41 @@ public class PlayerController : Player {
         {
             SelectCard_PlaceTileDown();
             CheckActiveAreas();
+            CheckForSwapCardsButton();
         }
 
         // On Holding Down Mouse/Finger 
         else if (Input.GetMouseButton(0))
         {
             CheckForCardFollow();
+        }
+    }
+
+    void CheckForSwapCardsButton()
+    {
+        RaycastHit Hit;
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out Hit, 100f))
+        {
+         
+            if (Hit.transform.GetComponent<SwapButtons>() != null)
+            {
+                int buttonHit = Hit.transform.GetComponent<SwapButtons>().Button;
+                if (buttonHit == 1)
+                {
+                    ClueCard Card1 = ClueArea.GetCard(1);
+                    ClueCard Card2 = ClueArea.GetCard(2);
+                    ClueArea.PlaceCard(Card1, 2);
+                    ClueArea.PlaceCard(Card2, 1);
+                }
+                else if (buttonHit == 2)
+                {
+                    ClueCard Card1 = ClueArea.GetCard(2);
+                    ClueCard Card2 = ClueArea.GetCard(3);
+                    ClueArea.PlaceCard(Card1, 3);
+                    ClueArea.PlaceCard(Card2, 2);
+                }
+            }
         }
     }
 
