@@ -52,6 +52,7 @@ public class gameManager : MonoBehaviour {
 
     public GameObject[] SwapButtonsObj;
 
+    TurnManager turnManager;
 
     private void Awake()
     {
@@ -66,6 +67,7 @@ public class gameManager : MonoBehaviour {
         WinScreen.SetActive(false);
         LoseScreen.SetActive(false);
         ShowAreaText.SetActive(false);
+        turnManager = FindObjectOfType<TurnManager>();
         tileArea = FindObjectOfType<TileArea>();
         caseArea = FindObjectOfType<CaseArea>();
 
@@ -239,6 +241,7 @@ public class gameManager : MonoBehaviour {
     void CheckForTotalScore()
     {
         CurrentTurnOn++;
+        turnManager.NextTurn();
         CheckForWin();
         StartCoroutine("Reset");
         StartCoroutine("PlayersDrawCards");
