@@ -98,7 +98,10 @@ public class PlayerController : Player {
                 if (HolmesCaseCard.CardTypes.Contains(TS.ThisCardType)) { OpenTileSpots.Add(TS); }
             }
         }
-        if (OpenTileSpots.Count == 0) { return false; }
+        if (OpenTileSpots.Count == 0) {
+            endTurnButton.EnableEndTurn();
+            return false;
+        }
         HolmesTilesToPlace++;
         endTurnButton.DisableEndTurn();
         HolmesTile = HolmesTilePrefab;

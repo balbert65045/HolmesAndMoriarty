@@ -381,7 +381,7 @@ RectTransform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 60516047}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 592, y: 333, z: 0}
+  m_LocalPosition: {x: 614, y: 311, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 599873839}
@@ -1035,7 +1035,7 @@ RectTransform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 540997566}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -147, y: 2.5999985, z: 0}
+  m_LocalPosition: {x: -169, y: 2.5999985, z: 0}
   m_LocalScale: {x: 3.9597192, y: 5.9996014, z: 3.9597187}
   m_Children: []
   m_Father: {fileID: 60516051}
@@ -3074,7 +3074,7 @@ MonoBehaviour:
     m_HighlightedTrigger: Highlighted
     m_PressedTrigger: Pressed
     m_DisabledTrigger: Disabled
-  m_Interactable: 0
+  m_Interactable: 1
   m_TargetGraphic: {fileID: 1967504875}
   m_OnClick:
     m_PersistentCalls:

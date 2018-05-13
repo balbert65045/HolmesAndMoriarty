@@ -17,6 +17,10 @@ public class AIController : Player {
     ClueCard clueCardUsing;
     ClueCard crimeCardUsing;
 
+    public List<ClueCard> cardsOponentHas;
+    public ClueCard GuessOponentClueCard;
+    public ClueCard GuessOponnentCrimeCard;
+
     public LevelPropertyManager.Difficulty difficulty;
 
     public override void SetupPlayer()
@@ -127,6 +131,7 @@ public class AIController : Player {
     {
         if (cardHand.GetCardsHolding().Count == 0) { return false; }
 
+        List<ClueCard> cardsHolding = cardHand.GetCardsHolding();
         switch (difficulty)
         {
             case LevelPropertyManager.Difficulty.Easy:
@@ -150,7 +155,7 @@ public class AIController : Player {
                 }
                 return false;
             case LevelPropertyManager.Difficulty.Medium:
-                List<ClueCard> cardsHolding = cardHand.GetCardsHolding();
+               
                 if (clueCardUsing == null && crimeCardUsing == null)
                 {
                     FindBestCrimeClueCard(cardsHolding, out clueCardUsing, out crimeCardUsing);
@@ -172,10 +177,196 @@ public class AIController : Player {
                     return true;
                 }
                 return false;
+            case LevelPropertyManager.Difficulty.Hard:
+                switch (gameManager.CurrentCaseOn)
+                {
+                    case 1:
+                        if (clueCardUsing == null && crimeCardUsing == null)
+                        {
+                            FindBestCrimeClueCard(cardsHolding, out clueCardUsing, out crimeCardUsing);
+                        }
+
+                        if (CardPlaced == 0)
+                        {
+                            cardHand.RemoveCard(clueCardUsing);
+                            ClueArea.PlaceCard(clueCardUsing, gameManager.CurrentCaseOn);
+                            return true;
+                        }
+                        else if (CardPlaced == 1)
+                        {
+                            cardHand.RemoveCard(crimeCardUsing);
+                            CrimeArea.PlaceCard(crimeCardUsing, gameManager.CurrentCaseOn);
+                            clueCardUsing = null;
+                            crimeCardUsing = null;
+                            List<ClueCard> OldCards =new List<ClueCard>();
+                            foreach (ClueCard card in cardHand.GetCardsHolding())
+                            {
+                                OldCards.Add(card);
+                            }
+                            cardsOponentHas = OldCards;
+                            return true;
+                        }
+                        return false;
+                    case 2:
+
+                        if (GuessOponentClueCard == null && GuessOponnentCrimeCard == null)
+                        {
+                            FindBestCrimeClueCard(cardsOponentHas, out GuessOponentClueCard, out GuessOponnentCrimeCard);
+                        }
+
+                        if (clueCardUsing == null && crimeCardUsing == null)
+                        {
+                            Debug.Log("Oponent Crime Card suspected is " + GuessOponnentCrimeCard.Number);
+                            Debug.Log("Oponent Clue Card suspected is " + GuessOponentClueCard.Number);
+                            if (!CheckifPossibletoBeatOponentsBest(GuessOponnentCrimeCard, GuessOponentClueCard, cardsHolding))
+                            {
+                                FindBestCrimeClueCard(cardsHolding, out clueCardUsing, out crimeCardUsing);
+                            }
+                        }
+
+
+                        if (CardPlaced == 0)
+                        {
+                            cardHand.RemoveCard(clueCardUsing);
+                            ClueArea.PlaceCard(clueCardUsing, gameManager.CurrentCaseOn);
+                            return true;
+                        }
+                        else if (CardPlaced == 1)
+                        {
+                            cardHand.RemoveCard(crimeCardUsing);
+                            CrimeArea.PlaceCard(crimeCardUsing, gameManager.CurrentCaseOn);
+                            clueCardUsing = null;
+                            crimeCardUsing = null;
+                            GuessOponentClueCard = null;
+                            GuessOponnentCrimeCard = null;
+                            List<ClueCard> OldCards = new List<ClueCard>();
+                            foreach (ClueCard card in cardHand.GetCardsHolding())
+                            {
+                                OldCards.Add(card);
+                            }
+                            cardsOponentHas = OldCards;
+                            return true;
+                        }
+
+
+                        break;
+                    case 3:
+                        if (GuessOponentClueCard == null && GuessOponnentCrimeCard == null)
+                        {
+                            FindBestCrimeClueCard(cardsOponentHas, out GuessOponentClueCard, out GuessOponnentCrimeCard);
+                        }
+
+                        if (clueCardUsing == null && crimeCardUsing == null)
+                        {
+                            Debug.Log("Oponent Crime Card suspected is " + GuessOponnentCrimeCard.Number);
+                            Debug.Log("Oponent Clue Card suspected is " + GuessOponentClueCard.Number);
+                            if (!CheckifPossibletoBeatOponentsBest(GuessOponnentCrimeCard, GuessOponentClueCard, cardsHolding))
+                            {
+                                FindBestCrimeClueCard(cardsHolding, out clueCardUsing, out crimeCardUsing);
+                            }
+                        }
+
+
+                        if (CardPlaced == 0)
+                        {
+                            cardHand.RemoveCard(clueCardUsing);
+                            ClueArea.PlaceCard(clueCardUsing, gameManager.CurrentCaseOn);
+                            return true;
+                        }
+                        else if (CardPlaced == 1)
+                        {
+                            cardHand.RemoveCard(crimeCardUsing);
+                            CrimeArea.PlaceCard(crimeCardUsing, gameManager.CurrentCaseOn);
+                            clueCardUsing = null;
+                            crimeCardUsing = null;
+                            GuessOponentClueCard = null;
+                            GuessOponnentCrimeCard = null;
+                            cardsOponentHas = cardHand.GetCardsHolding();
+                            return true;
+                        }
+
+
+                        break;
+                }
+
+                return false;
         }
         return false;
     }
 
+    bool CheckifPossibletoBeatOponentsBest(ClueCard OponentCrimeCard, ClueCard OponentClueCard, List<ClueCard> CardsAvailable)
+    {
+
+        // Look to beat the crime and match 
+        foreach (ClueCard CrimeCard in CardsAvailable)
+        {
+            if ((CrimeCard.Number > OponentCrimeCard.Number || ((OponentCrimeCard.Number > 13) && (CrimeCard.Number < OponentCrimeCard.Number % 4))) && (CrimeCard.ThisCardType != OponentClueCard.ThisCardType))
+            {
+                foreach (ClueCard ClueCard in CardsAvailable)
+                {
+                    if (ClueCard != CrimeCard)
+                    {
+                        if (ClueCard.ThisCardType == CrimeCard.ThisCardType)
+                        {
+                            Debug.Log("Found a card that will win");
+                            crimeCardUsing = CrimeCard;
+                            clueCardUsing = ClueCard;
+                            return true;
+                        }
+                    }
+                }
+            }
+
+        }
+
+       // Crime doesnt match, so try to put a clue card that matches opponent crime 
+        if (OponentCrimeCard.ThisCardType != OponentClueCard.ThisCardType)
+        {
+            foreach (ClueCard clueCard in CardsAvailable)
+            {
+                if (clueCard.ThisCardType == OponentCrimeCard.ThisCardType)
+                {
+                    foreach (ClueCard crimeCard in CardsAvailable)
+                    {
+                        if (clueCard != crimeCard)
+                        {
+                            if (crimeCard.Number < OponentCrimeCard.Number)
+                            {
+                                Debug.Log("Found a card that matches oponent crime");
+                                crimeCardUsing = crimeCard;
+                                clueCardUsing = clueCard;
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // look if possible to put a clue thats higher than theirs 
+        foreach (ClueCard clueCard in CardsAvailable)
+        {
+            if (clueCard.ThisCardType == OponentClueCard.ThisCardType && clueCard.Number > OponentClueCard.Number)
+            {
+                foreach(ClueCard crimeCard in CardsAvailable)
+                {
+                    if (clueCard != crimeCard)
+                    {
+                        if (crimeCard.Number < OponentCrimeCard.Number)
+                        {
+                            Debug.Log("Found a card clue card that will beat theirs in trump");
+                            crimeCardUsing = crimeCard;
+                            clueCardUsing = clueCard;
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+
+
+        return false;
+    }
 
     bool FindBestCrimeClueCard(List<ClueCard> cards, out ClueCard clueCard, out ClueCard crimeCard)
     {
@@ -203,18 +394,19 @@ public class AIController : Player {
         // Find highest card and see if it shares a color 
         for (int i = OrderedCards.Length - 1; i >= 0; i--)
         {
-            foreach (ClueCard card in OrderedCards)
+            for (int j = OrderedCards.Length - 1; j >= 0; j--)
             {
-                if (card.ThisCardType == OrderedCards[i].ThisCardType && card != OrderedCards[i])
+                if (OrderedCards[j].ThisCardType == OrderedCards[i].ThisCardType && OrderedCards[j] != OrderedCards[i])
                 {
-                    clueCard = card;
+
+                    clueCard = OrderedCards[j];
                     crimeCard = OrderedCards[i];
                     return true;
                 }
             }
         }
-        crimeCard = OrderedCards[OrderedCards.Length - 1];
-        clueCard = OrderedCards[OrderedCards.Length - 2];
+        crimeCard = OrderedCards[0];
+        clueCard = OrderedCards[OrderedCards.Length - 1];
         return false;
     }
 
