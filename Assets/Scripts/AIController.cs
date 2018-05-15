@@ -17,13 +17,13 @@ public class AIController : Player {
     ClueCard clueCardUsing;
     ClueCard crimeCardUsing;
 
-    public List<ClueCard> cardsOponentHas;
-    public ClueCard GuessOponentClueCard;
-    public ClueCard GuessOponnentCrimeCard;
+     List<ClueCard> cardsOponentHas;
+     ClueCard GuessOponentClueCard;
+     ClueCard GuessOponnentCrimeCard;
 
-    public List<ClueCard> FirstSetofCardsGivenoponent;
-    public ClueCard OponentClueCardC2;
-    public ClueCard OponentCrimeCardC2;
+     List<ClueCard> FirstSetofCardsGivenoponent;
+     ClueCard OponentClueCardC2;
+     ClueCard OponentCrimeCardC2;
 
     public LevelPropertyManager.Difficulty difficulty;
 
@@ -230,10 +230,7 @@ public class AIController : Player {
                         if (clueCardUsing == null && crimeCardUsing == null)
                         {
                             FindBestCrimeClueCard(cardsHolding, out clueCardUsing, out crimeCardUsing);
-                            if (crimeCardUsing.Number != 16) {
-                                Debug.Log("Looking for Wrap Around");
-                                CheckForWrapAroundCapable(cardsHolding); }
-                        }
+                            if (crimeCardUsing.Number != 16) { CheckForWrapAroundCapable(cardsHolding); }}
 
                         return PlaceCards(CardPlaced);
                     case 2:
@@ -322,7 +319,6 @@ public class AIController : Player {
 
     void FindCardsUsedInCase2(List<ClueCard> cardsHolding)
     {
-        //lloking for what was used in case 2
         foreach (ClueCard card in cardsHolding)
         {
             FirstSetofCardsGivenoponent.Remove(card);
@@ -341,17 +337,17 @@ public class AIController : Player {
 
     bool PlaceCards(int CardPlaced)
     {
+        //Play clue card 
         if (CardPlaced == 0)
         {
-            Debug.Log(clueCardUsing);
             cardHand.RemoveCard(clueCardUsing);
             ClueArea.PlaceCard(clueCardUsing, gameManager.CurrentCaseOn);
 
             return true;
         }
+        //Play crime card 
         else if (CardPlaced == 1)
         {
-            Debug.Log(crimeCardUsing);
             cardHand.RemoveCard(crimeCardUsing);
             CrimeArea.PlaceCard(crimeCardUsing, gameManager.CurrentCaseOn);
             clueCardUsing = null;
@@ -439,7 +435,6 @@ public class AIController : Player {
                 }
             }
         }
-
 
         return false;
     }
@@ -538,6 +533,7 @@ public class AIController : Player {
                 cardsPlayedPerCase[gameManager.CurrentCaseOn - 1]++;
                 if (cardsPlayedPerCase[gameManager.CurrentCaseOn - 1] == 2) { AIEndTurn(); }
             }
+            else { Debug.LogError("No card Played by AI"); }
         }
     }
 
@@ -552,10 +548,6 @@ public class AIController : Player {
                 OtherclueCards.Add(ClueArea.GetCard(3));
                 CheckifPossibletoBeatOponentsCase2WithSwap(OponentCrimeCardC2, OponentClueCardC2, OtherclueCards, CrimeArea.GetCard(2), ClueArea.GetCard(2));
             }
-
-
-
-
             AIEndTurn();
             SwapCards = false;
         }
@@ -573,7 +565,6 @@ public class AIController : Player {
                 {
                         if (ClueCard.ThisCardType == CrimeCardStuckWith.ThisCardType)
                         {
-                            Debug.Log("Found a card that will win by swap");
                             int CasePos = ClueCard.GetComponentInParent<RowAreaPosition>().Case;
                             ClueArea.PlaceCard(ClueCard, 2);
                             ClueArea.PlaceCard(CardSwappingWith, CasePos);
@@ -593,7 +584,6 @@ public class AIController : Player {
                 {
                     if (CrimeCardStuckWith.Number < OponentCrimeCard.Number)
                     {
-                        Debug.Log("Found a card that matches oponent crime amd win with swap");
                         int CasePos = clueCard.GetComponentInParent<RowAreaPosition>().Case;
                         ClueArea.PlaceCard(clueCard, 2);
                         ClueArea.PlaceCard(CardSwappingWith, CasePos);
@@ -610,7 +600,6 @@ public class AIController : Player {
             {
                 if (CrimeCardStuckWith.Number < OponentCrimeCard.Number)
                 {
-                    Debug.Log("Found a card clue card that will beat theirs in trump with swap");
                     int CasePos = clueCard.GetComponentInParent<RowAreaPosition>().Case;
                     ClueArea.PlaceCard(clueCard, 2);
                     ClueArea.PlaceCard(CardSwappingWith, CasePos);
