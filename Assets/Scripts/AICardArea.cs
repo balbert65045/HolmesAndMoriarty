@@ -39,6 +39,11 @@ public class AICardArea : MonoBehaviour {
         }
     }
 
+    public ClueCard GetCard(int Pos)
+    {
+        return Positions[Pos - 1].GetComponent<RowAreaPosition>().GetComponentInChildren<ClueCard>();
+    }
+
     public void PlaceCard(ClueCard card, int CaseN)
     {
         // simply placing it in position one for now 

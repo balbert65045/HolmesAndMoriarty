@@ -21,6 +21,10 @@ public class AIController : Player {
     public ClueCard GuessOponentClueCard;
     public ClueCard GuessOponnentCrimeCard;
 
+    public List<ClueCard> FirstSetofCardsGivenoponent;
+    public ClueCard OponentClueCardC2;
+    public ClueCard OponentCrimeCardC2;
+
     public LevelPropertyManager.Difficulty difficulty;
 
     public override void SetupPlayer()
@@ -134,50 +138,35 @@ public class AIController : Player {
         List<ClueCard> cardsHolding = cardHand.GetCardsHolding();
         switch (difficulty)
         {
+            //case LevelPropertyManager.Difficulty.Easy:
+            //    //Clue Card Place Down
+            //    if (CardPlaced == 0)
+            //    {
+            //        int RandomIndex = Random.Range(0, cardHand.GetCardsHolding().Count);
+            //        ClueCard ClueCard = cardHand.GetCardsHolding()[RandomIndex];
+            //        cardHand.RemoveCard(cardHand.GetCardsHolding()[RandomIndex]);
+            //        ClueArea.PlaceCard(ClueCard, gameManager.CurrentCaseOn);
+            //        return true;
+            //    }
+            //    // Crime Card Place Down
+            //    else if (CardPlaced == 1)
+            //    {
+            //        int RandomIndex2 = Random.Range(0, cardHand.GetCardsHolding().Count);
+            //        ClueCard CrimeCard = cardHand.GetCardsHolding()[RandomIndex2];
+            //        cardHand.RemoveCard(cardHand.GetCardsHolding()[RandomIndex2]);
+            //        CrimeArea.PlaceCard(CrimeCard, gameManager.CurrentCaseOn);
+            //        return true;
+            //    }
+            //    return false;
             case LevelPropertyManager.Difficulty.Easy:
-                //Clue Card Place Down
-                if (CardPlaced == 0)
-                {
-                    int RandomIndex = Random.Range(0, cardHand.GetCardsHolding().Count);
-                    ClueCard ClueCard = cardHand.GetCardsHolding()[RandomIndex];
-                    cardHand.RemoveCard(cardHand.GetCardsHolding()[RandomIndex]);
-                    ClueArea.PlaceCard(ClueCard, gameManager.CurrentCaseOn);
-                    return true;
-                }
-                // Crime Card Place Down
-                else if (CardPlaced == 1)
-                {
-                    int RandomIndex2 = Random.Range(0, cardHand.GetCardsHolding().Count);
-                    ClueCard CrimeCard = cardHand.GetCardsHolding()[RandomIndex2];
-                    cardHand.RemoveCard(cardHand.GetCardsHolding()[RandomIndex2]);
-                    CrimeArea.PlaceCard(CrimeCard, gameManager.CurrentCaseOn);
-                    return true;
-                }
-                return false;
-            case LevelPropertyManager.Difficulty.Medium:
                
                 if (clueCardUsing == null && crimeCardUsing == null)
                 {
                     FindBestCrimeClueCard(cardsHolding, out clueCardUsing, out crimeCardUsing);
                 }
+                return PlaceCards(CardPlaced);
 
-                if (CardPlaced == 0)
-                {
-                    cardHand.RemoveCard(clueCardUsing);
-                    ClueArea.PlaceCard(clueCardUsing, gameManager.CurrentCaseOn);
-                    return true;
-                }
-                else if (CardPlaced == 1)
-                {
-                    cardHand.RemoveCard(crimeCardUsing);
-                    CrimeArea.PlaceCard(crimeCardUsing, gameManager.CurrentCaseOn);
-                    clueCardUsing = null;
-                    crimeCardUsing = null;
-
-                    return true;
-                }
-                return false;
-            case LevelPropertyManager.Difficulty.Hard:
+            case LevelPropertyManager.Difficulty.Medium:
                 switch (gameManager.CurrentCaseOn)
                 {
                     case 1:
@@ -186,27 +175,7 @@ public class AIController : Player {
                             FindBestCrimeClueCard(cardsHolding, out clueCardUsing, out crimeCardUsing);
                         }
 
-                        if (CardPlaced == 0)
-                        {
-                            cardHand.RemoveCard(clueCardUsing);
-                            ClueArea.PlaceCard(clueCardUsing, gameManager.CurrentCaseOn);
-                            return true;
-                        }
-                        else if (CardPlaced == 1)
-                        {
-                            cardHand.RemoveCard(crimeCardUsing);
-                            CrimeArea.PlaceCard(crimeCardUsing, gameManager.CurrentCaseOn);
-                            clueCardUsing = null;
-                            crimeCardUsing = null;
-                            List<ClueCard> OldCards =new List<ClueCard>();
-                            foreach (ClueCard card in cardHand.GetCardsHolding())
-                            {
-                                OldCards.Add(card);
-                            }
-                            cardsOponentHas = OldCards;
-                            return true;
-                        }
-                        return false;
+                        return PlaceCards(CardPlaced);
                     case 2:
 
                         if (GuessOponentClueCard == null && GuessOponnentCrimeCard == null)
@@ -225,32 +194,11 @@ public class AIController : Player {
                         }
 
 
-                        if (CardPlaced == 0)
-                        {
-                            cardHand.RemoveCard(clueCardUsing);
-                            ClueArea.PlaceCard(clueCardUsing, gameManager.CurrentCaseOn);
-                            return true;
-                        }
-                        else if (CardPlaced == 1)
-                        {
-                            cardHand.RemoveCard(crimeCardUsing);
-                            CrimeArea.PlaceCard(crimeCardUsing, gameManager.CurrentCaseOn);
-                            clueCardUsing = null;
-                            crimeCardUsing = null;
-                            GuessOponentClueCard = null;
-                            GuessOponnentCrimeCard = null;
-                            List<ClueCard> OldCards = new List<ClueCard>();
-                            foreach (ClueCard card in cardHand.GetCardsHolding())
-                            {
-                                OldCards.Add(card);
-                            }
-                            cardsOponentHas = OldCards;
-                            return true;
-                        }
-
-
-                        break;
+                        return PlaceCards(CardPlaced);
                     case 3:
+
+
+
                         if (GuessOponentClueCard == null && GuessOponnentCrimeCard == null)
                         {
                             FindBestCrimeClueCard(cardsOponentHas, out GuessOponentClueCard, out GuessOponnentCrimeCard);
@@ -267,29 +215,157 @@ public class AIController : Player {
                         }
 
 
-                        if (CardPlaced == 0)
-                        {
-                            cardHand.RemoveCard(clueCardUsing);
-                            ClueArea.PlaceCard(clueCardUsing, gameManager.CurrentCaseOn);
-                            return true;
-                        }
-                        else if (CardPlaced == 1)
-                        {
-                            cardHand.RemoveCard(crimeCardUsing);
-                            CrimeArea.PlaceCard(crimeCardUsing, gameManager.CurrentCaseOn);
-                            clueCardUsing = null;
-                            crimeCardUsing = null;
-                            GuessOponentClueCard = null;
-                            GuessOponnentCrimeCard = null;
-                            cardsOponentHas = cardHand.GetCardsHolding();
-                            return true;
-                        }
-
-
-                        break;
+                        return PlaceCards(CardPlaced);
                 }
 
                 return false;
+
+
+
+
+            case LevelPropertyManager.Difficulty.Hard:
+                switch (gameManager.CurrentCaseOn)
+                {
+                    case 1:
+                        if (clueCardUsing == null && crimeCardUsing == null)
+                        {
+                            FindBestCrimeClueCard(cardsHolding, out clueCardUsing, out crimeCardUsing);
+                            if (crimeCardUsing.Number != 16) {
+                                Debug.Log("Looking for Wrap Around");
+                                CheckForWrapAroundCapable(cardsHolding); }
+                        }
+
+                        return PlaceCards(CardPlaced);
+                    case 2:
+
+                        if (GuessOponentClueCard == null && GuessOponnentCrimeCard == null)
+                        {
+                            FindBestCrimeClueCard(cardsOponentHas, out GuessOponentClueCard, out GuessOponnentCrimeCard);
+                        }
+
+                        if (clueCardUsing == null && crimeCardUsing == null)
+                        {
+                            Debug.Log("Oponent Crime Card suspected is " + GuessOponnentCrimeCard.Number);
+                            Debug.Log("Oponent Clue Card suspected is " + GuessOponentClueCard.Number);
+                            if (!CheckifPossibletoBeatOponentsBest(GuessOponnentCrimeCard, GuessOponentClueCard, cardsHolding))
+                            {
+                                FindBestCrimeClueCard(cardsHolding, out clueCardUsing, out crimeCardUsing);
+                            }
+                        }
+
+
+                        return PlaceCards(CardPlaced);
+                    case 3:
+
+                        if (clueCardUsing == null && crimeCardUsing == null)
+                        {
+                            FindCardsUsedInCase2(cardsHolding);
+                        }
+
+                        if (GuessOponentClueCard == null && GuessOponnentCrimeCard == null)
+                        {
+                            FindBestCrimeClueCard(cardsOponentHas, out GuessOponentClueCard, out GuessOponnentCrimeCard);
+                        }
+
+                        if (clueCardUsing == null && crimeCardUsing == null)
+                        {
+                            Debug.Log("Oponent Crime Card suspected is " + GuessOponnentCrimeCard.Number);
+                            Debug.Log("Oponent Clue Card suspected is " + GuessOponentClueCard.Number);
+                            if (!CheckifPossibletoBeatOponentsBest(GuessOponnentCrimeCard, GuessOponentClueCard, cardsHolding))
+                            {
+                                FindBestCrimeClueCard(cardsHolding, out clueCardUsing, out crimeCardUsing);
+                            }
+                        }
+
+                        return PlaceCards(CardPlaced);
+                }
+
+                return false;
+        }
+        return false;
+    }
+
+    bool CheckForWrapAroundCapable(List<ClueCard> cards)
+    {
+
+        foreach (ClueCard CrimeC in cards)
+        {
+            if (CrimeC.Number == 1)
+            {
+                foreach (ClueCard ClueC in cards)
+                {
+                    if (ClueC != CrimeC && CrimeC.ThisCardType == ClueC.ThisCardType)
+                    {
+                        Debug.Log("Using low number to win");
+                        crimeCardUsing = CrimeC;
+                        clueCardUsing = ClueC;
+                        return true;
+                    }
+                }
+            }
+            else if (CrimeC.Number == 2)
+            {
+                foreach (ClueCard ClueC in cards)
+                {
+                    if (ClueC != CrimeC && CrimeC.ThisCardType == ClueC.ThisCardType)
+                    {
+                        Debug.Log("Using low number to win");
+                        crimeCardUsing = CrimeC;
+                        clueCardUsing = ClueC;
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    void FindCardsUsedInCase2(List<ClueCard> cardsHolding)
+    {
+        //lloking for what was used in case 2
+        foreach (ClueCard card in cardsHolding)
+        {
+            FirstSetofCardsGivenoponent.Remove(card);
+        }
+        if (FirstSetofCardsGivenoponent[1].Number > FirstSetofCardsGivenoponent[0].Number)
+        {
+            OponentClueCardC2 = FirstSetofCardsGivenoponent[0];
+            OponentCrimeCardC2 = FirstSetofCardsGivenoponent[1];
+        }
+        else
+        {
+            OponentClueCardC2 = FirstSetofCardsGivenoponent[1];
+            OponentCrimeCardC2 = FirstSetofCardsGivenoponent[0];
+        }
+    }
+
+    bool PlaceCards(int CardPlaced)
+    {
+        if (CardPlaced == 0)
+        {
+            Debug.Log(clueCardUsing);
+            cardHand.RemoveCard(clueCardUsing);
+            ClueArea.PlaceCard(clueCardUsing, gameManager.CurrentCaseOn);
+
+            return true;
+        }
+        else if (CardPlaced == 1)
+        {
+            Debug.Log(crimeCardUsing);
+            cardHand.RemoveCard(crimeCardUsing);
+            CrimeArea.PlaceCard(crimeCardUsing, gameManager.CurrentCaseOn);
+            clueCardUsing = null;
+            crimeCardUsing = null;
+            GuessOponentClueCard = null;
+            GuessOponnentCrimeCard = null;
+            List<ClueCard> OldCards = new List<ClueCard>();
+            foreach (ClueCard card in cardHand.GetCardsHolding())
+            {
+                OldCards.Add(card);
+            }
+            cardsOponentHas = OldCards;
+            if (gameManager.CurrentCaseOn == 1) { FirstSetofCardsGivenoponent = OldCards; }
+            return true;
         }
         return false;
     }
@@ -468,10 +544,86 @@ public class AIController : Player {
     void LookToSwapClueCards()
     {
         if (SwapCards) {
+
+            if (difficulty == LevelPropertyManager.Difficulty.Hard)
+            {
+                List<ClueCard> OtherclueCards = new List<ClueCard>();
+                OtherclueCards.Add(ClueArea.GetCard(1));
+                OtherclueCards.Add(ClueArea.GetCard(3));
+                CheckifPossibletoBeatOponentsCase2WithSwap(OponentCrimeCardC2, OponentClueCardC2, OtherclueCards, CrimeArea.GetCard(2), ClueArea.GetCard(2));
+            }
+
+
+
+
             AIEndTurn();
             SwapCards = false;
         }
     }
+
+
+    bool CheckifPossibletoBeatOponentsCase2WithSwap(ClueCard OponentCrimeCard, ClueCard OponentClueCard, List<ClueCard> CardsAvailable, ClueCard CrimeCardStuckWith, ClueCard CardSwappingWith)
+    {
+
+        // Look to beat the crime and match 
+
+            if ((CrimeCardStuckWith.Number > OponentCrimeCard.Number || ((OponentCrimeCard.Number > 13) && (CrimeCardStuckWith.Number < OponentCrimeCard.Number % 4))) && (CrimeCardStuckWith.ThisCardType != OponentClueCard.ThisCardType))
+            {
+                foreach (ClueCard ClueCard in CardsAvailable)
+                {
+                        if (ClueCard.ThisCardType == CrimeCardStuckWith.ThisCardType)
+                        {
+                            Debug.Log("Found a card that will win by swap");
+                            int CasePos = ClueCard.GetComponentInParent<RowAreaPosition>().Case;
+                            ClueArea.PlaceCard(ClueCard, 2);
+                            ClueArea.PlaceCard(CardSwappingWith, CasePos);
+                            return true;
+                        }
+                    }
+            }
+
+        
+
+        // Crime doesnt match, so try to put a clue card that matches opponent crime 
+        if (OponentCrimeCard.ThisCardType != OponentClueCard.ThisCardType)
+        {
+            foreach (ClueCard clueCard in CardsAvailable)
+            {
+                if (clueCard.ThisCardType == OponentCrimeCard.ThisCardType)
+                {
+                    if (CrimeCardStuckWith.Number < OponentCrimeCard.Number)
+                    {
+                        Debug.Log("Found a card that matches oponent crime amd win with swap");
+                        int CasePos = clueCard.GetComponentInParent<RowAreaPosition>().Case;
+                        ClueArea.PlaceCard(clueCard, 2);
+                        ClueArea.PlaceCard(CardSwappingWith, CasePos);
+                        return true;
+                    }
+                }
+            }
+        }
+
+        // look if possible to put a clue thats higher than theirs 
+        foreach (ClueCard clueCard in CardsAvailable)
+        {
+            if (clueCard.ThisCardType == OponentClueCard.ThisCardType && clueCard.Number > OponentClueCard.Number)
+            {
+                if (CrimeCardStuckWith.Number < OponentCrimeCard.Number)
+                {
+                    Debug.Log("Found a card clue card that will beat theirs in trump with swap");
+                    int CasePos = clueCard.GetComponentInParent<RowAreaPosition>().Case;
+                    ClueArea.PlaceCard(clueCard, 2);
+                    ClueArea.PlaceCard(CardSwappingWith, CasePos);
+                    return true;
+                }
+            }
+        }
+
+
+        return false;
+    }
+
+
 
     void LookToPickMoriartyTile()
     {
