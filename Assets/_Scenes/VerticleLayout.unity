@@ -1018,6 +1018,7 @@ MonoBehaviour:
   ThisCardType: 1
   Number: 10
   Used: 0
+  ThreatLevel: 0
 --- !u!23 &111769718
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1141,7 +1142,7 @@ RectTransform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 125362817}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 897.5, y: 493.5, z: 0}
+  m_LocalPosition: {x: 680.5, y: 374.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1162619804}
@@ -2182,6 +2183,7 @@ MonoBehaviour:
   ThisCardType: 2
   Number: 9
   Used: 0
+  ThreatLevel: 0
 --- !u!23 &252821184
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -2617,6 +2619,7 @@ MonoBehaviour:
   ThisCardType: 0
   Number: 13
   Used: 0
+  ThreatLevel: 0
 --- !u!23 &288711465
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -2761,7 +2764,7 @@ RectTransform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 321441479}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -821.28, y: -339.47998, z: 0}
+  m_LocalPosition: {x: -604.28, y: -220.47998, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 467447830}
@@ -3159,6 +3162,7 @@ MonoBehaviour:
   ThisCardType: 2
   Number: 4
   Used: 0
+  ThreatLevel: 0
 --- !u!23 &410455494
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -3400,6 +3404,7 @@ MonoBehaviour:
   ThisCardType: 0
   Number: 7
   Used: 0
+  ThreatLevel: 0
 --- !u!23 &446971268
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -4143,6 +4148,7 @@ MonoBehaviour:
   ThisCardType: 1
   Number: 15
   Used: 0
+  ThreatLevel: 0
 --- !u!23 &596307337
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -4315,9 +4321,6 @@ MonoBehaviour:
   HolmesCaseCardsWon: []
   CardSpot: {fileID: 1141877704}
   cardDeck: {fileID: 1160658105}
-  cardsOponentHas: []
-  GuessOponentClueCard: {fileID: 0}
-  GuessOponnentCrimeCard: {fileID: 0}
   difficulty: 2
 --- !u!4 &601319007
 Transform:
@@ -4679,6 +4682,7 @@ MonoBehaviour:
   ThisCardType: 3
   Number: 11
   Used: 0
+  ThreatLevel: 0
 --- !u!23 &653144978
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -5696,6 +5700,7 @@ MonoBehaviour:
   ThisCardType: 3
   Number: 2
   Used: 0
+  ThreatLevel: 0
 --- !u!23 &791397797
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -6173,7 +6178,7 @@ RectTransform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 912164859}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 821.28503, y: -441.49, z: 0}
+  m_LocalPosition: {x: 604.28503, y: -322.49, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 888922426}
@@ -6419,6 +6424,7 @@ MonoBehaviour:
   ThisCardType: 1
   Number: 3
   Used: 0
+  ThreatLevel: 0
 --- !u!23 &946768655
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -6878,7 +6884,7 @@ RectTransform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1059192711}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -763.27, y: 436.5, z: 0}
+  m_LocalPosition: {x: -546.27, y: 317.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1093209936}
@@ -7611,6 +7617,7 @@ MonoBehaviour:
   ThisCardType: 3
   Number: 14
   Used: 0
+  ThreatLevel: 0
 --- !u!23 &1123824105
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -7771,6 +7778,7 @@ MonoBehaviour:
   ThisCardType: 0
   Number: 12
   Used: 0
+  ThreatLevel: 0
 --- !u!23 &1130813978
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -8085,6 +8093,7 @@ MonoBehaviour:
   ThisCardType: 0
   Number: 1
   Used: 0
+  ThreatLevel: 0
 --- !u!23 &1150916996
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -8273,7 +8282,7 @@ RectTransform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1162619803}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -821.28, y: -441.49, z: 0}
+  m_LocalPosition: {x: -604.28, y: -322.49, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 78143221}
@@ -8981,6 +8990,7 @@ MonoBehaviour:
   ThisCardType: 2
   Number: 16
   Used: 0
+  ThreatLevel: 0
 --- !u!23 &1297574594
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -9168,7 +9178,7 @@ RectTransform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1365925282}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -596.5, y: 353.4, z: 0}
+  m_LocalPosition: {x: -379.5, y: 234.4, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 125362821}
@@ -9325,7 +9335,7 @@ RectTransform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1417509683}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -283.5, y: 0, z: 0}
+  m_LocalPosition: {x: -66.5, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2013126545}
@@ -10102,6 +10112,7 @@ MonoBehaviour:
   ThisCardType: 1
   Number: 5
   Used: 0
+  ThreatLevel: 0
 --- !u!23 &1557246712
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -10861,6 +10872,7 @@ MonoBehaviour:
   ThisCardType: 3
   Number: 8
   Used: 0
+  ThreatLevel: 0
 --- !u!23 &1680454584
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -11501,6 +11513,7 @@ MonoBehaviour:
   ThisCardType: 2
   Number: 6
   Used: 0
+  ThreatLevel: 0
 --- !u!23 &1808757758
 MeshRenderer:
   m_ObjectHideFlags: 0

@@ -241,6 +241,9 @@ public class gameManager : MonoBehaviour {
     void CheckForTotalScore()
     {
         CurrentTurnOn++;
+        tileArea.DetermineThreatLevelOfOpenTiles();
+
+
         turnManager.NextTurn();
         CheckForWin();
         StartCoroutine("Reset");

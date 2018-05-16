@@ -432,6 +432,349 @@ public class TileArea : MonoBehaviour {
         return false; 
     }
 
+    public void DetermineThreatLevelOfOpenTiles()
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            for (int j = 0; j < 4; j++)
+            {
+                if (Tile2D[i, j] == TileType.None)
+                {
+                    int ThreatSeen = 0;
+                    // CheckAsEnd
+                    int Endthreat = CheckAsEnd(i, j);
+
+                    // CheckAsMiddle
+                    int MiddleThreat = CheckAsMiddle(i, j);
+
+                    if (Endthreat > MiddleThreat)
+                    {
+                         ThreatSeen = Endthreat;
+                    }
+                    else
+                    {
+                        ThreatSeen = MiddleThreat;
+                    }
+
+                    TileSpots[i + 4 * j].ThreatLevel = ThreatSeen;
+                }
+            }
+        }
+    }
+
+
+    int CheckAsMiddle(int i, int j)
+    {
+        int ThreatSeen = 0;
+        int ThreatSeenDiagonal1 = CheckDiagonal1Threat(i, j);
+        int ThreatVertical = ChecVerticalThreat(i, j);
+        int ThreatSeenDiagonal2 = CheckDiagonal2Threat(i, j);
+        int ThreatHorizontal = CheckHorizontalThreat(i, j);
+
+        if (ThreatSeen < ThreatSeenDiagonal1) { ThreatSeen = ThreatSeenDiagonal1; }
+        if (ThreatSeen < ThreatVertical) { ThreatSeen = ThreatVertical; }
+        if (ThreatSeen < ThreatSeenDiagonal2) { ThreatSeen = ThreatSeenDiagonal2; }
+        if (ThreatSeen < ThreatHorizontal) { ThreatSeen = ThreatHorizontal; }
+
+        return ThreatSeen;
+    }
+
+    int CheckDiagonal1Threat(int i, int j)
+    {
+        int threat = 0;
+        //UpLeft
+        if (i > 0 && j > 0)
+        {
+            if (Tile2D[i - 1, j - 1] == TileType.Moriarty)
+            {
+                threat++;
+            }
+        }
+        //bottomRight
+        if (i < 3 && j < 3)
+        {
+            if (Tile2D[i + 1, j + 1] == TileType.Moriarty)
+            {
+                threat++;
+            }
+        }
+        return threat;
+    }
+
+    int ChecVerticalThreat(int i, int j)
+    {
+        int threat = 0;
+        //Up
+        if (j > 0)
+        {
+            if (Tile2D[i, j - 1] == TileType.Moriarty)
+            {
+                threat++;
+            }
+        }
+        //Bottom
+        if (j < 3)
+        {
+            if (Tile2D[i, j + 1] == TileType.Moriarty)
+            {
+                threat++;
+            }
+        }
+        return threat;
+    }
+
+    int CheckDiagonal2Threat(int i, int j)
+    {
+        int threat = 0;
+        //UpRight
+        if (i < 3 && j > 0)
+        {
+            if (Tile2D[i + 1, j - 1] == TileType.Moriarty)
+            {
+                threat++;
+            }
+        }
+
+        //BottomLeft
+        if (i > 0 && j < 3)
+        {
+            if (Tile2D[i - 1, j + 1] == TileType.Moriarty)
+            {
+                threat++;
+            }
+        }
+        return threat;
+    }
+
+    int CheckHorizontalThreat(int i, int j)
+    {
+        int threat = 0;
+        //right
+        if (i < 3)
+        {
+            if (Tile2D[i + 1, j] == TileType.Moriarty)
+            {
+                threat++;
+            }
+        }
+        //Left
+        if (i > 0)
+        {
+            if (Tile2D[i - 1, j] == TileType.Moriarty)
+            {
+                threat++;
+            }
+        }
+        return threat;
+    }
+
+
+
+    int CheckAsEnd(int i, int j)
+    {
+        int ThreatSeen = 0;
+        int UpLeftThreat = CheckUpLeftThreat(i,j);
+        int UpThreat = CheckUpThreat(i, j);
+        int UpRightThreat = CheckUpRightThreat(i, j);
+        int RightThreat = CheckRightThreat(i, j);
+        int BottomRightThreat = CheckBottomRightThreat(i, j);
+        int BottomThreat = CheckBottomThreat(i, j);
+        int BottomLeftThreat = CheckBottomLeftThreat(i, j);
+        int LeftThreat = CheckLeftthreat(i, j);
+
+        if (ThreatSeen < UpLeftThreat) { ThreatSeen = UpLeftThreat; }
+        if (ThreatSeen < UpThreat) { ThreatSeen = UpThreat; }
+        if (ThreatSeen < UpRightThreat) { ThreatSeen = UpRightThreat; }
+        if (ThreatSeen < RightThreat) { ThreatSeen = RightThreat; }
+        if (ThreatSeen < BottomRightThreat) { ThreatSeen = BottomRightThreat; }
+        if (ThreatSeen < BottomThreat) { ThreatSeen = BottomThreat; }
+        if (ThreatSeen < BottomLeftThreat) { ThreatSeen = BottomLeftThreat; }
+        if (ThreatSeen < LeftThreat) { ThreatSeen = LeftThreat; }
+
+        return ThreatSeen;
+    }
+
+    int CheckUpLeftThreat(int i, int j)
+    {
+        //UpLeft
+        if (i > 0 && j > 0)
+        {
+            if (Tile2D[i - 1, j - 1] == TileType.Moriarty)
+            {
+                i--;
+                j--;
+                //UpLeft
+                if (i > 0 && j > 0)
+                {
+                    if (Tile2D[i - 1, j - 1] == TileType.Moriarty)
+                    {
+                        return 2;
+                    }
+                }
+                return 1;
+            }
+        }
+        return 0;
+    }
+
+
+    int CheckUpThreat(int i, int j)
+    {
+        //Up
+        if (j > 0)
+        {
+            if (Tile2D[i, j - 1] == TileType.Moriarty)
+            {
+                j--;
+                if (j > 0)
+                {
+                    if (Tile2D[i, j - 1] == TileType.Moriarty)
+                    {
+                        return 2;
+                    }
+                }
+                return 1;
+            }
+        }
+        return 0;
+    }
+
+    int CheckUpRightThreat(int i, int j)
+    {
+        //UpRight
+        if (i < 3 && j > 0)
+        {
+            if (Tile2D[i + 1, j - 1] == TileType.Moriarty)
+            {
+                i++;
+                j--;
+                //UpRight
+                if (i < 3 && j > 0)
+                {
+                    if (Tile2D[i + 1, j - 1] == TileType.Moriarty)
+                    {
+                        return 2;
+                    }
+                }
+                return 1;
+            }
+        }
+        return 0;
+    }
+
+    int CheckRightThreat(int i, int j)
+    {
+        //right
+        if (i < 3)
+        {
+            if (Tile2D[i + 1, j] == TileType.Moriarty)
+            {
+                i++;
+                if (i < 3)
+                {
+                    if (Tile2D[i + 1, j] == TileType.Moriarty)
+                    {
+                        return 2;
+                    }
+                }
+                return 1;
+            }
+        }
+        return 0;
+    }
+
+    int CheckBottomRightThreat(int i, int j)
+    {
+        //BottomRight
+        if (i < 3 && j < 3)
+        {
+            if (Tile2D[i + 1, j + 1] == TileType.Moriarty)
+            {
+                i++;
+                j++;
+                //BottomRight
+                if (i < 3 && j < 3)
+                {
+                    if (Tile2D[i + 1, j + 1] == TileType.Moriarty)
+                    {
+                        return 2;
+                    }
+                }
+                return 1;
+            }
+        }
+        return 0;
+    }
+
+    int CheckBottomThreat(int i, int j)
+    {
+        //Bottom
+        if (j < 3)
+        {
+            if (Tile2D[i, j + 1] == TileType.Moriarty)
+            {
+                j++;
+                //Bottom
+                if (j < 3)
+                {
+                    if (Tile2D[i, j + 1] == TileType.Moriarty)
+                    {
+                        return 2;
+                    }
+                }
+                return 1;
+            }
+        }
+        return 0;
+    }
+    
+
+    int CheckBottomLeftThreat(int i, int j)
+    {
+        //BottomLeft
+        if (i > 0 && j < 3)
+        {
+            if (Tile2D[i - 1, j + 1] == TileType.Moriarty)
+            {
+                i--;
+                j++;
+                //BottomLeft
+                if (i > 0 && j < 3)
+                {
+                    if (Tile2D[i - 1, j + 1] == TileType.Moriarty)
+                    {
+                        return 2;
+                    }
+                }
+                return 1;
+            }
+        }
+        return 0;
+    }
+
+    int CheckLeftthreat(int i, int j)
+    {
+        //Left
+        if (i > 0)
+        {
+            if (Tile2D[i - 1, j ] == TileType.Moriarty)
+            {
+                i--;
+                //Left
+                if (i > 0)
+                {
+                    if (Tile2D[i - 1, j] == TileType.Moriarty)
+                    {
+                        return 2;
+                    }
+                }
+                return 1;
+            }
+        }
+        return 0;
+    }
+
+
     // Update is called once per frame
     void Update () {
 		
