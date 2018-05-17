@@ -447,7 +447,7 @@ public class TileArea : MonoBehaviour {
                     // CheckAsMiddle
                     int MiddleThreat = CheckAsMiddle(i, j);
 
-                    if (Endthreat > MiddleThreat)
+                    if (Endthreat > MiddleThreat || Endthreat == -1)
                     {
                          ThreatSeen = Endthreat;
                     }
@@ -572,7 +572,7 @@ public class TileArea : MonoBehaviour {
 
     int CheckAsEnd(int i, int j)
     {
-        int ThreatSeen = 0;
+        int ThreatSeen = -2;
         int UpLeftThreat = CheckUpLeftThreat(i,j);
         int UpThreat = CheckUpThreat(i, j);
         int UpRightThreat = CheckUpRightThreat(i, j);
@@ -610,11 +610,31 @@ public class TileArea : MonoBehaviour {
                     {
                         return 2;
                     }
+                    else if ((Tile2D[i - 1, j - 1] == TileType.None))
+                    {
+                        return 1;
+                    }
                 }
-                return 1;
+            }
+            else if (Tile2D[i - 1, j - 1] == TileType.None)
+            {
+                i--;
+                j--;
+                //UpLeft
+                if (i > 0 && j > 0)
+                {
+                    if (Tile2D[i - 1, j - 1] == TileType.Moriarty)
+                    {
+                        return 1;
+                    }
+                    else if ((Tile2D[i - 1, j - 1] == TileType.None))
+                    {
+                        return 0;
+                    }
+                }
             }
         }
-        return 0;
+        return -1;
     }
 
 
@@ -632,11 +652,29 @@ public class TileArea : MonoBehaviour {
                     {
                         return 2;
                     }
+                    else if  (Tile2D[i, j - 1] == TileType.None)
+                    {
+                        return 1;
+                    }
                 }
-                return 1;
+            }
+            else if (Tile2D[i, j - 1] == TileType.None)
+            {
+                j--;
+                if (j > 0)
+                {
+                    if (Tile2D[i, j - 1] == TileType.Moriarty)
+                    {
+                        return 1;
+                    }
+                    else if (Tile2D[i, j - 1] == TileType.None)
+                    {
+                        return 0;
+                    }
+                }
             }
         }
-        return 0;
+        return -1;
     }
 
     int CheckUpRightThreat(int i, int j)
@@ -655,11 +693,31 @@ public class TileArea : MonoBehaviour {
                     {
                         return 2;
                     }
+                    else if (Tile2D[i + 1, j - 1] == TileType.None)
+                    {
+                        return 1;
+                    }
                 }
-                return 1;
+            }
+            else if (Tile2D[i + 1, j - 1] == TileType.None)
+            {
+                i++;
+                j--;
+                //UpRight
+                if (i < 3 && j > 0)
+                {
+                    if (Tile2D[i + 1, j - 1] == TileType.Moriarty)
+                    {
+                        return 1;
+                    }
+                    else if (Tile2D[i + 1, j - 1] == TileType.None)
+                    {
+                        return 0;
+                    }
+                }
             }
         }
-        return 0;
+        return -1;
     }
 
     int CheckRightThreat(int i, int j)
@@ -676,11 +734,29 @@ public class TileArea : MonoBehaviour {
                     {
                         return 2;
                     }
+                    else if (Tile2D[i + 1, j] == TileType.None)
+                    {
+                        return 1;
+                    }
                 }
-                return 1;
+            }
+            else if (Tile2D[i + 1, j] == TileType.None)
+            {
+                i++;
+                if (i < 3)
+                {
+                    if (Tile2D[i + 1, j] == TileType.Moriarty)
+                    {
+                        return 1;
+                    }
+                    else if (Tile2D[i + 1, j] == TileType.None)
+                    {
+                        return 0;
+                    }
+                }
             }
         }
-        return 0;
+        return -1;
     }
 
     int CheckBottomRightThreat(int i, int j)
@@ -699,11 +775,31 @@ public class TileArea : MonoBehaviour {
                     {
                         return 2;
                     }
+                    else if (Tile2D[i + 1, j + 1] == TileType.None)
+                    {
+                        return 1;
+                    }
                 }
-                return 1;
+            }
+            else if (Tile2D[i + 1, j + 1] == TileType.None)
+            {
+                i++;
+                j++;
+                //BottomRight
+                if (i < 3 && j < 3)
+                {
+                    if (Tile2D[i + 1, j + 1] == TileType.Moriarty)
+                    {
+                        return 1;
+                    }
+                    else if (Tile2D[i + 1, j + 1] == TileType.None)
+                    {
+                        return 0;
+                    }
+                }
             }
         }
-        return 0;
+        return -1;
     }
 
     int CheckBottomThreat(int i, int j)
@@ -721,11 +817,31 @@ public class TileArea : MonoBehaviour {
                     {
                         return 2;
                     }
+                    else if (Tile2D[i, j + 1] == TileType.None)
+                    {
+                        return 1;
+                    }
                 }
-                return 1;
+            }
+            else if (Tile2D[i, j + 1] == TileType.None)
+            {
+                j++;
+                //Bottom
+                if (j < 3)
+                {
+                    if (Tile2D[i, j + 1] == TileType.Moriarty)
+                    {
+                        return 1;
+                    }
+                    else if (Tile2D[i, j + 1] == TileType.None)
+                    {
+                        return 0;
+                    }
+                }
             }
         }
-        return 0;
+       
+        return -1;
     }
     
 
@@ -745,11 +861,31 @@ public class TileArea : MonoBehaviour {
                     {
                         return 2;
                     }
+                    else if (Tile2D[i - 1, j + 1] == TileType.None)
+                    {
+                        return 1;
+                    }
                 }
-                return 1;
+            }
+            else if (Tile2D[i - 1, j + 1] == TileType.None)
+            {
+                i--;
+                j++;
+                //BottomLeft
+                if (i > 0 && j < 3)
+                {
+                    if (Tile2D[i - 1, j + 1] == TileType.Moriarty)
+                    {
+                        return 1;
+                    }
+                    else if (Tile2D[i - 1, j + 1] == TileType.None)
+                    {
+                        return 0;
+                    }
+                }
             }
         }
-        return 0;
+        return -1;
     }
 
     int CheckLeftthreat(int i, int j)
@@ -767,11 +903,30 @@ public class TileArea : MonoBehaviour {
                     {
                         return 2;
                     }
+                    else if (Tile2D[i - 1, j] == TileType.None)
+                    {
+                        return 1;
+                    }
                 }
-                return 1;
+            }
+            else if (Tile2D[i - 1, j] == TileType.None)
+            {
+                i--;
+                //Left
+                if (i > 0)
+                {
+                    if (Tile2D[i - 1, j] == TileType.Moriarty)
+                    {
+                        return 1;
+                    }
+                    else if (Tile2D[i - 1, j] == TileType.None)
+                    {
+                        return 0;
+                    }
+                }
             }
         }
-        return 0;
+        return -1;
     }
 
 

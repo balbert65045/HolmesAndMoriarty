@@ -62,6 +62,7 @@ public class AIController : Player {
 
     public override bool PlaceHolmesTiles(GameObject HolmesTile, CaseCard HolmesCaseCard)
     {
+        tileArea.DetermineThreatLevelOfOpenTiles();
         TileSpot[] TilesSpots = FindObjectsOfType<TileSpot>();
         List<TileSpot> OpenTileSpots = new List<TileSpot>();
         foreach (TileSpot TS in TilesSpots)
@@ -72,8 +73,22 @@ public class AIController : Player {
             }
         }
         if (OpenTileSpots.Count == 0) { return false; }
-        int RandomOpenTileIndex = Random.Range(0, OpenTileSpots.Count);
-        tileArea.PlaceTile(HolmesTile, OpenTileSpots[RandomOpenTileIndex].Number, PlayerType.Holmes);
+
+        int HighestThreatLevel = -2;
+        foreach (TileSpot TS in OpenTileSpots)
+        {
+            if (HighestThreatLevel < TS.ThreatLevel) { HighestThreatLevel = TS.ThreatLevel; }
+        }
+
+        foreach (TileSpot TS in OpenTileSpots)
+        {
+            if (TS.ThreatLevel == HighestThreatLevel)
+            {
+                Debug.Log("Highest Threat is " + TS.Number);
+                tileArea.PlaceTile(HolmesTile, TS.Number, PlayerType.Holmes);
+                break;
+            }
+        }
         return true;
     }
 
@@ -81,6 +96,7 @@ public class AIController : Player {
     {
         for (int i = 0; i < number; i++)
         {
+            tileArea.DetermineThreatLevelOfOpenTiles();
             TileSpot[] TilesSpots = FindObjectsOfType<TileSpot>();
             List<TileSpot> OpenTileSpots = new List<TileSpot>();
             foreach (TileSpot TS in TilesSpots)
@@ -89,18 +105,34 @@ public class AIController : Player {
             }
             if (OpenTileSpots.Count == 0) { return false; }
 
-            List<TileSpot> NotLoseTileSpots = new List<TileSpot>();
+            int LowestThreatlevel = 4;
             foreach (TileSpot TS in OpenTileSpots)
             {
-                if (!tileArea.CheckForMoriartyWinWithTile(TS.Number)) { NotLoseTileSpots.Add(TS); }
-                else { Debug.Log("Would have lost with that tile"); }
+                if (LowestThreatlevel > TS.ThreatLevel) { LowestThreatlevel = TS.ThreatLevel; }
             }
 
+            foreach (TileSpot TS in OpenTileSpots)
+            {
+                if (TS.ThreatLevel == LowestThreatlevel)
+                {
+                    Debug.Log("Lowest Threat is " + TS.Number);
+                    tileArea.PlaceTile(MoriartyTile, TS.Number, PlayerType.Moriarty);
+                    break;
+                }
+            }
 
-            int RandomOpenTileIndex = Random.Range(0, NotLoseTileSpots.Count);
-            if (NotLoseTileSpots.Count == 0) { RandomOpenTileIndex = Random.Range(0, OpenTileSpots.Count); }
-            else {RandomOpenTileIndex = Random.Range(0, NotLoseTileSpots.Count); }
-            tileArea.PlaceTile(MoriartyTile, OpenTileSpots[RandomOpenTileIndex].Number, PlayerType.Moriarty);
+            //List<TileSpot> NotLoseTileSpots = new List<TileSpot>();
+            //foreach (TileSpot TS in OpenTileSpots)
+            //{
+            //    if (!tileArea.CheckForMoriartyWinWithTile(TS.Number)) { NotLoseTileSpots.Add(TS); }
+            //    else { Debug.Log("Would have lost with that tile"); }
+            //}
+
+
+                //int RandomOpenTileIndex = Random.Range(0, NotLoseTileSpots.Count);
+                //if (NotLoseTileSpots.Count == 0) { RandomOpenTileIndex = Random.Range(0, OpenTileSpots.Count); }
+                //else {RandomOpenTileIndex = Random.Range(0, NotLoseTileSpots.Count); }
+                //tileArea.PlaceTile(MoriartyTile, OpenTileSpots[RandomOpenTileIndex].Number, PlayerType.Moriarty);
         }
         return true;
     }
@@ -533,7 +565,7 @@ public class AIController : Player {
                 cardsPlayedPerCase[gameManager.CurrentCaseOn - 1]++;
                 if (cardsPlayedPerCase[gameManager.CurrentCaseOn - 1] == 2) { AIEndTurn(); }
             }
-            else { Debug.LogError("No card Played by AI"); }
+            //else { Debug.LogError("No card Played by AI"); }
         }
     }
 

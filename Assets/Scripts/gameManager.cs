@@ -200,6 +200,7 @@ public class gameManager : MonoBehaviour {
                 break;
 
             case TurnStatus.SwitchClueCards:
+                
                 foreach (GameObject obj in SwapButtonsObj)
                 {
                     obj.SetActive(false);
@@ -241,9 +242,6 @@ public class gameManager : MonoBehaviour {
     void CheckForTotalScore()
     {
         CurrentTurnOn++;
-        tileArea.DetermineThreatLevelOfOpenTiles();
-
-
         turnManager.NextTurn();
         CheckForWin();
         StartCoroutine("Reset");
@@ -411,6 +409,7 @@ public class gameManager : MonoBehaviour {
             Case ++;
             yield return new WaitForSeconds(.8f);
         }
+
         if (CheckForPickTileMoriarty())
         {
             CurrentTurnStatus = TurnStatus.PickTileMoriarty;
