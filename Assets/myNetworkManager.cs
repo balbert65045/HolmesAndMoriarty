@@ -11,6 +11,12 @@ public class myNetworkManager : NetworkManager {
         Debug.Log(Time.timeSinceLevelLoad + " Host started");
     }
 
+    public void MyStartClient(string IPAddress)
+    {
+        NetworkClient MyClient = StartClient();
+        MyClient.Connect(IPAddress, 8888);
+    }
+
     public override void OnStartHost()
     {
         base.OnStartHost();
