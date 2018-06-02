@@ -13,6 +13,7 @@ public class myNetworkManager : NetworkManager {
 
     public void MyStartClient(string IPAddress)
     {
+        Debug.Log(Time.timeSinceLevelLoad + " Client attempting to connect to " + IPAddress);
         NetworkClient MyClient = StartClient();
         MyClient.Connect(IPAddress, 7777);
     }
