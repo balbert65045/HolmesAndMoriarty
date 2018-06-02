@@ -14,7 +14,7 @@ public class myNetworkManager : NetworkManager {
     public void MyStartClient(string IPAddress)
     {
         NetworkClient MyClient = StartClient();
-        MyClient.Connect(IPAddress, 8888);
+        MyClient.Connect(IPAddress, 7777);
     }
 
     public override void OnStartHost()
