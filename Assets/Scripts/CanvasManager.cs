@@ -8,7 +8,6 @@ public class CanvasManager : MonoBehaviour {
     public GameObject StartMenu;
     public GameObject DifficultyMenu;
     public GameObject PlayerChoiceMenu;
-    public GameObject Host_Find_Game;
     public LevelManager levelManager;
     public LevelPropertyManager _LevelPropertyManager;
 
@@ -25,13 +24,6 @@ public class CanvasManager : MonoBehaviour {
         PlayerChoiceMenu.SetActive(false);
     }
 
-    public void MoveToHost_Find_Game()
-    {
-        StartMenu.SetActive(false);
-        DifficultyMenu.SetActive(false);
-        PlayerChoiceMenu.SetActive(false);
-        Host_Find_Game.SetActive(true);
-    }
 
     public void MoveToDifficultyMenu()
     {

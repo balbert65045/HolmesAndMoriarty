@@ -5,6 +5,9 @@ using UnityEngine.Networking;
 
 public class myNetworkManager : NetworkManager {
 
+
+    NetworkClient ClientWorkingWith;
+
     public void MyStartHost()
     {
         StartHost();
@@ -14,9 +17,16 @@ public class myNetworkManager : NetworkManager {
     public void MyStartClient(string IPAddress)
     {
         Debug.Log(Time.timeSinceLevelLoad + " Client attempting to connect to " + IPAddress);
-        NetworkClient MyClient = StartClient();
-        MyClient.Connect(IPAddress, 7777);
+        ClientWorkingWith = StartClient();
+        ClientWorkingWith.Connect(IPAddress, 7777);
     }
+
+    public void MyStopClient()
+    {
+        Debug.Log("Disconnecting client");
+        StopClient();
+    }
+
 
     public override void OnStartHost()
     {
@@ -42,7 +52,16 @@ public class myNetworkManager : NetworkManager {
         base.OnClientConnect(conn);
         Debug.Log(Time.timeSinceLevelLoad + " Client connected to IP:" + conn.address);
         Debug.Log(Network.player.ipAddress);
+        MyNetworkHud Hud = FindObjectOfType<MyNetworkHud>();
+        if (Hud) { Hud.PlayerJoinedServer(); }
+    }
 
+    public override void OnClientDisconnect(NetworkConnection conn)
+    {
+        base.OnClientDisconnect(conn);
+        MyNetworkHud Hud = FindObjectOfType<MyNetworkHud>();
+        if (Hud) { Hud.StopClientConnect(); }
 
     }
+
 }
