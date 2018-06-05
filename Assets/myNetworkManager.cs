@@ -35,7 +35,8 @@ public class myNetworkManager : NetworkManager {
         //DoorLocations doorlocals = FindObjectOfType<DoorLocations>();
         //GameObject door = Instantiate(spawnPrefabs[1], doorlocals.doorPositions[0].position, doorlocals.doorPositions[0].rotation);
         //NetworkServer.Spawn(door);
-
+        MyNetworkHud Hud = FindObjectOfType<MyNetworkHud>();
+        if (Hud) { Hud.CreateLobby(); }
         Debug.Log(Time.timeSinceLevelLoad + " Host requested");
     }
 
@@ -56,6 +57,11 @@ public class myNetworkManager : NetworkManager {
         if (Hud) { Hud.PlayerJoinedServer(); }
     }
 
+    public void SpawnObject(GameObject obj)
+    {
+        NetworkServer.Spawn(obj);
+    }
+
     public override void OnClientDisconnect(NetworkConnection conn)
     {
         base.OnClientDisconnect(conn);
@@ -64,4 +70,5 @@ public class myNetworkManager : NetworkManager {
 
     }
 
+    
 }

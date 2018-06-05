@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Networking;
 
 public class MyNetworkHud : MonoBehaviour {
 
@@ -35,12 +36,16 @@ public class MyNetworkHud : MonoBehaviour {
         ConnectingScreen.SetActive(false);
     }
 
+    public void CreateLobby()
+    {
+        GameObject Lobby = Instantiate(LobbyScreen, FindObjectOfType<Canvas>().transform);
+        networkManager.SpawnObject(Lobby);
+    }
+
     public void PlayerJoinedServer()
     {
         StartMenu.SetActive(false);
         ConnectingScreen.SetActive(false);
-        LobbyScreen.SetActive(true);
-        LobbyScreen.GetComponent<LobbyScreenManager>().PlayerJoin();
     }
 
     // Update is called once per frame
