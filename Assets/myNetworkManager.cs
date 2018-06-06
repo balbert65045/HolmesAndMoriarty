@@ -57,6 +57,7 @@ public class myNetworkManager : NetworkManager {
         
         MyNetworkHud Hud = FindObjectOfType<MyNetworkHud>();
         if (Hud) { Hud.PlayerJoinedServer(numPlayers); }
+        else { Debug.Log("No Hud Found"); }
     }
 
     public void SpawnObject(GameObject obj)
