@@ -4,10 +4,10 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Networking;
 
-public class MyNetworkHud : MonoBehaviour {
+public class MyNetworkHud : NetworkBehaviour {
 
     public Text IpAddressText;
-    myNetworkManager networkManager;
+    public myNetworkManager networkManager;
     public GameObject StartMenu;
     public GameObject ConnectingScreen;
     public GameObject LobbyScreen;
@@ -15,6 +15,7 @@ public class MyNetworkHud : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         networkManager = FindObjectOfType<myNetworkManager>();
+        if (networkManager == null) { Debug.LogError("No network manager found"); }
     }
 
     public void HostCreate()
