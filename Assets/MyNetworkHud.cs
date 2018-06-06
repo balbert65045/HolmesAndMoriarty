@@ -11,6 +11,7 @@ public class MyNetworkHud : NetworkBehaviour {
     public GameObject StartMenu;
     public GameObject ConnectingScreen;
     public GameObject LobbyScreen;
+    public GameObject Canvas;
 
 	// Use this for initialization
 	void Start () {
@@ -45,7 +46,7 @@ public class MyNetworkHud : NetworkBehaviour {
     [Command]
     public void CmdPlayerJoinedServer()
     {
-        GameObject Lobby = Instantiate(LobbyScreen, FindObjectOfType<Canvas>().transform);
+        GameObject Lobby = Instantiate(LobbyScreen, Canvas.transform);
         networkManager.SpawnObject(Lobby);
         StartMenu.SetActive(false);
         ConnectingScreen.SetActive(false);

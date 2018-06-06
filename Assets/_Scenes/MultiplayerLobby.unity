@@ -911,6 +911,7 @@ MonoBehaviour:
   ConnectingScreen: {fileID: 229532926}
   LobbyScreen: {fileID: 1100210627583926, guid: a8481a2a0554fd3479e0fe20ac5f1d05,
     type: 2}
+  Canvas: {fileID: 1598845982}
 --- !u!4 &1315291610
 Transform:
   m_ObjectHideFlags: 0
