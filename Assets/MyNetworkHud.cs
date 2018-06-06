@@ -44,12 +44,19 @@ public class MyNetworkHud : NetworkBehaviour {
  //       networkManager.SpawnObject(Lobby);
     }
 
-    public void PlayerJoinedServer(int numberofPlayers)
+    public void PlayerJoinedServer()
     {
         StartMenu.SetActive(false);
         ConnectingScreen.SetActive(false);
         LobbyScreen.SetActive(true);
-        Debug.Log(numberofPlayers);
+        CmdFindNumberOfPlayers();
+        
+    }
+
+    [Command]
+    void CmdFindNumberOfPlayers()
+    {
+        Debug.Log (networkManager.FindPlayersActive());
     }
 
     // Update is called once per frame
