@@ -610,7 +610,13 @@ Prefab:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 114475617953922666, guid: a8481a2a0554fd3479e0fe20ac5f1d05,
+        type: 2}
+      propertyPath: m_LocalPlayerAuthority
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 114475617953922666, guid: a8481a2a0554fd3479e0fe20ac5f1d05, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: a8481a2a0554fd3479e0fe20ac5f1d05, type: 2}
   m_IsPrefabParent: 0
 --- !u!1 &349072041
@@ -675,6 +681,11 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &704376339 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1100210627583926, guid: a8481a2a0554fd3479e0fe20ac5f1d05,
+    type: 2}
+  m_PrefabInternal: {fileID: 292533454}
 --- !u!224 &704376340 stripped
 RectTransform:
   m_PrefabParentObject: {fileID: 224001486887421070, guid: a8481a2a0554fd3479e0fe20ac5f1d05,
@@ -1018,8 +1029,7 @@ MonoBehaviour:
   networkManager: {fileID: 1320830936}
   StartMenu: {fileID: 796118368}
   ConnectingScreen: {fileID: 229532926}
-  LobbyScreen: {fileID: 1100210627583926, guid: a8481a2a0554fd3479e0fe20ac5f1d05,
-    type: 2}
+  LobbyScreen: {fileID: 704376339}
   Canvas: {fileID: 1598845982}
 --- !u!4 &1315291610
 Transform:
@@ -1166,6 +1176,7 @@ MonoBehaviour:
   matchSize: 4
   isNetworkActive: 0
   matchMaker: {fileID: 0}
+  Hud: {fileID: 1315291609}
 --- !u!4 &1320830937
 Transform:
   m_ObjectHideFlags: 0

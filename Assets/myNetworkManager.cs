@@ -6,6 +6,7 @@ using UnityEngine.Networking;
 public class myNetworkManager : NetworkManager {
 
 
+    public MyNetworkHud Hud;
     NetworkClient ClientWorkingWith;
 
     public void MyStartHost()
@@ -35,8 +36,7 @@ public class myNetworkManager : NetworkManager {
         //DoorLocations doorlocals = FindObjectOfType<DoorLocations>();
         //GameObject door = Instantiate(spawnPrefabs[1], doorlocals.doorPositions[0].position, doorlocals.doorPositions[0].rotation);
         //NetworkServer.Spawn(door);
-        MyNetworkHud Hud = FindObjectOfType<MyNetworkHud>();
-        if (Hud) { Hud.CreateLobby(); }
+         Hud.CreateLobby(); 
         Debug.Log(Time.timeSinceLevelLoad + " Host requested");
     }
 
@@ -55,9 +55,8 @@ public class myNetworkManager : NetworkManager {
         Debug.Log(Network.player.ipAddress);
 
         
-        MyNetworkHud Hud = FindObjectOfType<MyNetworkHud>();
-        if (Hud) { Hud.PlayerJoinedServer(numPlayers); }
-        else { Debug.Log("No Hud Found"); }
+        Hud.PlayerJoinedServer(numPlayers); 
+
     }
 
     public void SpawnObject(GameObject obj)
@@ -68,8 +67,7 @@ public class myNetworkManager : NetworkManager {
     public override void OnClientDisconnect(NetworkConnection conn)
     {
         base.OnClientDisconnect(conn);
-        MyNetworkHud Hud = FindObjectOfType<MyNetworkHud>();
-        if (Hud) { Hud.StopClientConnect(); }
+        Hud.StopClientConnect(); 
 
     }
 
