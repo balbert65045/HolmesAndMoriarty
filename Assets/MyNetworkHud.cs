@@ -43,13 +43,13 @@ public class MyNetworkHud : NetworkBehaviour {
   //      GameObject Lobby = Instantiate(LobbyScreen, FindObjectOfType<Canvas>().transform);
  //       networkManager.SpawnObject(Lobby);
     }
-    [Command]
-    public void CmdPlayerJoinedServer()
+
+    public void PlayerJoinedServer(int numberofPlayers)
     {
-        GameObject Lobby = Instantiate(LobbyScreen, Canvas.transform);
-        networkManager.SpawnObject(Lobby);
         StartMenu.SetActive(false);
         ConnectingScreen.SetActive(false);
+        LobbyScreen.SetActive(true);
+        Debug.Log(numberofPlayers);
     }
 
     // Update is called once per frame
