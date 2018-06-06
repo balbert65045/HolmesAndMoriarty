@@ -38,12 +38,14 @@ public class MyNetworkHud : MonoBehaviour {
 
     public void CreateLobby()
     {
-        GameObject Lobby = Instantiate(LobbyScreen, FindObjectOfType<Canvas>().transform);
-        networkManager.SpawnObject(Lobby);
+  //      GameObject Lobby = Instantiate(LobbyScreen, FindObjectOfType<Canvas>().transform);
+ //       networkManager.SpawnObject(Lobby);
     }
 
     public void PlayerJoinedServer()
     {
+        GameObject Lobby = Instantiate(LobbyScreen, FindObjectOfType<Canvas>().transform);
+        networkManager.SpawnObject(Lobby);
         StartMenu.SetActive(false);
         ConnectingScreen.SetActive(false);
     }
