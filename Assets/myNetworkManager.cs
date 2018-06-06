@@ -54,7 +54,7 @@ public class myNetworkManager : NetworkManager {
         Debug.Log(Time.timeSinceLevelLoad + " Client connected to IP:" + conn.address);
         Debug.Log(Network.player.ipAddress);
         MyNetworkHud Hud = FindObjectOfType<MyNetworkHud>();
-        if (Hud) { Hud.PlayerJoinedServer(); }
+        if (Hud) { Hud.CmdPlayerJoinedServer(); }
     }
 
     public void SpawnObject(GameObject obj)
