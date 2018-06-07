@@ -6,6 +6,7 @@ public class LobbyScreenManager : MonoBehaviour {
 
     public GameObject Player1Menu;
     public GameObject Player2Menu;
+    public int PlayerIndex = 1;
 
     private myNetworkManager MyNetworkManager;
 	// Use this for initialization
@@ -13,18 +14,23 @@ public class LobbyScreenManager : MonoBehaviour {
         MyNetworkManager = FindObjectOfType<myNetworkManager>();
     }
 
-    public void PlayerJoin()
+    public void PlayerJoin(GameObject Player)
     {
-        MyNetworkManager = FindObjectOfType<myNetworkManager>();
-        Debug.Log(MyNetworkManager.numPlayers);
-        if (MyNetworkManager.numPlayers == 1)
+        if (PlayerIndex == 1)
         {
-            Player1Menu.SetActive(true);
+            Player.transform.SetParent(Player1Menu.GetComponent<RectTransform>());
         }
-        else if (MyNetworkManager.numPlayers == 2)
+        else if (PlayerIndex == 2)
         {
-            Player2Menu.SetActive(true);
+            Player.transform.SetParent(Player2Menu.GetComponent<RectTransform>());
         }
+        else
+        {
+            Debug.LogError("Player Index has mooved to high from players joining only 2 should be able to join");
+        }
+        Player.transform.localPosition = Vector3.zero;
+        PlayerIndex++;
+
     }
 	
 	// Update is called once per frame

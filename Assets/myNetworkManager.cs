@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
-public class myNetworkManager : NetworkManager {
+public class myNetworkManager : NetworkLobbyManager {
 
-
+    public GameObject Player;
     public MyNetworkHud Hud;
     NetworkClient ClientWorkingWith;
 
@@ -28,47 +28,48 @@ public class myNetworkManager : NetworkManager {
         StopClient();
     }
 
+    public override void OnLobbyClientEnter()
+    {
+        base.OnLobbyClientEnter();
+        
+    }
+
+    public override GameObject OnLobbyServerCreateLobbyPlayer(NetworkConnection conn, short playerControllerId)
+    {
+        Player = base.OnLobbyServerCreateGamePlayer(conn, playerControllerId);
+       // Debug.Log(LobbyPlayer);
+        //Hud.PlayerJoinedServer(LobbyPlayer);
+        return Player;
+
+    }
 
     public override void OnStartHost()
     {
         base.OnStartHost();
-
-        //DoorLocations doorlocals = FindObjectOfType<DoorLocations>();
-        //GameObject door = Instantiate(spawnPrefabs[1], doorlocals.doorPositions[0].position, doorlocals.doorPositions[0].rotation);
-        //NetworkServer.Spawn(door);
          Hud.CreateLobby(); 
         Debug.Log(Time.timeSinceLevelLoad + " Host requested");
     }
 
    
 
-    public override void OnStartClient(NetworkClient myClient)
+    public override void OnLobbyStartClient(NetworkClient myClient)
     {
-        base.OnStopClient();
+        base.OnLobbyStartClient(myClient);
         Debug.Log(Time.timeSinceLevelLoad + " Client start requested" );
     }
 
-    public override void OnClientConnect(NetworkConnection conn)
+    public override void OnLobbyClientConnect(NetworkConnection conn)
     {
-        base.OnClientConnect(conn);
+        Hud.PlayerJoinedServer();
+        base.OnLobbyClientConnect(conn);
         Debug.Log(Time.timeSinceLevelLoad + " Client connected to IP:" + conn.address);
         Debug.Log(Network.player.ipAddress);
-        Hud.PlayerJoinedServer(); 
     }
 
-    public int FindPlayersActive()
-    {
-        return numPlayers;
-    }
 
-    public void SpawnObject(GameObject obj)
+    public override void OnLobbyClientDisconnect(NetworkConnection conn)
     {
-        NetworkServer.Spawn(obj);
-    }
-
-    public override void OnClientDisconnect(NetworkConnection conn)
-    {
-        base.OnClientDisconnect(conn);
+        base.OnLobbyClientDisconnect(conn);
         Hud.StopClientConnect(); 
 
     }

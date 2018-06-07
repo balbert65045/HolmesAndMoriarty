@@ -40,8 +40,7 @@ public class MyNetworkHud : NetworkBehaviour {
 
     public void CreateLobby()
     {
-  //      GameObject Lobby = Instantiate(LobbyScreen, FindObjectOfType<Canvas>().transform);
- //       networkManager.SpawnObject(Lobby);
+        Debug.Log("Creating Lobby");
     }
 
     public void PlayerJoinedServer()
@@ -49,15 +48,8 @@ public class MyNetworkHud : NetworkBehaviour {
         StartMenu.SetActive(false);
         ConnectingScreen.SetActive(false);
         LobbyScreen.SetActive(true);
-        CmdFindNumberOfPlayers();
-        
     }
 
-    [Command]
-    void CmdFindNumberOfPlayers()
-    {
-        Debug.Log (networkManager.FindPlayersActive());
-    }
 
     // Update is called once per frame
     void Update () {
