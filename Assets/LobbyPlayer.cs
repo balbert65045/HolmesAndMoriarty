@@ -98,6 +98,7 @@ public class LobbyPlayer : NetworkBehaviour {
         {
             PT = PlayerType.Random;
         }
+        ReadyToggle.isOn = false;
     }
 	
 	// Update is called once per frame
