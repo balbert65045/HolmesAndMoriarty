@@ -45,15 +45,11 @@ public class LobbyScreenManager : MonoBehaviour {
         {
             if (Player1Menu.GetComponentInChildren<LobbyPlayer>().Ready && Player2Menu.GetComponentInChildren<LobbyPlayer>().Ready)
             {
-                LevelManager.DecidePlayersTypes();
+                LevelManager.DecidePlayersTypes(Player1Menu.GetComponent<LobbyPlayer>().PT, Player2Menu.GetComponent<LobbyPlayer>().PT);
             }
         }
     }
 
-    public void SetPlayerType(int PlayerID, PlayerType PT)
-    {
-        LevelManager.SetPlayerType(PlayerID, PT);
-    }
 	
 	// Update is called once per frame
 	void Update () {

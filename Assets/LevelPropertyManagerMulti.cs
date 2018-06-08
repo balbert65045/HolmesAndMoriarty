@@ -18,33 +18,22 @@ public class LevelPropertyManagerMulti : MonoBehaviour {
     }
 
 
-    public void SetPlayerType(int playerID, PlayerType PT)
-    {
-        if (playerID == 1)
-        {
-            Player1Player = PT;
-        }
-        else if (playerID == 2)
-        {
-            Player2Player = PT;
-        }
-    }
 
-    public void DecidePlayersTypes()
+    public void DecidePlayersTypes(PlayerType Player1Type, PlayerType Player2Type)
     {
-        if (Player1Player == PlayerType.Holmes && Player2Player == PlayerType.Holmes)
+        if (Player1Type == PlayerType.Holmes && Player2Type == PlayerType.Holmes)
         {
             int PlayerID = Random.Range(1, 3);
             if (PlayerID == 1) { Player1Player = PlayerType.Moriarty; }
             else if (PlayerID == 2) { Player2Player = PlayerType.Moriarty; }
         }
-        else if (Player1Player == PlayerType.Moriarty && Player2Player == PlayerType.Moriarty)
+        else if (Player1Type == PlayerType.Moriarty && Player2Type == PlayerType.Moriarty)
         {
             int PlayerID = Random.Range(1, 3);
             if (PlayerID == 1) { Player1Player = PlayerType.Holmes; }
             else if (PlayerID == 2) { Player2Player = PlayerType.Holmes; }
         }
-        else if (Player1Player == PlayerType.Random && Player2Player == PlayerType.Random)
+        else if (Player1Type == PlayerType.Random && Player2Type == PlayerType.Random)
         {
             int PlayerID = Random.Range(1, 3);
             if (PlayerID == 1) {
@@ -56,12 +45,12 @@ public class LevelPropertyManagerMulti : MonoBehaviour {
                 Player1Player = PlayerType.Moriarty;
             }
         }
-        else if (Player1Player == PlayerType.Random)
+        else if (Player1Type == PlayerType.Random)
         {
             if (Player2Player == PlayerType.Holmes) { Player1Player = PlayerType.Moriarty; }
             if (Player2Player == PlayerType.Moriarty) { Player1Player = PlayerType.Holmes; }
         }
-        else if (Player2Player == PlayerType.Random)
+        else if (Player2Type == PlayerType.Random)
         {
             if (Player1Player == PlayerType.Holmes) { Player2Player = PlayerType.Moriarty; }
             if (Player1Player == PlayerType.Moriarty) { Player2Player = PlayerType.Holmes; }

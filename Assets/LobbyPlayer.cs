@@ -98,8 +98,6 @@ public class LobbyPlayer : NetworkBehaviour {
         {
             PT = PlayerType.Random;
         }
-
-         Lobby.SetPlayerType(PlayerID, PT);
     }
 	
 	// Update is called once per frame
