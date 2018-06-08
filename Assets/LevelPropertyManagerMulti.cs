@@ -47,13 +47,13 @@ public class LevelPropertyManagerMulti : MonoBehaviour {
         }
         else if (Player1Type == PlayerType.Random)
         {
-            if (Player2Player == PlayerType.Holmes) { Player1Player = PlayerType.Moriarty; }
-            if (Player2Player == PlayerType.Moriarty) { Player1Player = PlayerType.Holmes; }
+            if (Player2Type == PlayerType.Holmes) { Player1Player = PlayerType.Moriarty; }
+            if (Player2Type == PlayerType.Moriarty) { Player1Player = PlayerType.Holmes; }
         }
         else if (Player2Type == PlayerType.Random)
         {
-            if (Player1Player == PlayerType.Holmes) { Player2Player = PlayerType.Moriarty; }
-            if (Player1Player == PlayerType.Moriarty) { Player2Player = PlayerType.Holmes; }
+            if (Player1Type == PlayerType.Holmes) { Player2Player = PlayerType.Moriarty; }
+            if (Player1Type == PlayerType.Moriarty) { Player2Player = PlayerType.Holmes; }
         }
     }
 
