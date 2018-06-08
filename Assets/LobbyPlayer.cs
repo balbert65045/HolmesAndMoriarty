@@ -1,9 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.UI;
 
-public class LobbyPlayer : MonoBehaviour {
+public class LobbyPlayer : NetworkBehaviour {
 
     public Text Name;
     public PlayerType PT = PlayerType.Holmes;
@@ -18,10 +19,29 @@ public class LobbyPlayer : MonoBehaviour {
         ReadyToggle = GetComponentInChildren<Toggle>();
         LobbyScreenManager Lobby = FindObjectOfType<LobbyScreenManager>();
         Lobby.PlayerJoin(this.gameObject);
-        
+    }
+
+    public void ValueChanged()
+    {
+        Debug.Log("Value of Dropdown Changed");
+        int DropdownValue = playerDropdown.value;
+        CmdDropDownChanged(DropdownValue);
+    }
+
+    [Command]
+    void CmdDropDownChanged(int DropDownValue)
+    {
+        RpcDropDownChanged(DropDownValue);
+    }
+
+    [ClientRpc]
+    void RpcDropDownChanged(int DropDownValue)
+    {
+        playerDropdown.value = DropDownValue;
     }
 	
 	// Update is called once per frame
 	void Update () {
+   
     }
 }
