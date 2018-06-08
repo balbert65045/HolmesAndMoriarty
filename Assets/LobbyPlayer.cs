@@ -27,6 +27,43 @@ public class LobbyPlayer : NetworkBehaviour {
         }
     }
 
+    public void ChangeName(string name)
+    {
+        Debug.Log("Name Change");
+        CmdNameChange(name);
+    }
+
+    [Command]
+    void CmdNameChange(string name)
+    {
+        RpcNameChange(name);
+    }
+
+    [ClientRpc]
+    void RpcNameChange(string name)
+    {
+        Name.text = name;
+    }
+
+    public void ToggledReady()
+    {
+        Debug.Log("Toggled Ready");
+        bool Value = ReadyToggle.isOn;
+        CmdToggleChanged(Value);
+    }
+
+    [Command]
+    void CmdToggleChanged(bool Value)
+    {
+        RpcToggleChanged(Value);
+    }
+
+    [ClientRpc]
+    void RpcToggleChanged(bool Value)
+    {
+        ReadyToggle.isOn = Value;
+    }
+
     public void ValueChanged()
     {
         Debug.Log("Value of Dropdown Changed");
