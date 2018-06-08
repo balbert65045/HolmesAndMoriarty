@@ -19,6 +19,12 @@ public class LobbyPlayer : NetworkBehaviour {
         ReadyToggle = GetComponentInChildren<Toggle>();
         LobbyScreenManager Lobby = FindObjectOfType<LobbyScreenManager>();
         Lobby.PlayerJoin(this.gameObject);
+
+        if (!isLocalPlayer)
+        {
+            playerDropdown.interactable = false;
+            ReadyToggle.interactable = false;
+        }
     }
 
     public void ValueChanged()
