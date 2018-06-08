@@ -10,6 +10,8 @@ public class LobbyPlayer : NetworkBehaviour {
     public PlayerType PT = PlayerType.Holmes;
     public bool Ready = false;
 
+    public int PlayerID = 0;
+
     private Dropdown playerDropdown;
     private Toggle ReadyToggle;
 
@@ -18,7 +20,7 @@ public class LobbyPlayer : NetworkBehaviour {
         playerDropdown = GetComponentInChildren<Dropdown>();
         ReadyToggle = GetComponentInChildren<Toggle>();
         LobbyScreenManager Lobby = FindObjectOfType<LobbyScreenManager>();
-        Lobby.PlayerJoin(this.gameObject);
+        PlayerID = Lobby.PlayerJoin(this.gameObject);
 
         if (!isLocalPlayer)
         {
@@ -81,6 +83,21 @@ public class LobbyPlayer : NetworkBehaviour {
     void RpcDropDownChanged(int DropDownValue)
     {
         playerDropdown.value = DropDownValue;
+        LevelPropertyManagerMulti LevelManager = FindObjectOfType<LevelPropertyManagerMulti>();
+        if (playerDropdown.value == 0)
+        {
+            PT = PlayerType.Holmes;
+        }
+        else if (playerDropdown.value == 1)
+        {
+            PT = PlayerType.Moriarty;
+        }
+        else if (playerDropdown.value == 2)
+        {
+            PT = PlayerType.Random;
+        }
+
+         LevelManager.SetPlayerType(PlayerID, PT);
     }
 	
 	// Update is called once per frame

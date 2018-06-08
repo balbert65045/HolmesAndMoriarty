@@ -4,6 +4,7 @@ public enum PlayerType
 {
     Holmes,
     Moriarty,
+    Random
 }
 
 public enum TileType

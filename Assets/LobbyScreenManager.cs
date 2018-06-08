@@ -14,7 +14,7 @@ public class LobbyScreenManager : MonoBehaviour {
         MyNetworkManager = FindObjectOfType<myNetworkManager>();
     }
 
-    public void PlayerJoin(GameObject Player)
+    public int PlayerJoin(GameObject Player)
     {
         if (PlayerIndex == 1)
         {
@@ -33,6 +33,7 @@ public class LobbyScreenManager : MonoBehaviour {
         Player.transform.localPosition = Vector3.zero;
         Player.transform.localScale = new Vector3(1,1,1);
         PlayerIndex++;
+        return (PlayerIndex - 1);
 
     }
 	
