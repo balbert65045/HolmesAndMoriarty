@@ -9,9 +9,12 @@ public class LobbyScreenManager : MonoBehaviour {
     public int PlayerIndex = 1;
 
     private myNetworkManager MyNetworkManager;
-	// Use this for initialization
-	void Start () {
+    private LevelPropertyManagerMulti LevelManager;
+    // Use this for initialization
+    void Start () {
         MyNetworkManager = FindObjectOfType<myNetworkManager>();
+        LevelManager = FindObjectOfType<LevelPropertyManagerMulti>();
+        if (LevelManager == null) { Debug.LogError("No LevelPropertyManagerMulti in the scene"); }
     }
 
     public int PlayerJoin(GameObject Player)
@@ -34,7 +37,22 @@ public class LobbyScreenManager : MonoBehaviour {
         Player.transform.localScale = new Vector3(1,1,1);
         PlayerIndex++;
         return (PlayerIndex - 1);
+    }
 
+    public void CheckifAllReady()
+    {
+        if (Player1Menu.GetComponentInChildren<LobbyPlayer>() != null && Player2Menu.GetComponentInChildren<LobbyPlayer>() != null)
+        {
+            if (Player1Menu.GetComponentInChildren<LobbyPlayer>().Ready && Player2Menu.GetComponentInChildren<LobbyPlayer>().Ready)
+            {
+                LevelManager.DecidePlayersTypes();
+            }
+        }
+    }
+
+    public void SetPlayerType(int PlayerID, PlayerType PT)
+    {
+        LevelManager.SetPlayerType(PlayerID, PT);
     }
 	
 	// Update is called once per frame
