@@ -66,6 +66,7 @@ public class LobbyPlayer : NetworkBehaviour {
     {
         ReadyToggle.isOn = Value;
         Ready = Value;
+        GetComponent<NetworkLobbyPlayer>().readyToBegin = Value;
         Lobby.CheckifAllReady();
     }
 
@@ -99,6 +100,7 @@ public class LobbyPlayer : NetworkBehaviour {
             PT = PlayerType.Random;
         }
         ReadyToggle.isOn = false;
+        GetComponent<NetworkLobbyPlayer>().readyToBegin = false;
     }
 	
 	// Update is called once per frame

@@ -36,6 +36,7 @@ public class MyNetworkHud : NetworkBehaviour {
         networkManager.MyStopClient();
         StartMenu.SetActive(true);
         ConnectingScreen.SetActive(false);
+        LobbyScreen.SetActive(false);
     }
 
     public void CreateLobby()
@@ -50,6 +51,10 @@ public class MyNetworkHud : NetworkBehaviour {
         LobbyScreen.SetActive(true);
     }
 
+    public void LeaveLobby()
+    {
+
+    }
 
     // Update is called once per frame
     void Update () {

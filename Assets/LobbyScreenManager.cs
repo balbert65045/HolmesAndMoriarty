@@ -46,6 +46,7 @@ public class LobbyScreenManager : MonoBehaviour {
             if (Player1Menu.GetComponentInChildren<LobbyPlayer>().Ready && Player2Menu.GetComponentInChildren<LobbyPlayer>().Ready)
             {
                 LevelManager.DecidePlayersTypes(Player1Menu.GetComponentInChildren<LobbyPlayer>().PT, Player2Menu.GetComponentInChildren<LobbyPlayer>().PT);
+                MyNetworkManager.CheckReadyToBegin();
             }
         }
     }
