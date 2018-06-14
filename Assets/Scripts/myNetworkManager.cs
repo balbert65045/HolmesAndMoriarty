@@ -9,6 +9,11 @@ public class myNetworkManager : NetworkLobbyManager {
     public MyNetworkHud Hud;
     NetworkClient ClientWorkingWith;
 
+    void Awake()
+    {
+        DontDestroyOnLoad(transform.gameObject);
+    }
+
     public void MyStartHost()
     {
         StartHost();
@@ -36,8 +41,10 @@ public class myNetworkManager : NetworkLobbyManager {
 
     public override GameObject OnLobbyServerCreateLobbyPlayer(NetworkConnection conn, short playerControllerId)
     {
+        Debug.Log("Lobby Player Called");
         Player = base.OnLobbyServerCreateGamePlayer(conn, playerControllerId);
-       // Debug.Log(LobbyPlayer);
+        Debug.Log(Player);
+        // Debug.Log(LobbyPlayer);
         //Hud.PlayerJoinedServer(LobbyPlayer);
         return Player;
 
@@ -74,5 +81,11 @@ public class myNetworkManager : NetworkLobbyManager {
 
     }
 
-    
+    public override GameObject OnLobbyServerCreateGamePlayer(NetworkConnection conn, short playerControllerId)
+    {
+        Debug.Log("Creating Game Player");
+        return base.OnLobbyServerCreateGamePlayer(conn, playerControllerId);
+    }
+
+
 }

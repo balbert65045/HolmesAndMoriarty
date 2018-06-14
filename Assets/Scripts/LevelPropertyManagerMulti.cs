@@ -17,6 +17,15 @@ public class LevelPropertyManagerMulti : MonoBehaviour {
         }
     }
 
+    private void OnLevelWasLoaded(int level)
+    {
+        //Debug.Log(level);
+        //if (level == 3)
+        //{
+           
+        //}
+    }
+
 
 
     public void DecidePlayersTypes(PlayerType Player1Type, PlayerType Player2Type)
