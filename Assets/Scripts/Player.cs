@@ -19,6 +19,8 @@ public class Player : NetworkBehaviour {
     public Transform CardSpot;
 
     void Awake () {
+        ClientScene.AddPlayer(0);
+
         _CardDeck = FindObjectOfType<ClueDeck>();
         _CardHand = GetComponentInChildren<CardHand>();
         SetupPlayer();

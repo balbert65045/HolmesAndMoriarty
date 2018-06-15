@@ -95,6 +95,9 @@ public class myNetworkManager : NetworkLobbyManager {
         GameObject Player = (GameObject)Instantiate(gamePlayerPrefab);
 
         NetworkServer.AddPlayerForConnection(conn, Player, playerControllerId);
+
+        ClientScene.AddPlayer(client.connection, 0);
+        //NetworkServer.Spawn(Player);
     }
 
 }
