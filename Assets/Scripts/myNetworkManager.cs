@@ -87,5 +87,14 @@ public class myNetworkManager : NetworkLobbyManager {
         return base.OnLobbyServerCreateGamePlayer(conn, playerControllerId);
     }
 
+    public override void OnServerAddPlayer(NetworkConnection conn, short playerControllerId)
+    {
+        Debug.Log("Added player");
+        base.OnServerAddPlayer(conn, playerControllerId);
+
+        GameObject Player = (GameObject)Instantiate(gamePlayerPrefab);
+
+        NetworkServer.AddPlayerForConnection(conn, Player, playerControllerId);
+    }
 
 }
