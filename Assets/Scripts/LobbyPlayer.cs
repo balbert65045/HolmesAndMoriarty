@@ -6,27 +6,38 @@ using UnityEngine.UI;
 
 public class LobbyPlayer : NetworkBehaviour {
 
-    public Text Name;
+    
     public PlayerType PT = PlayerType.Holmes;
     public bool Ready = false;
 
     public int PlayerID = 0;
 
-    private Dropdown playerDropdown;
-    private Toggle ReadyToggle;
-    private LobbyScreenManager Lobby;
+    LobbyPlayerUI[] LobbyPlayersUI;
+    LobbyPlayerUI ThisLobbyPlayerUI;
 
-    private void Awake()
-    {
-        DontDestroyOnLoad(this.gameObject);
-    }
+    private Text Name;
+    public Dropdown playerDropdown;
+    public Toggle ReadyToggle;
+    public LobbyScreenManager Lobby;
+
+    string PlayerName;
 
     // Use this for initialization
     void Start () {
-        playerDropdown = GetComponentInChildren<Dropdown>();
-        ReadyToggle = GetComponentInChildren<Toggle>();
         Lobby = FindObjectOfType<LobbyScreenManager>();
         PlayerID = Lobby.PlayerJoin(this.gameObject);
+
+        LobbyPlayersUI = FindObjectsOfType<LobbyPlayerUI>();
+        foreach (LobbyPlayerUI LPU in LobbyPlayersUI)
+        {
+            if (PlayerID == LPU.player) { ThisLobbyPlayerUI = LPU; }
+        }
+        ThisLobbyPlayerUI.ChildObject.SetActive(true);
+
+        Name = ThisLobbyPlayerUI.GetComponentInChildren<NameText>().GetComponent<Text>();
+        playerDropdown = ThisLobbyPlayerUI.GetComponentInChildren<Dropdown>();
+        ReadyToggle = ThisLobbyPlayerUI.GetComponentInChildren<Toggle>();
+        ChangeName();
 
         if (!isLocalPlayer)
         {
@@ -34,11 +45,16 @@ public class LobbyPlayer : NetworkBehaviour {
             ReadyToggle.interactable = false;
         }
     }
+    
+    public void SetName(string name)
+    {
+        PlayerName = name;
+    }
 
-    public void ChangeName(string name)
+    public void ChangeName()
     {
         Debug.Log("Name Change");
-        CmdNameChange(name);
+        CmdNameChange(PlayerName);
     }
 
     [Command]

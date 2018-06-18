@@ -21,20 +21,20 @@ public class LobbyScreenManager : MonoBehaviour {
     {
         if (PlayerIndex == 1)
         {
-            Player.transform.SetParent(Player1Menu.GetComponent<RectTransform>());
-            Player.GetComponent<LobbyPlayer>().ChangeName("Player 1");
+           // Player.transform.SetParent(Player1Menu.GetComponent<RectTransform>());
+            Player.GetComponent<LobbyPlayer>().SetName("Player 1");
         }
         else if (PlayerIndex == 2)
         {
-            Player.transform.SetParent(Player2Menu.GetComponent<RectTransform>());
-            Player.GetComponent<LobbyPlayer>().ChangeName("Player 2");
+           // Player.transform.SetParent(Player2Menu.GetComponent<RectTransform>());
+            Player.GetComponent<LobbyPlayer>().SetName("Player 2");
         }
         else
         {
             Debug.LogError("Player Index has mooved to high from players joining only 2 should be able to join");
         }
-        Player.transform.localPosition = Vector3.zero;
-        Player.transform.localScale = new Vector3(1,1,1);
+       // Player.transform.localPosition = Vector3.zero;
+     //   Player.transform.localScale = new Vector3(1,1,1);
         PlayerIndex++;
         return (PlayerIndex - 1);
     }
