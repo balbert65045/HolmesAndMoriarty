@@ -5,7 +5,6 @@ using UnityEngine.Networking;
 
 public class myNetworkManager : NetworkLobbyManager {
 
-    public GameObject Player;
     public MyNetworkHud Hud;
     NetworkClient ClientWorkingWith;
 
@@ -42,7 +41,7 @@ public class myNetworkManager : NetworkLobbyManager {
     public override GameObject OnLobbyServerCreateLobbyPlayer(NetworkConnection conn, short playerControllerId)
     {
         Debug.Log("Lobby Player Called");
-        Player = base.OnLobbyServerCreateGamePlayer(conn, playerControllerId);
+        GameObject Player = base.OnLobbyServerCreateGamePlayer(conn, playerControllerId);
         Debug.Log(Player);
         // Debug.Log(LobbyPlayer);
         //Hud.PlayerJoinedServer(LobbyPlayer);
@@ -92,12 +91,15 @@ public class myNetworkManager : NetworkLobbyManager {
         Debug.Log("Added player");
         base.OnServerAddPlayer(conn, playerControllerId);
 
-        GameObject Player = (GameObject)Instantiate(gamePlayerPrefab);
-
-        NetworkServer.AddPlayerForConnection(conn, Player, playerControllerId);
-
-        ClientScene.AddPlayer(client.connection, 0);
+       // TryToAddPlayer();
+      //  ClientScene.AddPlayer(conn, playerControllerId);
         //NetworkServer.Spawn(Player);
     }
 
+    public override void OnLobbyClientSceneChanged(NetworkConnection conn)
+    {
+        Debug.Log("Client scene changed");
+        base.OnLobbyClientSceneChanged(conn);
+        TryToAddPlayer();
+    }
 }

@@ -1,8 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class LevelPropertyManagerMulti : MonoBehaviour {
+
+public class LevelPropertyManagerMulti : NetworkBehaviour {
 
 
     public PlayerType Player1Player;
@@ -22,7 +24,7 @@ public class LevelPropertyManagerMulti : MonoBehaviour {
         //Debug.Log(level);
         //if (level == 3)
         //{
-           
+          
         //}
     }
 
