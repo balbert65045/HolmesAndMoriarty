@@ -16,6 +16,11 @@ public class LobbyPlayer : NetworkBehaviour {
     private Toggle ReadyToggle;
     private LobbyScreenManager Lobby;
 
+    private void Awake()
+    {
+        DontDestroyOnLoad(this.gameObject);
+    }
+
     // Use this for initialization
     void Start () {
         playerDropdown = GetComponentInChildren<Dropdown>();

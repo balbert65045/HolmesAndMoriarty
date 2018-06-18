@@ -99,9 +99,9 @@ public class myNetworkManager : NetworkLobbyManager {
     public override void OnLobbyClientSceneChanged(NetworkConnection conn)
     {
         Debug.Log("Client scene changed");
-        base.OnLobbyClientSceneChanged(conn);
-        GameObject Player = Instantiate(gamePlayerPrefab);
+        //base.OnLobbyClientSceneChanged(conn);
+        //GameObject Player = Instantiate(gamePlayerPrefab);
 
-        NetworkServer.AddPlayerForConnection(conn, Player, 0);
+        //NetworkServer.AddPlayerForConnection(conn, Player, 0);
     }
 }
