@@ -100,6 +100,8 @@ public class myNetworkManager : NetworkLobbyManager {
     {
         Debug.Log("Client scene changed");
         base.OnLobbyClientSceneChanged(conn);
-        NetworkServer.AddPlayerForConnection(conn, gamePlayerPrefab, 0);
+        GameObject Player = Instantiate(gamePlayerPrefab);
+
+        NetworkServer.AddPlayerForConnection(conn, Player, 0);
     }
 }
