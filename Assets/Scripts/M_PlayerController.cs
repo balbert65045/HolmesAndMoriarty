@@ -56,12 +56,14 @@ public class M_PlayerController : Player {
         base.SetupPlayer();
         if (FindObjectOfType<LevelPropertyManagerMulti>() != null)
         {
+            if (!isLocalPlayer) { return; }
+            Debug.Log(netId);
             LobbyPlayer[] LobbyPlayers = FindObjectsOfType<LobbyPlayer>();
             foreach (LobbyPlayer LP in LobbyPlayers)
             {
-                if (LP.GetComponent<NetworkIdentity>().playerControllerId == GetComponent<NetworkIdentity>().playerControllerId)
+                if (LP.isLocalPlayer)
                 {
-                    Debug.Log("PlayerControllerID's Match");
+                    Debug.Log("Found same Local Player");
                     MyPlayerType = FindObjectOfType<LevelPropertyManagerMulti>().GetPlayerType(LP.PlayerID);
                 }
             }
