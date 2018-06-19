@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
 public class M_PlayerController : Player {
 
@@ -53,9 +54,17 @@ public class M_PlayerController : Player {
     public override void SetupPlayer()
     {
         base.SetupPlayer();
-        if (FindObjectOfType<LevelPropertyManager>() != null)
+        if (FindObjectOfType<LevelPropertyManagerMulti>() != null)
         {
-            MyPlayerType = FindObjectOfType<LevelPropertyManager>().GetPlayerType();
+            LobbyPlayer[] LobbyPlayers = FindObjectsOfType<LobbyPlayer>();
+            foreach (LobbyPlayer LP in LobbyPlayers)
+            {
+                if (LP.GetComponent<NetworkIdentity>().playerControllerId == GetComponent<NetworkIdentity>().playerControllerId)
+                {
+                    Debug.Log("PlayerControllerID's Match");
+                    MyPlayerType = FindObjectOfType<LevelPropertyManagerMulti>().GetPlayerType(LP.PlayerID);
+                }
+            }
         }
     }
 

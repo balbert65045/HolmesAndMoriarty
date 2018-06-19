@@ -49,6 +49,9 @@ public class myNetworkManager : NetworkLobbyManager {
 
     }
 
+
+
+
     public override void OnStartHost()
     {
         base.OnStartHost();
@@ -90,18 +93,10 @@ public class myNetworkManager : NetworkLobbyManager {
     {
         Debug.Log("Added player");
         base.OnServerAddPlayer(conn, playerControllerId);
-
-       // TryToAddPlayer();
-      //  ClientScene.AddPlayer(conn, playerControllerId);
-        //NetworkServer.Spawn(Player);
     }
 
     public override void OnLobbyClientSceneChanged(NetworkConnection conn)
     {
         Debug.Log("Client scene changed");
-        //base.OnLobbyClientSceneChanged(conn);
-        //GameObject Player = Instantiate(gamePlayerPrefab);
-
-        //NetworkServer.AddPlayerForConnection(conn, Player, 0);
     }
 }

@@ -24,11 +24,18 @@ public class LevelPropertyManagerMulti : NetworkBehaviour {
         //Debug.Log(level);
         //if (level == 3)
         //{
-          
+
         //}
     }
 
+    public PlayerType GetPlayerType(int PlayerID)
+    {
+        if (PlayerID == 1) { return Player1Player; }
+        else if (PlayerID == 2) { return Player2Player; }
 
+        Debug.LogError("Player ID not 1 or 2");
+        return Player1Player;
+    }
 
     public void DecidePlayersTypes(PlayerType Player1Type, PlayerType Player2Type)
     {
