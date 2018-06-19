@@ -66,7 +66,10 @@ public class LobbyPlayer : NetworkBehaviour {
     [ClientRpc]
     void RpcNameChange(string name)
     {
-        Name.text = name;
+        if (Name != null)
+        {
+            Name.text = name;
+        }
     }
 
     public void ToggledReady()

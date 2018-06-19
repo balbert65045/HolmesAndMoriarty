@@ -21,6 +21,7 @@ public class LobbyPlayerUI : MonoBehaviour {
         LobbyPlayer[] lobbyPlayers = FindObjectsOfType<LobbyPlayer>();
         foreach(LobbyPlayer LP in lobbyPlayers)
         {
+           // Debug.Lo
             if (LP.PlayerID == player)
             {
                 LP.ValueChanged();
