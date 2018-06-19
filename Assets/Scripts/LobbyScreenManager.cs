@@ -41,11 +41,21 @@ public class LobbyScreenManager : MonoBehaviour {
 
     public void CheckifAllReady()
     {
-        if (Player1Menu.GetComponentInChildren<LobbyPlayer>() != null && Player2Menu.GetComponentInChildren<LobbyPlayer>() != null)
+        LobbyPlayer[] LobbyPlayers = FindObjectsOfType<LobbyPlayer>();
+        LobbyPlayer LobbyPlayer1 = null;
+        LobbyPlayer LobbyPlayer2 = null;
+        foreach(LobbyPlayer LP in LobbyPlayers)
         {
-            if (Player1Menu.GetComponentInChildren<LobbyPlayer>().Ready && Player2Menu.GetComponentInChildren<LobbyPlayer>().Ready)
+            if (LP.PlayerID == 1) { LobbyPlayer1 = LP; }
+            else if (LP.PlayerID == 2) { LobbyPlayer2 = LP; }
+        }
+
+
+        if (LobbyPlayer1 != null && LobbyPlayer2 != null)
+        {
+            if (LobbyPlayer1.Ready && LobbyPlayer2.Ready)
             {
-                LevelManager.DecidePlayersTypes(Player1Menu.GetComponentInChildren<LobbyPlayer>().PT, Player2Menu.GetComponentInChildren<LobbyPlayer>().PT);
+                LevelManager.DecidePlayersTypes(LobbyPlayer1.PT, LobbyPlayer2.PT);
                 MyNetworkManager.CheckReadyToBegin();
             }
         }
