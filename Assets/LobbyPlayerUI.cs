@@ -15,4 +15,29 @@ public class LobbyPlayerUI : MonoBehaviour {
 	void Update () {
 		
 	}
+
+    public void DropDownChange()
+    {
+        LobbyPlayer[] lobbyPlayers = FindObjectsOfType<LobbyPlayer>();
+        foreach(LobbyPlayer LP in lobbyPlayers)
+        {
+            if (LP.PlayerID == player)
+            {
+                LP.ValueChanged();
+            }
+        }
+    }
+
+    public void ToggleChange()
+    {
+        LobbyPlayer[] lobbyPlayers = FindObjectsOfType<LobbyPlayer>();
+        foreach (LobbyPlayer LP in lobbyPlayers)
+        {
+            if (LP.PlayerID == player)
+            {
+                LP.ToggledReady();
+            }
+        }
+    }
+
 }
