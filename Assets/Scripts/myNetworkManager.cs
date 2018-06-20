@@ -99,4 +99,14 @@ public class myNetworkManager : NetworkLobbyManager {
     {
         Debug.Log("Client scene changed");
     }
+
+    public override bool OnLobbyServerSceneLoadedForPlayer(GameObject lobbyPlayer, GameObject gamePlayer)
+    {
+        Debug.Log("lobby player " + lobbyPlayer);
+        Debug.Log("Game player " + gamePlayer);
+
+        gamePlayer.GetComponent<M_PlayerController>().MyPlayerType = lobbyPlayer.GetComponent<LobbyPlayer>().PT;
+
+        return base.OnLobbyServerSceneLoadedForPlayer(lobbyPlayer, gamePlayer);
+    }
 }
