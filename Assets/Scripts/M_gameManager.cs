@@ -115,7 +115,7 @@ public class M_gameManager : MonoBehaviour {
             }
         }
 
-        StartCoroutine("PlayersDrawCards");
+       
     }
 
     public void setPlayer(Player P)
@@ -127,6 +127,10 @@ public class M_gameManager : MonoBehaviour {
         else if (P.MyPlayerType == PlayerType.Moriarty)
         {
             MoriartyPlayer = P;
+        }
+        if (MoriartyPlayer != null && HolmesPlayer != null)
+        {
+            StartCoroutine("PlayersDrawCards");
         }
     }
 	
