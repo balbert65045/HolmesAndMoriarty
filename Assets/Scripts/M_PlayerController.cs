@@ -49,7 +49,7 @@ public class M_PlayerController : Player {
         if (isServer)
         {
             Debug.Log("Server Acting");
-            CmdGetPlayerType();
+            RpcSetPlayer(MyPlayerType);
         }
 
     }
