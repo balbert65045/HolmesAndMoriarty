@@ -66,6 +66,7 @@ public class M_PlayerController : Player {
     [Command]
     void CmdGetPlayerType()
     {
+        FindObjectOfType<M_gameManager>().setPlayer(this);
         RpcSetPlayer(MyPlayerType);
     }
 
