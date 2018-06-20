@@ -46,13 +46,18 @@ public class M_PlayerController : Player {
             }
         }
 
-        CmdGetPlayerType();
+        if (isServer)
+        {
+            Debug.Log("Server Acting");
+            CmdGetPlayerType();
+        }
 
     }
 
     //Set the player type on the server
     public void SetPlayerType(PlayerType PT)
     {
+        Debug.Log("Player being set");
         MyPlayerType = PT;
     }
 
@@ -66,12 +71,14 @@ public class M_PlayerController : Player {
     [Command]
     void CmdGetPlayerType()
     {
+        Debug.Log("Command Happening");
         RpcSetPlayer(MyPlayerType);
     }
 
     [ClientRpc]
     void RpcSetPlayer(PlayerType PT)
     {
+        Debug.Log("RPC Happening");
         MyPlayerType = PT;
         FindObjectOfType<M_gameManager>().setPlayer(this);
     }
