@@ -105,7 +105,9 @@ public class myNetworkManager : NetworkLobbyManager {
         Debug.Log("lobby player " + lobbyPlayer);
         Debug.Log("Game player " + gamePlayer);
 
-        gamePlayer.GetComponent<M_PlayerController>().MyPlayerType = lobbyPlayer.GetComponent<LobbyPlayer>().PT;
+        if (lobbyPlayer.GetComponent<LobbyPlayer>().PlayerID == 1) { gamePlayer.GetComponent<M_PlayerController>().MyPlayerType = FindObjectOfType<LevelPropertyManagerMulti>().Player1Player; }
+        else if (lobbyPlayer.GetComponent<LobbyPlayer>().PlayerID == 2) { gamePlayer.GetComponent<M_PlayerController>().MyPlayerType = FindObjectOfType<LevelPropertyManagerMulti>().Player2Player; }
+        else { Debug.Log("something went wrong"); }
 
         return base.OnLobbyServerSceneLoadedForPlayer(lobbyPlayer, gamePlayer);
     }
