@@ -46,7 +46,7 @@ public class M_PlayerController : Player {
             }
         }
 
-
+        CmdGetPlayerType();
 
     }
 
@@ -56,17 +56,16 @@ public class M_PlayerController : Player {
         MyPlayerType = PT;
     }
 
-    public override void OnStartLocalPlayer()
-    {
-        base.OnStartLocalPlayer();
-        //Get the player type on the server and put it on the clients
-        CmdGetPlayerType();
-    }
+    //public override void OnStartLocalPlayer()
+    //{
+    //    base.OnStartLocalPlayer();
+    //    //Get the player type on the server and put it on the clients
+    //    CmdGetPlayerType();
+    //}
 
     [Command]
     void CmdGetPlayerType()
     {
-        FindObjectOfType<M_gameManager>().setPlayer(this);
         RpcSetPlayer(MyPlayerType);
     }
 
