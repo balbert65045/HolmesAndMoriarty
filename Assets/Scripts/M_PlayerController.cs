@@ -52,12 +52,6 @@ public class M_PlayerController : Player {
 
     public void SetPlayerType(PlayerType PT)
     {
-        CmdSetPlayer(PT);
-    }
-
-    [Command]
-    void CmdSetPlayer(PlayerType PT)
-    {
         RpcSetPlayer(PT);
     }
 
