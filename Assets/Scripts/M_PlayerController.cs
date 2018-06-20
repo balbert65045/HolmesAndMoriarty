@@ -50,21 +50,21 @@ public class M_PlayerController : Player {
 
     }
 
-    public override void OnStartLocalPlayer()
+    public void SetPlayerType(PlayerType PT)
     {
-        //Debug.Log("Start Local Player");
-        //LobbyPlayer[] LobbyPlayers = FindObjectsOfType<LobbyPlayer>();
-        //foreach (LobbyPlayer LP in LobbyPlayers)
-        //{
-        //    Debug.Log("LobbyPlayerFound");
-        //    if (LP.isLocalPlayer)
-        //    {
-        //        Debug.Log("Found same Local Player");
-        //        MyPlayerType = FindObjectOfType<LevelPropertyManagerMulti>().GetPlayerType(LP.PlayerID);
-        //        return;
-        //    }
-        //}
-        //Debug.Log("No Lobby Players are local player");
+        CmdSetPlayer(PT);
+    }
+
+    [Command]
+    void CmdSetPlayer(PlayerType PT)
+    {
+        RpcSetPlayer(PT);
+    }
+
+    [ClientRpc]
+    void RpcSetPlayer(PlayerType PT)
+    {
+        MyPlayerType = PT;
     }
 
     public override void SetupPlayer()
