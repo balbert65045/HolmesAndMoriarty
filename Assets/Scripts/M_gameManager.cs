@@ -33,8 +33,8 @@ public class M_gameManager : MonoBehaviour {
     CaseArea caseArea;
 
     Player[] Players;
-    Player HolmesPlayer;
-    Player MoriartyPlayer;
+    public Player HolmesPlayer;
+    public Player MoriartyPlayer;
 
     public ClueDeck cardDeck;
 
@@ -76,19 +76,19 @@ public class M_gameManager : MonoBehaviour {
             obj.SetActive(false);
         }
 
-        Players = FindObjectsOfType<Player>();
-        foreach (Player player in Players)
-        {
-            switch (player.MyPlayerType)
-            {
-                case PlayerType.Holmes:
-                    HolmesPlayer = player;
-                    break;
-                case PlayerType.Moriarty:
-                    MoriartyPlayer = player;
-                    break;
-            }
-        }
+        //Players = FindObjectsOfType<Player>();
+        //foreach (Player player in Players)
+        //{
+        //    switch (player.MyPlayerType)
+        //    {
+        //        case PlayerType.Holmes:
+        //            HolmesPlayer = player;
+        //            break;
+        //        case PlayerType.Moriarty:
+        //            MoriartyPlayer = player;
+        //            break;
+        //    }
+        //}
 
         CardArea[] CardAreas = FindObjectsOfType<CardArea>();
         foreach (CardArea carda in CardAreas)
@@ -116,6 +116,18 @@ public class M_gameManager : MonoBehaviour {
         }
 
         StartCoroutine("PlayersDrawCards");
+    }
+
+    public void setPlayer(Player P)
+    {
+        if (P.MyPlayerType == PlayerType.Holmes)
+        {
+            HolmesPlayer = P;
+        }
+        else if (P.MyPlayerType == PlayerType.Moriarty)
+        {
+            MoriartyPlayer = P;
+        }
     }
 	
     IEnumerator PlayersDrawCards()
