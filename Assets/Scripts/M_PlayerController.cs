@@ -52,7 +52,19 @@ public class M_PlayerController : Player {
 
     public void SetPlayerType(PlayerType PT)
     {
-        RpcSetPlayer(PT);
+        MyPlayerType = PT;
+    }
+
+    public override void OnStartLocalPlayer()
+    {
+        base.OnStartLocalPlayer();
+        CmdGetPlayerType();
+    }
+
+    [Command]
+    void CmdGetPlayerType()
+    {
+        RpcSetPlayer(MyPlayerType);
     }
 
     [ClientRpc]
