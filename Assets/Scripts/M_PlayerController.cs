@@ -46,11 +46,11 @@ public class M_PlayerController : Player {
             }
         }
 
-        //if (isServer)
-        //{
-        //    Debug.Log("Server Acting");
-        //    CmdGetPlayerType();
-        //}
+        if (isServer)
+        {
+            Debug.Log("Server Acting");
+            CmdGetPlayerType();
+        }
 
     }
 
@@ -59,7 +59,6 @@ public class M_PlayerController : Player {
     {
         Debug.Log("Player being set");
         MyPlayerType = PT;
-        RpcSetPlayer(PT);
     }
 
     //public override void OnStartLocalPlayer()
