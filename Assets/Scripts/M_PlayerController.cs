@@ -77,7 +77,7 @@ public class M_PlayerController : Player {
     {
         Debug.Log("RPC Happening");
         LinkedLobbyPlayer = LP;
-        if (LP.isLocalPlayer) { isTheLocalPlayer = true; }
+        if (LP.GetComponent<LobbyPlayer>().isLocalPlayer) { isTheLocalPlayer = true; }
         MyPlayerType = PT;
         FindObjectOfType<M_gameManager>().setPlayer(this);
     }
