@@ -45,7 +45,15 @@ public class M_PlayerController : Player {
                 CrimeArea = carda;
             }
         }
+        StartCoroutine("SetPlayers");
 
+
+
+    }
+
+    IEnumerator SetPlayers()
+    {
+        yield return new WaitForSeconds(.2f);
         if (isServer)
         {
             Debug.Log("Server Acting");
@@ -53,10 +61,9 @@ public class M_PlayerController : Player {
             if (isLocalPlayer)
             {
                 Debug.Log("This is the server player");
-                FindObjectOfType<M_gameManager>().setPlayer(this);
+                // FindObjectOfType<M_gameManager>().setPlayer(this);
             }
         }
-
     }
 
     //Set the player type on the server
