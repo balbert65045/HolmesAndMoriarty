@@ -26,6 +26,8 @@ public class M_PlayerController : Player {
     bool b_EnableSwapClueCards = false;
     public bool isTheLocalPlayer = false;
 
+    private LobbyPlayer LinkedLobbyPlayer;
+
 
     void Start() {
         ClueAreaActive = true;
@@ -57,23 +59,25 @@ public class M_PlayerController : Player {
         if (isServer)
         {
             Debug.Log("Server Acting");
-            RpcSetPlayer(MyPlayerType);
+            RpcSetPlayer(MyPlayerType, LinkedLobbyPlayer);
         }
     }
 
     //Set the player type on the server
     public void SetPlayerType(PlayerType PT, LobbyPlayer LP)
     {
-        if (LP.isLocalPlayer) { isTheLocalPlayer = true; }
+        LinkedLobbyPlayer = LP;
         Debug.Log("Player being set");
         MyPlayerType = PT;
     }
 
 
     [ClientRpc]
-    void RpcSetPlayer(PlayerType PT)
+    void RpcSetPlayer(PlayerType PT, LobbyPlayer LP)
     {
         Debug.Log("RPC Happening");
+        LinkedLobbyPlayer = LP;
+        if (LP.isLocalPlayer) { isTheLocalPlayer = true; }
         MyPlayerType = PT;
         FindObjectOfType<M_gameManager>().setPlayer(this);
     }
