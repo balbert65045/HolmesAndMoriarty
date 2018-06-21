@@ -47,10 +47,9 @@ public class M_PlayerController : Player {
         }
         StartCoroutine("SetPlayers");
 
-
-
     }
 
+    // Wait a delay for all players to spawn on server and then set them all 
     IEnumerator SetPlayers()
     {
         yield return new WaitForSeconds(.2f);
@@ -58,11 +57,6 @@ public class M_PlayerController : Player {
         {
             Debug.Log("Server Acting");
             RpcSetPlayer(MyPlayerType);
-            if (isLocalPlayer)
-            {
-                Debug.Log("This is the server player");
-                // FindObjectOfType<M_gameManager>().setPlayer(this);
-            }
         }
     }
 
@@ -73,19 +67,6 @@ public class M_PlayerController : Player {
         MyPlayerType = PT;
     }
 
-    //public override void OnStartLocalPlayer()
-    //{
-    //    base.OnStartLocalPlayer();
-    //    //Get the player type on the server and put it on the clients
-    //    CmdGetPlayerType();
-    //}
-
-    [Command]
-    void CmdGetPlayerType()
-    {
-        Debug.Log("Command Happening");
-        RpcSetPlayer(MyPlayerType);
-    }
 
     [ClientRpc]
     void RpcSetPlayer(PlayerType PT)
