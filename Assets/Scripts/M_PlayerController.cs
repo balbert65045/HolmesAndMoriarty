@@ -26,7 +26,7 @@ public class M_PlayerController : Player {
     bool b_EnableSwapClueCards = false;
     public bool isTheLocalPlayer = false;
 
-    public LobbyPlayer LinkedLobbyPlayer;
+    public GameObject LinkedLobbyPlayer;
 
 
     void Start() {
@@ -66,14 +66,14 @@ public class M_PlayerController : Player {
     //Set the player type on the server
     public void SetPlayerType(PlayerType PT, LobbyPlayer LP)
     {
-        LinkedLobbyPlayer = LP;
+        LinkedLobbyPlayer = LP.gameObject;
         Debug.Log("Player being set");
         MyPlayerType = PT;
     }
 
 
     [ClientRpc]
-    void RpcSetPlayer(PlayerType PT, LobbyPlayer LP)
+    void RpcSetPlayer(PlayerType PT, GameObject LP)
     {
         Debug.Log("RPC Happening");
         LinkedLobbyPlayer = LP;
