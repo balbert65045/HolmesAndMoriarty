@@ -26,7 +26,7 @@ public class M_PlayerController : Player {
     bool b_EnableSwapClueCards = false;
     public bool isTheLocalPlayer = false;
 
-    private LobbyPlayer LinkedLobbyPlayer;
+    public LobbyPlayer LinkedLobbyPlayer;
 
 
     void Start() {
