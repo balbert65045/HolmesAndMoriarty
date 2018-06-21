@@ -88,6 +88,14 @@ public class LevelPropertyManagerMulti : NetworkBehaviour {
                 P1Moriarty_P2Holmes();
             }
         }
+        else if (Player1Type == PlayerType.Holmes && Player2Type == PlayerType.Moriarty)
+        {
+            P1Holmes_P2Moriarty();
+        }
+        else if (Player1Type == PlayerType.Moriarty && Player2Type == PlayerType.Holmes)
+        {
+            P1Moriarty_P2Holmes();
+        }
     }
 
     void P1Holmes_P2Moriarty()
