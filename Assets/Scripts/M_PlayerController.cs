@@ -24,6 +24,7 @@ public class M_PlayerController : Player {
     EndTurnButton endTurnButton;
     int MoriartyTilesToPlace = 0;
     bool b_EnableSwapClueCards = false;
+    public bool isTheLocalPlayer = false;
 
 
     void Start() {
@@ -61,8 +62,9 @@ public class M_PlayerController : Player {
     }
 
     //Set the player type on the server
-    public void SetPlayerType(PlayerType PT)
+    public void SetPlayerType(PlayerType PT, LobbyPlayer LP)
     {
+        if (LP.isLocalPlayer) { isTheLocalPlayer = true; }
         Debug.Log("Player being set");
         MyPlayerType = PT;
     }
