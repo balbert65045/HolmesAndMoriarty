@@ -39,6 +39,7 @@ public class LevelPropertyManagerMulti : NetworkBehaviour {
 
     public void DecidePlayersTypes(PlayerType Player1Type, PlayerType Player2Type)
     {
+        Debug.Log("Deciding Player Value Types");
         if (Player1Type == PlayerType.Holmes && Player2Type == PlayerType.Holmes)
         {
             int PlayerID = Random.Range(1, 3);

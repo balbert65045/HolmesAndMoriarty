@@ -49,13 +49,12 @@ public class LobbyScreenManager : MonoBehaviour {
             if (LP.PlayerID == 1) { LobbyPlayer1 = LP; }
             else if (LP.PlayerID == 2) { LobbyPlayer2 = LP; }
         }
-
+        LevelManager.DecidePlayersTypes(LobbyPlayer1.PT, LobbyPlayer2.PT);
 
         if (LobbyPlayer1 != null && LobbyPlayer2 != null)
         {
             if (LobbyPlayer1.Ready && LobbyPlayer2.Ready)
             {
-                LevelManager.DecidePlayersTypes(LobbyPlayer1.PT, LobbyPlayer2.PT);
                 MyNetworkManager.CheckReadyToBegin();
             }
         }
