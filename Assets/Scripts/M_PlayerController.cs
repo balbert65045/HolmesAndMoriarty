@@ -50,6 +50,11 @@ public class M_PlayerController : Player {
         {
             Debug.Log("Server Acting");
             RpcSetPlayer(MyPlayerType);
+            if (isLocalPlayer)
+            {
+                Debug.Log("This is the server player");
+                FindObjectOfType<M_gameManager>().setPlayer(this);
+            }
         }
 
     }
