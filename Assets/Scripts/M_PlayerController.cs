@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
-public class M_PlayerController : Player {
+public class M_PlayerController : M_Player {
 
     // Use this for initialization
     public int HolmesTilesToPlace = 0;
