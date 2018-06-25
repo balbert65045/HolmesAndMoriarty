@@ -41,9 +41,12 @@ public class LobbyPlayer : NetworkBehaviour {
 
         if (!isLocalPlayer)
         {
-            LocalPlayer = true;
             playerDropdown.interactable = false;
             ReadyToggle.interactable = false;
+        }
+        else
+        {
+            LocalPlayer = true;
         }
     }
     
