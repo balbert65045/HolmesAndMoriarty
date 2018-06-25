@@ -19,7 +19,7 @@ public class LobbyPlayer : NetworkBehaviour {
     public Dropdown playerDropdown;
     public Toggle ReadyToggle;
     public LobbyScreenManager Lobby;
-
+    public bool LocalPlayer = false;
     string PlayerName;
 
     // Use this for initialization
@@ -41,6 +41,7 @@ public class LobbyPlayer : NetworkBehaviour {
 
         if (!isLocalPlayer)
         {
+            LocalPlayer = true;
             playerDropdown.interactable = false;
             ReadyToggle.interactable = false;
         }
