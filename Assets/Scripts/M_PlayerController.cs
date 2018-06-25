@@ -26,7 +26,7 @@ public class M_PlayerController : Player {
     bool b_EnableSwapClueCards = false;
     public bool isTheLocalPlayer = false;
 
-    public GameObject LinkedLobbyPlayer;
+    GameObject LinkedLobbyPlayer;
 
 
     void Start() {
@@ -77,7 +77,12 @@ public class M_PlayerController : Player {
     {
         Debug.Log("RPC Happening");
         LinkedLobbyPlayer = LP;
-        if (LP.GetComponent<LobbyPlayer>().LocalPlayer) { isTheLocalPlayer = true; }
+        if (LP.GetComponent<LobbyPlayer>().LocalPlayer) {
+            isTheLocalPlayer = true;
+            this.transform.SetParent(FindObjectOfType<myPlayer>().transform);
+        }
+        else { this.transform.SetParent(FindObjectOfType<myOponnent>().transform); }
+        transform.localPosition = Vector3.zero;
         MyPlayerType = PT;
         FindObjectOfType<M_gameManager>().setPlayer(this);
     }
