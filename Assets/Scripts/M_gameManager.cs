@@ -32,9 +32,9 @@ public class M_gameManager : MonoBehaviour {
 
     CaseArea caseArea;
 
-    Player[] Players;
-    public Player HolmesPlayer;
-    public Player MoriartyPlayer;
+    M_Player[] Players;
+    public M_Player HolmesPlayer;
+    public M_Player MoriartyPlayer;
 
     public ClueDeck cardDeck;
 
@@ -118,7 +118,7 @@ public class M_gameManager : MonoBehaviour {
        
     }
 
-    public void setPlayer(Player P)
+    public void setPlayer(M_Player P)
     {
         if (P.MyPlayerType == PlayerType.Holmes)
         {
