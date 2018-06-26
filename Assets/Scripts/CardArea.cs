@@ -5,6 +5,9 @@ using UnityEngine;
 public class CardArea : MonoBehaviour {
 
     // Use this for initialization
+    public enum CardAreaType { Player, Opponent}
+    public CardAreaType ThisCardAreaType;
+
     public enum Row { Clue, Crime }
     public Row ThisRow;
     public Player PlayerAttached;

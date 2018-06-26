@@ -261,28 +261,31 @@ public class M_PlayerController : M_Player {
         CardArea[] CardAreas = FindObjectsOfType<CardArea>();
         foreach (CardArea CA in CardAreas)
         {
-            switch (CA.ThisRow)
+            if (CA.ThisCardAreaType == CardArea.CardAreaType.Player)
             {
-                case CardArea.Row.Crime:
-                    if (CA.CheckForAvailableSpace(gamemanager.CurrentCaseOn))
-                    {
-                        CrimeAreaActive = true;
-                    }
-                    else
-                    {
-                        CrimeAreaActive = false;
-                    }
-                    break;
-                case CardArea.Row.Clue:
-                    if (CA.CheckForAvailableSpace(gamemanager.CurrentCaseOn))
-                    {
-                        ClueAreaActive = true;
-                    }
-                    else
-                    {
-                        ClueAreaActive = false;
-                    }
-                    break;
+                switch (CA.ThisRow)
+                {
+                    case CardArea.Row.Crime:
+                        if (CA.CheckForAvailableSpace(gamemanager.CurrentCaseOn))
+                        {
+                            CrimeAreaActive = true;
+                        }
+                        else
+                        {
+                            CrimeAreaActive = false;
+                        }
+                        break;
+                    case CardArea.Row.Clue:
+                        if (CA.CheckForAvailableSpace(gamemanager.CurrentCaseOn))
+                        {
+                            ClueAreaActive = true;
+                        }
+                        else
+                        {
+                            ClueAreaActive = false;
+                        }
+                        break;
+                }
             }
         }
     }
@@ -316,7 +319,7 @@ public class M_PlayerController : M_Player {
             {
                 if (Physics.Raycast(ray, out Hit))
                 {
-                    if (Hit.transform.GetComponent<ClueCard>() && Hit.transform.GetComponentInParent<CardArea>() &&
+                    if (Hit.transform.GetComponent<ClueCard>() && Hit.transform.GetComponentInParent<CardArea>() && Hit.transform.GetComponentInParent<CardArea>().ThisCardAreaType == CardArea.CardAreaType.Player &&
                         Hit.transform.GetComponentInParent<CardArea>().ThisRow == CardArea.Row.Clue)
                     {
                         ClueCard CardSwapping = Hit.transform.GetComponent<ClueCard>();
@@ -335,7 +338,7 @@ public class M_PlayerController : M_Player {
                 {
                    
                     // check for placing card
-                    if (Hit.transform.GetComponent<CardArea>())
+                    if (Hit.transform.GetComponent<CardArea>() && Hit.transform.GetComponent<CardArea>().ThisCardAreaType == CardArea.CardAreaType.Player)
                     {
                         //CheckForPlaceCard(Hit.transform);
                         CheckToRemoveCardOrPlaceDown();
@@ -408,7 +411,7 @@ public class M_PlayerController : M_Player {
     void CheckForPlaceCard(Transform HitTransform)
     {
         
-        if (HitTransform.GetComponent<CardArea>().CheckForAvailableSpace(gamemanager.CurrentCaseOn))
+        if (HitTransform.GetComponent<CardArea>().ThisCardAreaType == CardArea.CardAreaType.Player && HitTransform.GetComponent<CardArea>().CheckForAvailableSpace(gamemanager.CurrentCaseOn))
         {
             // Moving from another row area
             if (SelectedCard.GetComponentInParent<RowAreaPosition>() != null)
@@ -465,7 +468,7 @@ public class M_PlayerController : M_Player {
             UnselectCard();
         }
         // if in clue or crime area
-        if (card.GetComponentInParent<CardArea>() != null)
+        if (card.GetComponentInParent<CardArea>() != null && card.GetComponentInParent<CardArea>().ThisCardAreaType == CardArea.CardAreaType.Player)
         {
             if (card.GetComponentInParent<RowAreaPosition>().Case == gamemanager.CurrentCaseOn && !b_EnableSwapClueCards)
             {

@@ -703,9 +703,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 68343087}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a2fe5a953fccffe42aa2058dd9b7487f, type: 3}
+  m_Script: {fileID: 11500000, guid: 8c23f39f3d721e14f9361f3a6925b272, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ThisCardAreaType: 1
   ThisRow: 0
   PlayerAttached: {fileID: 0}
   Positions: []
@@ -7146,9 +7147,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1106221310}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a2fe5a953fccffe42aa2058dd9b7487f, type: 3}
+  m_Script: {fileID: 11500000, guid: 8c23f39f3d721e14f9361f3a6925b272, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ThisCardAreaType: 1
   ThisRow: 1
   PlayerAttached: {fileID: 0}
   Positions: []
@@ -9184,6 +9186,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c23f39f3d721e14f9361f3a6925b272, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ThisCardAreaType: 0
   ThisRow: 1
   PlayerAttached: {fileID: 0}
   Positions: []
@@ -9302,6 +9305,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c23f39f3d721e14f9361f3a6925b272, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ThisCardAreaType: 0
   ThisRow: 0
   PlayerAttached: {fileID: 0}
   Positions: []
