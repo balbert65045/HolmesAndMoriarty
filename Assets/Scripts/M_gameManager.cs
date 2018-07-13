@@ -36,7 +36,7 @@ public class M_gameManager : MonoBehaviour {
     public M_Player HolmesPlayer;
     public M_Player MoriartyPlayer;
 
-    public ClueDeck cardDeck;
+    public M_ClueDeck cardDeck;
 
     public List<ClueCard> HolmesCards = new List<ClueCard>();
     public List<ClueCard> MoriartyCards = new List<ClueCard>();

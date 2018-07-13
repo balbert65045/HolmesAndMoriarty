@@ -53,7 +53,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4328975900018208}
-  - component: {fileID: 114506497475969114}
+  - component: {fileID: 114004462556247742}
   m_Layer: 0
   m_Name: Hand
   m_TagString: Untagged
@@ -421,6 +421,27 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &114004462556247742
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1200880137171444}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9956446377d44404baeea534d2863ae1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CardPositions:
+  - {fileID: 4559058798019146}
+  - {fileID: 4629516543995342}
+  - {fileID: 4628037065503144}
+  - {fileID: 4682580323643920}
+  - {fileID: 4117499196748160}
+  - {fileID: 4974563510580704}
+  - {fileID: 4252151235830870}
+  CurrentSortMethod: 0
+  CardsHolding: []
 --- !u!114 &114278729053416272
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -444,27 +465,7 @@ MonoBehaviour:
     m_Bits: 512
   ClueAreaActive: 0
   CrimeAreaActive: 0
---- !u!114 &114506497475969114
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1200880137171444}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9c36efa838146da41b35484366557baa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CardPositions:
-  - {fileID: 4559058798019146}
-  - {fileID: 4629516543995342}
-  - {fileID: 4628037065503144}
-  - {fileID: 4682580323643920}
-  - {fileID: 4117499196748160}
-  - {fileID: 4974563510580704}
-  - {fileID: 4252151235830870}
-  CurrentSortMethod: 0
-  CardsHolding: []
+  isTheLocalPlayer: 0
 --- !u!114 &114667527419242680
 MonoBehaviour:
   m_ObjectHideFlags: 1

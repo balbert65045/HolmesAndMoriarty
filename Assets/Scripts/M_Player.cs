@@ -13,16 +13,18 @@ public class M_Player : NetworkBehaviour {
         return _CardHand.GetCardsHolding();
     }
 
-    private ClueDeck _CardDeck;
-    private CardHand _CardHand;
+    private M_ClueDeck _CardDeck;
+    private M_CardHand _CardHand;
 
     public Transform CardSpot;
+
+    public bool isTheLocalPlayer = false;
 
     void Awake () {
         
 
-        _CardDeck = FindObjectOfType<ClueDeck>();
-        _CardHand = GetComponentInChildren<CardHand>();
+        _CardDeck = FindObjectOfType<M_ClueDeck>();
+        _CardHand = GetComponentInChildren<M_CardHand>();
         SetupPlayer();
     }
 	
@@ -64,25 +66,36 @@ public class M_Player : NetworkBehaviour {
     // Draw Cards
     public void DrawCards(int Number)
     {
+        _CardDeck = FindObjectOfType<M_ClueDeck>();
+        if (!isTheLocalPlayer) { return; }
         IEnumerator DrawCard = DrawingCards(Number);
         StartCoroutine(DrawCard);
     }
 
     IEnumerator DrawingCards(int Number)
     {
-        List<ClueCard> cards = new List<ClueCard>();
-        for (int i = 0; i < Number; i++)
-        {
-            //yield return new WaitForSeconds(.2f);
-            //ClueCard cardDrawn = _CardDeck.DrawCard() as ClueCard;
-            //_CardHand.AddCard(cardDrawn, 0);
-            ClueCard cardDrawn = _CardDeck.DrawCard() as ClueCard;
-            cards.Add(cardDrawn);
-            if (transform.GetComponentInParent<myPlayer>() != null) { cardDrawn.transform.localRotation = Quaternion.Euler(new Vector3(-90, 0, 0)); }
-        }
-        _CardHand.AddCards(cards, 0);
+        CmdDrawCard(Number);
         yield return null;
     }
+
+    [Command]
+    void CmdDrawCard(int Number)
+    {
+        for (int i = 0; i < Number; i++)
+        {
+            int CardIndex =_CardDeck.SetCard();
+            RpcDrawCard(CardIndex);
+        }
+    }
+
+    [ClientRpc]
+    void RpcDrawCard(int CardIndex)
+    {
+        ClueCard cardDrawn = _CardDeck.GetandRemoveCard(CardIndex) as ClueCard;
+        if (transform.GetComponentInParent<myPlayer>() != null) { cardDrawn.transform.localRotation = Quaternion.Euler(new Vector3(-90, 0, 0)); }
+        _CardHand.AddCard(cardDrawn, 0);
+    }
+
 
     public void RemoveAllCards()
     {

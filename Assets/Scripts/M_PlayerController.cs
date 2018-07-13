@@ -12,8 +12,8 @@ public class M_PlayerController : M_Player {
     public bool ClueAreaActive = true;
     public bool CrimeAreaActive = true;
 
-    CardHand cardHand;
-    gameManager gamemanager;
+    M_CardHand cardHand;
+    M_gameManager gamemanager;
     ClueCard SelectedCard;
     Vector3 SelectedCardOriginalPosition;
     TileArea tileArea;
@@ -24,7 +24,6 @@ public class M_PlayerController : M_Player {
     EndTurnButton endTurnButton;
     int MoriartyTilesToPlace = 0;
     bool b_EnableSwapClueCards = false;
-    public bool isTheLocalPlayer = false;
 
     GameObject LinkedLobbyPlayer;
 
@@ -33,19 +32,22 @@ public class M_PlayerController : M_Player {
         ClueAreaActive = true;
         CrimeAreaActive = true;
         tileArea = FindObjectOfType<TileArea>();
-        gamemanager = FindObjectOfType<gameManager>();
+        gamemanager = FindObjectOfType<M_gameManager>();
         endTurnButton = FindObjectOfType<EndTurnButton>();
-        cardHand = GetComponentInChildren<CardHand>();
+        cardHand = GetComponentInChildren<M_CardHand>();
         CardArea[] CardAreas = FindObjectsOfType<CardArea>();
         foreach (CardArea carda in CardAreas)
         {
-            if (carda.ThisRow == CardArea.Row.Clue)
+            if (carda.ThisCardAreaType == CardArea.CardAreaType.Player)
             {
-                ClueArea = carda;
-            }
-            else if (carda.ThisRow == CardArea.Row.Crime)
-            {
-                CrimeArea = carda;
+                if (carda.ThisRow == CardArea.Row.Clue)
+                {
+                    ClueArea = carda;
+                }
+                else if (carda.ThisRow == CardArea.Row.Crime)
+                {
+                    CrimeArea = carda;
+                }
             }
         }
         StartCoroutine("SetPlayers");
@@ -146,9 +148,9 @@ public class M_PlayerController : M_Player {
     public void PlayerEndTurn()
     {
         gamemanager.PlayerEndTurn(MyPlayerType);
-        if (gamemanager.CurrentTurnStatus == gameManager.TurnStatus.SwitchClueCards) { }
-        else if (gamemanager.CurrentTurnStatus == gameManager.TurnStatus.BoardInspect) { }
-        else if ((gamemanager.CurrentTurnStatus == gameManager.TurnStatus.PickTileHolmes || gamemanager.CurrentTurnStatus == gameManager.TurnStatus.PickTileMoriarty) &&
+        if (gamemanager.CurrentTurnStatus == M_gameManager.TurnStatus.SwitchClueCards) { }
+        else if (gamemanager.CurrentTurnStatus == M_gameManager.TurnStatus.BoardInspect) { }
+        else if ((gamemanager.CurrentTurnStatus == M_gameManager.TurnStatus.PickTileHolmes || gamemanager.CurrentTurnStatus == M_gameManager.TurnStatus.PickTileMoriarty) &&
             MyPlayerType == PlayerType.Moriarty) { }
         else
         {
@@ -158,10 +160,11 @@ public class M_PlayerController : M_Player {
 
     // Update is called once per frame
     void Update() {
-
+        if (!isTheLocalPlayer) { return; }
         // On Mouse/Finger up 
         if (Input.GetMouseButtonUp(0))
         {
+            Debug.Log("Mouse up");
             Remove_Unselect_PlaceDownCard();
         }
         // On Mouse/finger pressed Down 
@@ -210,8 +213,8 @@ public class M_PlayerController : M_Player {
 
     public void CheckEndTurn()
     {
-        if (gamemanager.CurrentTurnStatus == gameManager.TurnStatus.Turn1 || gamemanager.CurrentTurnStatus == gameManager.TurnStatus.Turn2 
-            || gamemanager.CurrentTurnStatus == gameManager.TurnStatus.Turn3)
+        if (gamemanager.CurrentTurnStatus == M_gameManager.TurnStatus.Turn1 || gamemanager.CurrentTurnStatus == M_gameManager.TurnStatus.Turn2 
+            || gamemanager.CurrentTurnStatus == M_gameManager.TurnStatus.Turn3)
             {
                 if (!ClueArea.CheckForAvailableSpace(gamemanager.CurrentCaseOn) && !CrimeArea.CheckForAvailableSpace(gamemanager.CurrentCaseOn))
                 {
@@ -222,7 +225,7 @@ public class M_PlayerController : M_Player {
                     endTurnButton.DisableEndTurn();
                 }
             }
-        else if (gamemanager.CurrentTurnStatus == gameManager.TurnStatus.PickTileHolmes)
+        else if (gamemanager.CurrentTurnStatus == M_gameManager.TurnStatus.PickTileHolmes)
         {
             if (HolmesTilesToPlace == 0)
             {
@@ -238,7 +241,7 @@ public class M_PlayerController : M_Player {
                 endTurnButton.DisableEndTurn();
             }
         }
-        else if( gamemanager.CurrentTurnStatus == gameManager.TurnStatus.PickTileMoriarty)
+        else if( gamemanager.CurrentTurnStatus == M_gameManager.TurnStatus.PickTileMoriarty)
         {
             if (MoriartyTilesToPlace == 0)
             {
@@ -373,7 +376,6 @@ public class M_PlayerController : M_Player {
 
     void CheckToRemoveCardOrPlaceDown()
     {
-
         if (SelectedCard.GetComponentInParent<RowAreaPosition>() != null)
         {
             SelectedCard.GetComponentInParent<CardArea>().RemoveCard(SelectedCard);
@@ -383,23 +385,27 @@ public class M_PlayerController : M_Player {
         }
         else
         {
+            Debug.Log("Placing Card");
             CardArea[] CardAreas = FindObjectsOfType<CardArea>();
             foreach (CardArea CA in CardAreas)
             {
-                if (CrimeAreaActive)
+                if (CA.ThisCardAreaType == CardArea.CardAreaType.Player)
                 {
-                    if (CA.ThisRow == CardArea.Row.Crime)
+                    if (CrimeAreaActive)
                     {
-                        CheckForPlaceCard(CA.transform);
-                        return;
+                        if (CA.ThisRow == CardArea.Row.Crime)
+                        {
+                            CheckForPlaceCard(CA.transform);
+                            return;
+                        }
                     }
-                }
-                else if (ClueAreaActive)
-                {
-                    if (CA.ThisRow == CardArea.Row.Clue)
+                    else if (ClueAreaActive)
                     {
-                        CheckForPlaceCard(CA.transform);
-                        return;
+                        if (CA.ThisRow == CardArea.Row.Clue)
+                        {
+                            CheckForPlaceCard(CA.transform);
+                            return;
+                        }
                     }
                 }
             }
@@ -422,12 +428,46 @@ public class M_PlayerController : M_Player {
             // Moving card from hand
             else
             {
-                GetComponentInChildren<CardHand>().RemoveCard(SelectedCard);
-                HitTransform.GetComponent<CardArea>().PlaceCard(SelectedCard, gamemanager.CurrentCaseOn);
+                // CANT pass data through server like that find another way 
+                Debug.Log("Begin Moving Card");
+                int CardPosition = cardHand.GetCardPosition(SelectedCard);
+                int RowValue = (int)HitTransform.GetComponent<CardArea>().ThisRow;
+                CmdPlaceCard(RowValue, CardPosition);
+                // DO a command and RPC that places the card out of hand and into a card area dependent on if they are player or opponent
+                //GetComponentInChildren<M_CardHand>().RemoveCard(SelectedCard);
+                //HitTransform.GetComponent<CardArea>().PlaceCard(SelectedCard, gamemanager.CurrentCaseOn);
+                //   CmdPlaceCard(HitTransform.GetComponent<CardArea>().ThisRow, SelectedCard);
+
             }
             return;  
         }
         SelectedCard.transform.position = SelectedCardOriginalPosition;
+    }
+
+    [Command]
+    public void CmdPlaceCard(int RowValue, int CardPos)
+    {
+        RpcPlaceCard(RowValue, CardPos);
+    }
+
+    [ClientRpc]
+    public void RpcPlaceCard(int RowValue, int CardPos)
+    {
+        Debug.Log("RPC Moving Card");
+        ClueCard cardSelected = 
+        GetComponentInChildren<M_CardHand>().GetCardFromPosition(CardPos);
+        CardArea[] CardAreas = FindObjectsOfType<CardArea>();
+        foreach (CardArea CA in CardAreas)
+        {
+            if (GetComponentInParent<myOponnent>())
+            {
+                if (CA.ThisCardAreaType == CardArea.CardAreaType.Opponent && (int)CA.ThisRow == RowValue) { CA.PlaceCard(cardSelected, gamemanager.CurrentCaseOn); }
+            }
+            else if (GetComponentInParent<myPlayer>())
+            {
+                if (CA.ThisCardAreaType == CardArea.CardAreaType.Player && (int)CA.ThisRow == RowValue) { CA.PlaceCard(cardSelected, gamemanager.CurrentCaseOn); }
+            }
+        }
     }
 
     void CheckToPlaceDownTile(Transform HitTransform)
@@ -481,7 +521,7 @@ public class M_PlayerController : M_Player {
             return;
         }
         // if in hand
-        else if (card.GetComponentInParent<CardHand>() && !b_EnableSwapClueCards)
+        else if (card.GetComponentInParent<M_CardHand>() && !b_EnableSwapClueCards)
         {
             SelectCard(card);
         }

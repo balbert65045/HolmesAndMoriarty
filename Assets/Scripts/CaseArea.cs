@@ -27,15 +27,16 @@ public class CaseArea : MonoBehaviour {
 
     public void PlaceCards()
     {
-        for (int i = 0; i < Positions.Length; i++)
-        {
-            Card cardDrawn = caseDeck.DrawCard();
-            if (!Positions[i].GetComponentInChildren<CaseCard>())
-            {
-                GameObject card = Instantiate(cardDrawn.gameObject, Positions[i]);
-                card.transform.localRotation = Quaternion.Euler(new Vector3(0, 0, 0));
-            }
-        }
+        //caseDeck = FindObjectOfType<CaseDeck>();
+        //for (int i = 0; i < Positions.Length; i++)
+        //{
+        //    Card cardDrawn = caseDeck.DrawCard();
+        //    if (!Positions[i].GetComponentInChildren<CaseCard>())
+        //    {
+        //        GameObject card = Instantiate(cardDrawn.gameObject, Positions[i]);
+        //        card.transform.localRotation = Quaternion.Euler(new Vector3(0, 0, 0));
+        //    }
+        //}
     }
 
     public void FlipCard(int CaseNumber)
