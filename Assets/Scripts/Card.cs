@@ -4,9 +4,14 @@ using UnityEngine;
 
 public class Card : MonoBehaviour {
 
-    public bool b_Move;
+    bool b_Move = false;
     public Vector3 MovePoint = Vector3.zero;
 
+
+    private void Start()
+    {
+        b_Move = false;
+    }
 
     public void Move(Vector3 MovePosition)
     {

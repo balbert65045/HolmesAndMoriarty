@@ -33,30 +33,17 @@ public class M_CardDeck : NetworkBehaviour {
     }
 
 
-    // Bad time syncing up 
-    // Problems with giving the same card across the server
+// Using a counter to keep track of the Number of cards removed 
     public int SetCard()
     {
-        Debug.Log("Setting Card Index card");
         int CardIndex = Random.Range(0, NumerOfCardsLeft);
         NumerOfCardsLeft--;
-        Debug.Log(CardIndex);
         return (CardIndex);
     }
 
-    //OLD Method maybe still used for Case cards
-    //public Card DrawCard()
-    //{
-    //    Debug.Log("Grabbing card");
-    //    int CardIndex = Random.Range(0, CardsInDeck.Count);
-    //    Card card = CardsInDeck[CardIndex];
-    //    return (card);
-    //}
 
     public Card GetandRemoveCard(int index)
     {
-        Debug.Log("Grabbing by index card");
-        Debug.Log(index);
         Card card = CardsInDeck[index];
         CardsInDeck.Remove(CardsInDeck[index]); 
         return (card);
@@ -64,21 +51,6 @@ public class M_CardDeck : NetworkBehaviour {
 
 
 
-    //[Command]
-    //public void CmdDrawCard()
-    //{
-    //    Debug.Log("CMD drawiing card");
-    //    int RandomCardIndex = Random.Range(0, CardsInDeck.Count);
-    //    RpcDrawCard(RandomCardIndex);
-    //}
-
-    //[ClientRpc]
-    //public void RpcDrawCard(int CardIndex)
-    //{
-    //    Debug.Log("RPC Setting card");
-    //    CardDrawn = CardsInDeck[CardIndex];
-    //    Draw = true;
-    //}
 
     public ClueCard FindCardInDeck(ClueCard card)
     {
