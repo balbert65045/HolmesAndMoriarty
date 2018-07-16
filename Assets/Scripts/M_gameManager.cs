@@ -30,7 +30,7 @@ public class M_gameManager : MonoBehaviour {
     AICardArea ACrimeArea;
     AICardArea AClueArea;
 
-    CaseArea caseArea;
+    M_CaseArea caseArea;
 
     M_Player[] Players;
     public M_Player HolmesPlayer;
@@ -69,7 +69,7 @@ public class M_gameManager : MonoBehaviour {
         ShowAreaText.SetActive(false);
         turnManager = FindObjectOfType<TurnManager>();
         tileArea = FindObjectOfType<TileArea>();
-        caseArea = FindObjectOfType<CaseArea>();
+        caseArea = FindObjectOfType<M_CaseArea>();
 
         foreach (GameObject obj in SwapButtonsObj)
         {
@@ -136,6 +136,7 @@ public class M_gameManager : MonoBehaviour {
 	
     IEnumerator PlayersDrawCards()
     {
+        caseArea = FindObjectOfType<M_CaseArea>();
         yield return new WaitForSeconds(1.5f);
         HolmesPlayer.DrawCards(7);
         MoriartyPlayer.DrawCards(7);

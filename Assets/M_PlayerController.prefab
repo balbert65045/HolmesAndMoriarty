@@ -456,6 +456,7 @@ MonoBehaviour:
   MyPlayerType: 0
   HolmesCaseCardsWon: []
   CardSpot: {fileID: 0}
+  isTheLocalPlayer: 0
   HolmesTilesToPlace: 0
   BoardLayer:
     serializedVersion: 2
@@ -465,7 +466,6 @@ MonoBehaviour:
     m_Bits: 512
   ClueAreaActive: 0
   CrimeAreaActive: 0
-  isTheLocalPlayer: 0
 --- !u!114 &114667527419242680
 MonoBehaviour:
   m_ObjectHideFlags: 1

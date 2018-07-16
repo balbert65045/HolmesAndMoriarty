@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class SortButton : MonoBehaviour {
+public class M_SortButton : NetworkBehaviour {
 
     public GameObject NumberSortIndicator;
     public GameObject ColorSortIndicator;
@@ -15,7 +16,13 @@ public class SortButton : MonoBehaviour {
 	
 	public void Toggle()
     {
-
+        myPlayer player = FindObjectOfType<myPlayer>();
+        Debug.Log(player);
+        M_PlayerController Controller = player.GetComponentInChildren<M_PlayerController>();
+        Debug.Log(Controller);
+        M_CardHand hand = Controller.GetComponentInChildren<M_CardHand>();
+        Debug.Log(hand);
+        Controller.SortCardsToggle();
         if (ColorSortIndicator.activeSelf)
         {
             NumberSortIndicator.SetActive(true);

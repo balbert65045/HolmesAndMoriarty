@@ -43,6 +43,8 @@ public class M_CardHand : MonoBehaviour {
         return null;
     }
 
+
+    //Use Network to sort 
     public void ToggleSort()
     {
         switch (CurrentSortMethod)
@@ -54,9 +56,11 @@ public class M_CardHand : MonoBehaviour {
                 CurrentSortMethod = SortMethod.NumberSort;
                 break;
         }
-        Sort(FindObjectOfType<gameManager>().CurrentCaseOn - 1);
+        Sort(FindObjectOfType<M_gameManager>().CurrentCaseOn - 1);
         PutCardsInPlace();
     }
+
+
 
     private void Sort(int StartingPosition)
     {

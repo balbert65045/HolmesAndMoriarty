@@ -95,7 +95,7 @@ public class LobbyPlayer : NetworkBehaviour {
         ReadyToggle.isOn = Value;
         Ready = Value;
         GetComponent<NetworkLobbyPlayer>().readyToBegin = Value;
-        Lobby.CheckifAllReady();
+        if (isServer) { Lobby.CheckifAllReady(); }
     }
 
     public void ValueChanged()

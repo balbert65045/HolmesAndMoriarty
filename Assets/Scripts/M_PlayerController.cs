@@ -70,6 +70,7 @@ public class M_PlayerController : M_Player {
     {
         LinkedLobbyPlayer = LP.gameObject;
         Debug.Log("Player being set");
+        Debug.Log(PT);
         MyPlayerType = PT;
     }
 
@@ -79,6 +80,8 @@ public class M_PlayerController : M_Player {
     {
         Debug.Log("RPC Happening");
         LinkedLobbyPlayer = LP;
+        Debug.Log(LP);
+        Debug.Log(PT);
         if (LP.GetComponent<LobbyPlayer>().LocalPlayer) {
             isTheLocalPlayer = true;
             this.transform.SetParent(FindObjectOfType<myPlayer>().transform);
@@ -378,8 +381,10 @@ public class M_PlayerController : M_Player {
     {
         if (SelectedCard.GetComponentInParent<RowAreaPosition>() != null)
         {
-            SelectedCard.GetComponentInParent<CardArea>().RemoveCard(SelectedCard);
-            cardHand.AddCard(SelectedCard, gamemanager.CurrentCaseOn - 1);
+            //SelectedCard.GetComponentInParent<CardArea>().RemoveCard(SelectedCard);
+            //cardHand.AddCard(SelectedCard, gamemanager.CurrentCaseOn - 1);
+            int RowValue = (int)SelectedCard.GetComponentInParent<CardArea>().ThisRow;
+            CmdRemoveCard(RowValue);
             SelectedCard.transform.position = SelectedCardOriginalPosition;
             return;
         }
@@ -454,21 +459,54 @@ public class M_PlayerController : M_Player {
     public void RpcPlaceCard(int RowValue, int CardPos)
     {
         Debug.Log("RPC Moving Card");
-        ClueCard cardSelected = 
-        GetComponentInChildren<M_CardHand>().GetCardFromPosition(CardPos);
+        ClueCard cardSelected = GetComponentInChildren<M_CardHand>().GetCardFromPosition(CardPos);
         CardArea[] CardAreas = FindObjectsOfType<CardArea>();
         foreach (CardArea CA in CardAreas)
         {
             if (GetComponentInParent<myOponnent>())
             {
-                if (CA.ThisCardAreaType == CardArea.CardAreaType.Opponent && (int)CA.ThisRow == RowValue) { CA.PlaceCard(cardSelected, gamemanager.CurrentCaseOn); }
+                if (CA.ThisCardAreaType == CardArea.CardAreaType.Opponent && (int)CA.ThisRow == RowValue) { CA.PlaceCardDown(cardSelected, gamemanager.CurrentCaseOn); }
             }
             else if (GetComponentInParent<myPlayer>())
             {
-                if (CA.ThisCardAreaType == CardArea.CardAreaType.Player && (int)CA.ThisRow == RowValue) { CA.PlaceCard(cardSelected, gamemanager.CurrentCaseOn); }
+                if (CA.ThisCardAreaType == CardArea.CardAreaType.Player && (int)CA.ThisRow == RowValue) { CA.PlaceCardUp(cardSelected, gamemanager.CurrentCaseOn); }
             }
         }
     }
+
+    [Command]
+    void CmdRemoveCard(int RowValue)
+    {
+        RpcRemoveCard(RowValue);
+    }
+
+    [ClientRpc]
+    void RpcRemoveCard(int RowValue)
+    {
+        CardArea[] CardAreas = FindObjectsOfType<CardArea>();
+        foreach (CardArea CA in CardAreas)
+        {
+            if (GetComponentInParent<myOponnent>())
+            {
+                if (CA.ThisCardAreaType == CardArea.CardAreaType.Opponent && (int)CA.ThisRow == RowValue)
+                {
+                   ClueCard card = CA.GetCard(gamemanager.CurrentCaseOn);
+                    CA.RemoveCard(card);
+                    cardHand.AddCard(card, gamemanager.CurrentCaseOn - 1);
+                }
+            }
+            else if (GetComponentInParent<myPlayer>())
+            {
+                if (CA.ThisCardAreaType == CardArea.CardAreaType.Player && (int)CA.ThisRow == RowValue)
+                {
+                    ClueCard card = CA.GetCard(gamemanager.CurrentCaseOn);
+                    CA.RemoveCard(card);
+                    cardHand.AddCard(card, gamemanager.CurrentCaseOn - 1);
+                }
+            }
+        }
+    }
+
 
     void CheckToPlaceDownTile(Transform HitTransform)
     {
@@ -557,4 +595,24 @@ public class M_PlayerController : M_Player {
             SelectedCardOriginalPosition = Vector3.zero;
         }
     }
+
+    public void SortCardsToggle()
+    {
+        CmdToggleSort();
+    }
+
+    [Command]
+    void CmdToggleSort()
+    {
+        RpcToggleSort();
+    }
+
+    [ClientRpc]
+    void RpcToggleSort()
+    {
+        Debug.Log("Sorting hand");
+        cardHand.ToggleSort();
+    }
+
+
 }

@@ -71,6 +71,14 @@ public class CardArea : MonoBehaviour {
         return false;
     }
 
+    public int GetCardPosition(ClueCard card)
+    {
+        for (int i = 0; i < Positions.Length; i++)
+        {
+            if (GetCard(i+1) == card) { return i+1; }
+        }
+        return -1;
+    }
 
     public void RemoveCard(ClueCard card)
     {
@@ -100,6 +108,36 @@ public class CardArea : MonoBehaviour {
             }
         }
     }
+
+    public void PlaceCardUp(ClueCard card, int CaseN)
+    {
+        // simply placing it in position one for now 
+        card.transform.SetParent(Positions[CaseN - 1].transform);
+        card.transform.position = Positions[CaseN - 1].transform.position;
+        card.transform.rotation = Positions[CaseN - 1].transform.rotation;
+        float y = card.transform.localRotation.eulerAngles.y + 180;
+        float z = card.transform.localRotation.eulerAngles.z + 180;
+        card.transform.localRotation = Quaternion.Euler(0, y, z);
+        card.transform.localScale = new Vector3(.7f, .246f, .07f);
+        Positions[CaseN - 1].InUse = true;
+
+    }
+
+    public void PlaceCardDown(ClueCard card, int CaseN)
+    {
+        // simply placing it in position one for now 
+        card.transform.SetParent(Positions[CaseN - 1].transform);
+        card.transform.position = Positions[CaseN - 1].transform.position;
+        card.transform.rotation = Positions[CaseN - 1].transform.rotation;
+        float y = card.transform.localRotation.eulerAngles.y;
+        float z = card.transform.localRotation.eulerAngles.z;
+        card.transform.localRotation = Quaternion.Euler(0, y, z);
+        card.transform.localScale = new Vector3(.7f, .246f, .07f);
+        Positions[CaseN - 1].InUse = true;
+
+    }
+
+
 
 
     public void PlaceCard(ClueCard card, int CaseN)

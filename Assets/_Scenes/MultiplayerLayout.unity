@@ -542,6 +542,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 63865738}
+  - component: {fileID: 63865740}
   - component: {fileID: 63865739}
   m_Layer: 0
   m_Name: CaseArea
@@ -573,7 +574,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 63865737}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 18a0f89f734d0d549a3751d39cabc01a, type: 3}
+  m_Script: {fileID: 11500000, guid: d80bb9f6e3e25a942a1ef9c1a3ec4cc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Positions:
@@ -584,6 +585,38 @@ MonoBehaviour:
   - {fileID: 13303628}
   - {fileID: 1078733632}
   - {fileID: 2084089413}
+--- !u!114 &63865740
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 63865737}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 0
+    i1: 0
+    i2: 0
+    i3: 0
+    i4: 0
+    i5: 0
+    i6: 0
+    i7: 0
+    i8: 0
+    i9: 0
+    i10: 0
+    i11: 0
+    i12: 0
+    i13: 0
+    i14: 0
+    i15: 0
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 0
 --- !u!1 &65100208
 GameObject:
   m_ObjectHideFlags: 0
@@ -5933,6 +5966,7 @@ GameObject:
   - component: {fileID: 912164863}
   - component: {fileID: 912164862}
   - component: {fileID: 912164861}
+  - component: {fileID: 912164865}
   - component: {fileID: 912164864}
   m_Layer: 5
   m_Name: SortButton
@@ -6000,17 +6034,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_MethodName: ToggleSort
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
       - m_Target: {fileID: 912164864}
         m_MethodName: Toggle
         m_Mode: 1
@@ -6065,11 +6088,43 @@ MonoBehaviour:
   m_GameObject: {fileID: 912164859}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4342f90327095484d8c2ac34c9899bfc, type: 3}
+  m_Script: {fileID: 11500000, guid: 3c255feae6fabfd48ad64dc032fac294, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   NumberSortIndicator: {fileID: 919825221}
   ColorSortIndicator: {fileID: 888922425}
+--- !u!114 &912164865
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 912164859}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 0
+    i1: 0
+    i2: 0
+    i3: 0
+    i4: 0
+    i5: 0
+    i6: 0
+    i7: 0
+    i8: 0
+    i9: 0
+    i10: 0
+    i11: 0
+    i12: 0
+    i13: 0
+    i14: 0
+    i15: 0
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 0
 --- !u!1 &919825221
 GameObject:
   m_ObjectHideFlags: 0
@@ -7449,7 +7504,7 @@ MonoBehaviour:
   - {fileID: 114590031335966094, guid: 75bab6b4551ca7246bdcda551fa2fb66, type: 2}
   - {fileID: 114860799559661274, guid: 4b6553c79894aae4dbfedc79532b5525, type: 2}
   InitialCards: []
-  CardIndex: 0
+  NumerOfCardsLeft: 0
 --- !u!4 &1128602267
 Transform:
   m_ObjectHideFlags: 0
@@ -8009,7 +8064,7 @@ MonoBehaviour:
   - {fileID: 1154346004}
   - {fileID: 82102677}
   InitialCards: []
-  CardIndex: 0
+  NumerOfCardsLeft: 0
 --- !u!4 &1160658106
 Transform:
   m_ObjectHideFlags: 0
