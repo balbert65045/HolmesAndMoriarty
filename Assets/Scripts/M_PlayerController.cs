@@ -150,7 +150,7 @@ public class M_PlayerController : M_Player {
 
     public void PlayerEndTurn()
     {
-        gamemanager.PlayerEndTurn(MyPlayerType);
+        CmdEndTurn();
         if (gamemanager.CurrentTurnStatus == M_gameManager.TurnStatus.SwitchClueCards) { }
         else if (gamemanager.CurrentTurnStatus == M_gameManager.TurnStatus.BoardInspect) { }
         else if ((gamemanager.CurrentTurnStatus == M_gameManager.TurnStatus.PickTileHolmes || gamemanager.CurrentTurnStatus == M_gameManager.TurnStatus.PickTileMoriarty) &&
@@ -161,13 +161,24 @@ public class M_PlayerController : M_Player {
         }
     }
 
+    [Command]
+    void CmdEndTurn()
+    {
+        RpcEndTurn();
+    }
+
+    [ClientRpc]
+    void RpcEndTurn()
+    {
+        gamemanager.PlayerEndTurn(MyPlayerType);
+    }
+
     // Update is called once per frame
     void Update() {
         if (!isTheLocalPlayer) { return; }
         // On Mouse/Finger up 
         if (Input.GetMouseButtonUp(0))
         {
-            Debug.Log("Mouse up");
             Remove_Unselect_PlaceDownCard();
         }
         // On Mouse/finger pressed Down 
@@ -213,7 +224,7 @@ public class M_PlayerController : M_Player {
         }
     }
 
-
+    //Timing issue!!!??????
     public void CheckEndTurn()
     {
         if (gamemanager.CurrentTurnStatus == M_gameManager.TurnStatus.Turn1 || gamemanager.CurrentTurnStatus == M_gameManager.TurnStatus.Turn2 
@@ -221,11 +232,11 @@ public class M_PlayerController : M_Player {
             {
                 if (!ClueArea.CheckForAvailableSpace(gamemanager.CurrentCaseOn) && !CrimeArea.CheckForAvailableSpace(gamemanager.CurrentCaseOn))
                 {
-                    endTurnButton.EnableEndTurn();
+                endTurnButton.EnableEndTurn();
                 }
                 else
                 {
-                    endTurnButton.DisableEndTurn();
+                endTurnButton.DisableEndTurn();
                 }
             }
         else if (gamemanager.CurrentTurnStatus == M_gameManager.TurnStatus.PickTileHolmes)
@@ -434,7 +445,6 @@ public class M_PlayerController : M_Player {
             else
             {
                 // CANT pass data through server like that find another way 
-                Debug.Log("Begin Moving Card");
                 int CardPosition = cardHand.GetCardPosition(SelectedCard);
                 int RowValue = (int)HitTransform.GetComponent<CardArea>().ThisRow;
                 CmdPlaceCard(RowValue, CardPosition);
@@ -472,6 +482,7 @@ public class M_PlayerController : M_Player {
                 if (CA.ThisCardAreaType == CardArea.CardAreaType.Player && (int)CA.ThisRow == RowValue) { CA.PlaceCardUp(cardSelected, gamemanager.CurrentCaseOn); }
             }
         }
+        CheckEndTurn();
     }
 
     [Command]
