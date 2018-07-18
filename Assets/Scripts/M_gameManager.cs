@@ -25,10 +25,10 @@ public class M_gameManager : MonoBehaviour {
     public int CurrentTurnOn = 1;
     public int CurrentCaseOn = 1;
 
-    CardArea CrimeArea;
-    CardArea ClueArea;
-    AICardArea ACrimeArea;
-    AICardArea AClueArea;
+    CardArea MyPlayerCrimeArea;
+    CardArea MyPlayerClueArea;
+    CardArea MyOpponentCrimeArea;
+    CardArea MyOpponentClueArea;
 
     M_CaseArea caseArea;
 
@@ -76,43 +76,28 @@ public class M_gameManager : MonoBehaviour {
             obj.SetActive(false);
         }
 
-        //Players = FindObjectsOfType<Player>();
-        //foreach (Player player in Players)
-        //{
-        //    switch (player.MyPlayerType)
-        //    {
-        //        case PlayerType.Holmes:
-        //            HolmesPlayer = player;
-        //            break;
-        //        case PlayerType.Moriarty:
-        //            MoriartyPlayer = player;
-        //            break;
-        //    }
-        //}
+       
 
         CardArea[] CardAreas = FindObjectsOfType<CardArea>();
         foreach (CardArea carda in CardAreas)
         {
-            if (carda.ThisRow == CardArea.Row.Clue)
+            if (carda.ThisRow == CardArea.Row.Clue && carda.ThisCardAreaType == CardArea.CardAreaType.Player)
             {
-                ClueArea = carda;
+                MyPlayerClueArea = carda;
             }
-            else if (carda.ThisRow == CardArea.Row.Crime)
+            else if (carda.ThisRow == CardArea.Row.Crime && carda.ThisCardAreaType == CardArea.CardAreaType.Player)
             {
-                CrimeArea = carda;
+                MyPlayerCrimeArea = carda;
             }
-        }
-        AICardArea[] ACardAreas = FindObjectsOfType<AICardArea>();
-        foreach (AICardArea carda in ACardAreas)
-        {
-            if (carda.ThisRow == CardArea.Row.Clue)
+            else if (carda.ThisRow == CardArea.Row.Clue && carda.ThisCardAreaType == CardArea.CardAreaType.Opponent)
             {
-                AClueArea = carda;
+                MyOpponentClueArea = carda;
             }
-            else if (carda.ThisRow == CardArea.Row.Crime)
+            else if (carda.ThisRow == CardArea.Row.Crime && carda.ThisCardAreaType == CardArea.CardAreaType.Opponent)
             {
-                ACrimeArea = carda;
+                MyOpponentCrimeArea = carda;
             }
+
         }
 
        
@@ -149,10 +134,10 @@ public class M_gameManager : MonoBehaviour {
         HolmesPlayer.ResetPlayer();
         MoriartyPlayer.ResetPlayer();
 
-        ClueArea.ClearCards();
-        CrimeArea.ClearCards();
-        AClueArea.ClearCards();
-        ACrimeArea.ClearCards();
+        MyPlayerClueArea.ClearCards();
+        MyPlayerCrimeArea.ClearCards();
+        MyOpponentClueArea.ClearCards();
+        MyOpponentCrimeArea.ClearCards();
 
         cardDeck.ResetCards();
 
@@ -465,16 +450,26 @@ public class M_gameManager : MonoBehaviour {
         MoriartyCrimeCard = null;
         MoriartyClueCard = null;
 
-        if (CrimeArea.PlayerAttached == HolmesPlayer){HolmesCrimeCard = CrimeArea.FlipCard(Case);}
-        else { MoriartyCrimeCard = CrimeArea.FlipCard(Case); }
-        if (ClueArea.PlayerAttached == HolmesPlayer) { HolmesClueCard = ClueArea.FlipCard(Case); }
-        else { MoriartyClueCard = ClueArea.FlipCard(Case); }
+        if (HolmesPlayer.GetComponentInParent<myPlayer>()) { HolmesCrimeCard = MyPlayerCrimeArea.FlipCard(Case); }
+        else { HolmesCrimeCard = MyOpponentCrimeArea.FlipCard(Case); }
+        if (HolmesPlayer.GetComponentInParent<myPlayer>()) { HolmesClueCard = MyPlayerClueArea.FlipCard(Case); }
+        else { HolmesClueCard = MyOpponentClueArea.FlipCard(Case); }
 
+        if (MoriartyPlayer.GetComponentInParent<myPlayer>()) { MoriartyCrimeCard = MyPlayerCrimeArea.FlipCard(Case); }
+        else { MoriartyCrimeCard = MyOpponentCrimeArea.FlipCard(Case); }
+        if (MoriartyPlayer.GetComponentInParent<myPlayer>()) { MoriartyClueCard = MyPlayerClueArea.FlipCard(Case); }
+        else { MoriartyClueCard = MyOpponentClueArea.FlipCard(Case); }
 
-        if (ACrimeArea.PlayerAttached == HolmesPlayer) { HolmesCrimeCard = ACrimeArea.FlipCard(Case); }
-        else { MoriartyCrimeCard = ACrimeArea.FlipCard(Case); }
-        if (AClueArea.PlayerAttached == HolmesPlayer) { HolmesClueCard = AClueArea.FlipCard(Case); }
-        else { MoriartyClueCard = AClueArea.FlipCard(Case); }
+        //if (MyPlayerCrimeArea.PlayerAttached == HolmesPlayer){HolmesCrimeCard = MyPlayerCrimeArea.FlipCard(Case);}
+        //else { MoriartyCrimeCard = MyPlayerCrimeArea.FlipCard(Case); }
+        //if (MyPlayerClueArea.PlayerAttached == HolmesPlayer) { HolmesClueCard = MyPlayerClueArea.FlipCard(Case); }
+        //else { MoriartyClueCard = MyPlayerClueArea.FlipCard(Case); }
+
+        //// TODO fix this!!!
+        //if (MyOpponentCrimeArea.PlayerAttached == HolmesPlayer) { HolmesCrimeCard = MyOpponentCrimeArea.FlipCard(Case); }
+        //else { MoriartyCrimeCard = MyOpponentCrimeArea.FlipCard(Case); }
+        //if (MyOpponentClueArea.PlayerAttached == HolmesPlayer) { HolmesClueCard = MyOpponentClueArea.FlipCard(Case); }
+        //else { MoriartyClueCard = MyOpponentClueArea.FlipCard(Case); }
 
         caseArea.FlipCard(Case);
     }

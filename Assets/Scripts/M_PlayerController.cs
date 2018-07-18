@@ -101,6 +101,7 @@ public class M_PlayerController : M_Player {
     {
         base.EnableSwapClueCards();
         b_EnableSwapClueCards = true;
+        endTurnButton.EnableEndTurn();
     }
 
     public override void DisableSwapClueCards()
@@ -151,13 +152,17 @@ public class M_PlayerController : M_Player {
     public void PlayerEndTurn()
     {
         CmdEndTurn();
-        if (gamemanager.CurrentTurnStatus == M_gameManager.TurnStatus.SwitchClueCards) { }
-        else if (gamemanager.CurrentTurnStatus == M_gameManager.TurnStatus.BoardInspect) { }
-        else if ((gamemanager.CurrentTurnStatus == M_gameManager.TurnStatus.PickTileHolmes || gamemanager.CurrentTurnStatus == M_gameManager.TurnStatus.PickTileMoriarty) &&
-            MyPlayerType == PlayerType.Moriarty) { }
-        else
+
+        if (GetComponentInParent<myPlayer>())
         {
-            endTurnButton.DisableEndTurn();
+            if (gamemanager.CurrentTurnStatus == M_gameManager.TurnStatus.SwitchClueCards) { }
+            else if (gamemanager.CurrentTurnStatus == M_gameManager.TurnStatus.BoardInspect) { }
+            else if ((gamemanager.CurrentTurnStatus == M_gameManager.TurnStatus.PickTileHolmes || gamemanager.CurrentTurnStatus == M_gameManager.TurnStatus.PickTileMoriarty) &&
+                MyPlayerType == PlayerType.Moriarty) { }
+            else
+            {
+                endTurnButton.DisableEndTurn();
+            }
         }
     }
 
@@ -221,6 +226,8 @@ public class M_PlayerController : M_Player {
     //Timing issue!!!??????
     public void CheckEndTurn()
     {
+        Debug.Log(gamemanager.CurrentTurnStatus);
+        if (GetComponentInParent<myPlayer>() == null) { return; }
         if (gamemanager.CurrentTurnStatus == M_gameManager.TurnStatus.Turn1 || gamemanager.CurrentTurnStatus == M_gameManager.TurnStatus.Turn2 
             || gamemanager.CurrentTurnStatus == M_gameManager.TurnStatus.Turn3)
             {

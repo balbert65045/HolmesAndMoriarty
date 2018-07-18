@@ -130,7 +130,7 @@ public class CardArea : MonoBehaviour {
         card.transform.position = Positions[CaseN - 1].transform.position;
         card.transform.rotation = Positions[CaseN - 1].transform.rotation;
         float y = card.transform.localRotation.eulerAngles.y;
-        float z = card.transform.localRotation.eulerAngles.z;
+        float z = card.transform.localRotation.eulerAngles.z + 180;
         card.transform.localRotation = Quaternion.Euler(0, y, z);
         card.transform.localScale = new Vector3(.7f, .246f, .07f);
         Positions[CaseN - 1].InUse = true;
@@ -159,10 +159,14 @@ public class CardArea : MonoBehaviour {
         ClueCard card = Positions[Case - 1].GetComponentInChildren<ClueCard>();
 
         // currently flipping card when placing down 
+        card.transform.SetParent(Positions[Case - 1].transform);
+        card.transform.position = Positions[Case - 1].transform.position;
+        card.transform.rotation = Positions[Case - 1].transform.rotation;
+        float y = card.transform.localRotation.eulerAngles.y + 180;
+        float z = card.transform.localRotation.eulerAngles.z + 180;
+        card.transform.localRotation = Quaternion.Euler(0, y, z);
+        card.transform.localScale = new Vector3(.7f, .246f, .07f);
 
-        //float y = card.transform.localRotation.eulerAngles.y + 180;
-        //float z = card.transform.localRotation.eulerAngles.z + 180;
-        //card.transform.localRotation = Quaternion.Euler(0, y, z);
         return card;
     }
 
