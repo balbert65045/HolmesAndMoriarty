@@ -124,7 +124,7 @@ public class M_CardHand : MonoBehaviour {
         if (CardsHolding.Contains(CardPositions[CardPos].GetComponent<ClueCard>()))
         {
             CardsHolding.Remove(CardPositions[CardPos].GetComponent<ClueCard>());
-            CardPositions[CardPos].GetComponent<ClueCard>().transform.SetParent(FindObjectOfType<ClueDeck>().transform);
+            CardPositions[CardPos].GetComponent<ClueCard>().transform.SetParent(FindObjectOfType<M_ClueDeck>().transform);
         }
     }
 
@@ -134,7 +134,7 @@ public class M_CardHand : MonoBehaviour {
         if (CardsHolding.Contains(card))
         {
             CardsHolding.Remove(card);
-            card.transform.SetParent(FindObjectOfType<ClueDeck>().transform);
+            card.transform.SetParent(FindObjectOfType<M_ClueDeck>().transform);
         }
         else { Debug.LogWarning("Removing card that is not in hand"); }
     }
@@ -143,7 +143,7 @@ public class M_CardHand : MonoBehaviour {
     {
         foreach (ClueCard card in CardsHolding)
         {
-            card.transform.SetParent(FindObjectOfType<ClueDeck>().transform);
+            card.transform.SetParent(FindObjectOfType<M_ClueDeck>().transform);
         }
         CardsHolding.Clear();
     }
@@ -156,7 +156,7 @@ public class M_CardHand : MonoBehaviour {
             if (position.GetComponentInChildren<ClueCard>())
             {
                 ClueCard card = position.GetComponentInChildren<ClueCard>();
-                position.GetComponentInChildren<ClueCard>().transform.SetParent(FindObjectOfType<ClueDeck>().transform);
+                position.GetComponentInChildren<ClueCard>().transform.SetParent(FindObjectOfType<M_ClueDeck>().transform);
                 card.transform.position = FindObjectOfType<CardSpot>().transform.position;
                 card.transform.localRotation = Quaternion.Euler(new Vector3(90, 0, 0));
             }

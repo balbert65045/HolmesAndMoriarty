@@ -208,17 +208,11 @@ public class M_PlayerController : M_Player {
                 int buttonHit = Hit.transform.GetComponent<SwapButtons>().Button;
                 if (buttonHit == 1)
                 {
-                    ClueCard Card1 = ClueArea.GetCard(1);
-                    ClueCard Card2 = ClueArea.GetCard(2);
-                    ClueArea.PlaceCard(Card1, 2);
-                    ClueArea.PlaceCard(Card2, 1);
+                    CmdSwapClueCards(1, 2);
                 }
                 else if (buttonHit == 2)
                 {
-                    ClueCard Card1 = ClueArea.GetCard(2);
-                    ClueCard Card2 = ClueArea.GetCard(3);
-                    ClueArea.PlaceCard(Card1, 3);
-                    ClueArea.PlaceCard(Card2, 2);
+                    CmdSwapClueCards(2, 3);
                 }
             }
         }
@@ -381,11 +375,46 @@ public class M_PlayerController : M_Player {
     {
         int cardSwappingCase = cardSwapping.GetComponentInParent<RowAreaPosition>().Case;
         int SelectedCardSwappingCase = SelectedCard.GetComponentInParent<RowAreaPosition>().Case;
-        clueArea.MoveCard(cardSwapping);
-        clueArea.MoveCard(SelectedCard);
-        clueArea.PlaceCard(cardSwapping, SelectedCardSwappingCase);
-        clueArea.PlaceCard(SelectedCard, cardSwappingCase);
+        CmdSwapClueCards(cardSwappingCase, SelectedCardSwappingCase);
+    }
 
+    [Command]
+    void CmdSwapClueCards(int cardSwappingCase, int SelectedCardSwappingCase)
+    {
+        RpcSwapClueCards(cardSwappingCase, SelectedCardSwappingCase);
+    }
+
+    [ClientRpc]
+    void RpcSwapClueCards(int cardSwappingCase, int SelectedCardSwappingCase)
+    {
+        CardArea[] CardAreas = FindObjectsOfType<CardArea>();
+        foreach (CardArea CA in CardAreas)
+        {
+            if (GetComponentInParent<myOponnent>())
+            {
+                if (CA.ThisCardAreaType == CardArea.CardAreaType.Opponent && CA.ThisRow == CardArea.Row.Clue)
+                {
+                    ClueCard cardSwapping = CA.GetCard(cardSwappingCase);
+                    ClueCard selectedCard = CA.GetCard(SelectedCardSwappingCase);
+                    CA.MoveCard(cardSwapping);
+                    CA.MoveCard(selectedCard);
+                    CA.PlaceCardDown(cardSwapping, SelectedCardSwappingCase);
+                    CA.PlaceCardDown(selectedCard, cardSwappingCase);
+                }
+            }
+            else if (GetComponentInParent<myPlayer>())
+            {
+                if (CA.ThisCardAreaType == CardArea.CardAreaType.Player && CA.ThisRow == CardArea.Row.Clue)
+                {
+                    ClueCard cardSwapping = CA.GetCard(cardSwappingCase);
+                    ClueCard selectedCard = CA.GetCard(SelectedCardSwappingCase);
+                    CA.MoveCard(cardSwapping);
+                    CA.MoveCard(selectedCard);
+                    CA.PlaceCardUp(cardSwapping, SelectedCardSwappingCase);
+                    CA.PlaceCardUp(selectedCard, cardSwappingCase);
+                }
+            }
+        }
     }
 
     void CheckToRemoveCardOrPlaceDown()
@@ -475,11 +504,17 @@ public class M_PlayerController : M_Player {
         {
             if (GetComponentInParent<myOponnent>())
             {
-                if (CA.ThisCardAreaType == CardArea.CardAreaType.Opponent && (int)CA.ThisRow == RowValue) { CA.PlaceCardDown(cardSelected, gamemanager.CurrentCaseOn); }
+                if (CA.ThisCardAreaType == CardArea.CardAreaType.Opponent && (int)CA.ThisRow == RowValue) {
+                    cardHand.RemoveCard(cardSelected);
+                    CA.PlaceCardDown(cardSelected, gamemanager.CurrentCaseOn);
+                }
             }
             else if (GetComponentInParent<myPlayer>())
             {
-                if (CA.ThisCardAreaType == CardArea.CardAreaType.Player && (int)CA.ThisRow == RowValue) { CA.PlaceCardUp(cardSelected, gamemanager.CurrentCaseOn); }
+                if (CA.ThisCardAreaType == CardArea.CardAreaType.Player && (int)CA.ThisRow == RowValue) {
+                    cardHand.RemoveCard(cardSelected);
+                    CA.PlaceCardUp(cardSelected, gamemanager.CurrentCaseOn);
+                }
             }
         }
         CheckEndTurn();
