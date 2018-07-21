@@ -12,7 +12,16 @@ public class CaseCard : Card {
     public void MoveUp(int pos)
     {
         OldParent = transform.parent.gameObject;
-        Transform MovePos = GetComponentInParent<CaseArea>().HighPositions[pos - 1];
+        Transform MovePos;
+        if (GetComponentInParent<CaseArea>() != null)
+        {
+             MovePos = GetComponentInParent<CaseArea>().HighPositions[pos - 1];
+        }
+        else
+        {
+            Debug.Log("Finding new Case area");
+             MovePos = GetComponentInParent<M_CaseArea>().HighPositions[pos - 1];
+        }
         transform.SetParent(MovePos);
         transform.localPosition = Vector3.zero;
         transform.localScale = new Vector3(5, 7, .05f);

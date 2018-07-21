@@ -7,6 +7,8 @@ public class M_PlayerController : M_Player {
 
     // Use this for initialization
     public int HolmesTilesToPlace = 0;
+    public int MoriartyTilesToPlace = 0;
+
     public LayerMask BoardLayer;
     public LayerMask Card_TileLayer;
     public bool ClueAreaActive = true;
@@ -22,7 +24,7 @@ public class M_PlayerController : M_Player {
     CardArea ClueArea;
     CardArea CrimeArea;
     EndTurnButton endTurnButton;
-    int MoriartyTilesToPlace = 0;
+   
     bool b_EnableSwapClueCards = false;
 
     GameObject LinkedLobbyPlayer;
@@ -120,7 +122,7 @@ public class M_PlayerController : M_Player {
         }
         if (OpenTileSpots.Count == 0) { return false; }
         MoriartyTilesToPlace = number;
-        endTurnButton.DisableEndTurn();
+        if (GetComponentInParent<myPlayer>() != null) { endTurnButton.DisableEndTurn(); }
         MoriartyTile = MoriartyTilePrefab;
         return true;
     }
@@ -142,12 +144,14 @@ public class M_PlayerController : M_Player {
             return false;
         }
         HolmesTilesToPlace++;
-        endTurnButton.DisableEndTurn();
+        if (GetComponentInParent<myPlayer>() != null) { endTurnButton.DisableEndTurn(); }
         HolmesTile = HolmesTilePrefab;
         HolmesCaseCard.MoveUp(HolmesTilesToPlace);
         HolmesCaseCardsWon.Add(HolmesCaseCard);
         return true;
     }
+
+  
 
     public void PlayerEndTurn()
     {
@@ -155,14 +159,14 @@ public class M_PlayerController : M_Player {
 
         if (GetComponentInParent<myPlayer>())
         {
-            if (gamemanager.CurrentTurnStatus == M_gameManager.TurnStatus.SwitchClueCards) { }
-            else if (gamemanager.CurrentTurnStatus == M_gameManager.TurnStatus.BoardInspect) { }
-            else if ((gamemanager.CurrentTurnStatus == M_gameManager.TurnStatus.PickTileHolmes || gamemanager.CurrentTurnStatus == M_gameManager.TurnStatus.PickTileMoriarty) &&
-                MyPlayerType == PlayerType.Moriarty) { }
-            else
-            {
+            //if (gamemanager.CurrentTurnStatus == M_gameManager.TurnStatus.SwitchClueCards) { }
+            //else if (gamemanager.CurrentTurnStatus == M_gameManager.TurnStatus.BoardInspect) { }
+            //else if ((gamemanager.CurrentTurnStatus == M_gameManager.TurnStatus.PickTileHolmes || gamemanager.CurrentTurnStatus == M_gameManager.TurnStatus.PickTileMoriarty) &&
+            //    MyPlayerType == PlayerType.Moriarty) { }
+            //else
+            //{
                 endTurnButton.DisableEndTurn();
-            }
+            //}
         }
     }
 
@@ -223,25 +227,30 @@ public class M_PlayerController : M_Player {
         }
     }
 
+    
+
     //Timing issue!!!??????
     public void CheckEndTurn()
     {
-        Debug.Log(gamemanager.CurrentTurnStatus);
+       
         if (GetComponentInParent<myPlayer>() == null) { return; }
-        if (gamemanager.CurrentTurnStatus == M_gameManager.TurnStatus.Turn1 || gamemanager.CurrentTurnStatus == M_gameManager.TurnStatus.Turn2 
+        Debug.Log(gamemanager.CurrentTurnStatus);
+        if (gamemanager.CurrentTurnStatus == M_gameManager.TurnStatus.Turn1 || gamemanager.CurrentTurnStatus == M_gameManager.TurnStatus.Turn2
             || gamemanager.CurrentTurnStatus == M_gameManager.TurnStatus.Turn3)
+        {
+            if (!ClueArea.CheckForAvailableSpace(gamemanager.CurrentCaseOn) && !CrimeArea.CheckForAvailableSpace(gamemanager.CurrentCaseOn))
             {
-                if (!ClueArea.CheckForAvailableSpace(gamemanager.CurrentCaseOn) && !CrimeArea.CheckForAvailableSpace(gamemanager.CurrentCaseOn))
-                {
                 endTurnButton.EnableEndTurn();
-                }
-                else
-                {
-                endTurnButton.DisableEndTurn();
-                }
             }
+            else
+            {
+                endTurnButton.DisableEndTurn();
+            }
+        }
+
         else if (gamemanager.CurrentTurnStatus == M_gameManager.TurnStatus.PickTileHolmes)
         {
+            Debug.Log(HolmesTilesToPlace);
             if (HolmesTilesToPlace == 0)
             {
                 endTurnButton.EnableEndTurn();
@@ -256,8 +265,9 @@ public class M_PlayerController : M_Player {
                 endTurnButton.DisableEndTurn();
             }
         }
-        else if( gamemanager.CurrentTurnStatus == M_gameManager.TurnStatus.PickTileMoriarty)
+        else if (gamemanager.CurrentTurnStatus == M_gameManager.TurnStatus.PickTileMoriarty)
         {
+            Debug.Log(MoriartyTilesToPlace);
             if (MoriartyTilesToPlace == 0)
             {
                 endTurnButton.EnableEndTurn();
@@ -272,6 +282,11 @@ public class M_PlayerController : M_Player {
                 endTurnButton.DisableEndTurn();
             }
         }
+        else if (gamemanager.CurrentTurnStatus == M_gameManager.TurnStatus.BoardInspect)
+        {
+            endTurnButton.EnableEndTurn();
+        }
+
     }
 
     void CheckActiveAreas()
@@ -565,8 +580,7 @@ public class M_PlayerController : M_Player {
     {
         if (MoriartyTilesToPlace > 0)
         {
-            if (tileArea.PlaceTile(MoriartyTile, HitTransform.GetComponent<TileSpot>().Number, PlayerType.Moriarty)) { MoriartyTilesToPlace--; }
-            if (MoriartyTilesToPlace == 0) { CheckEndTurn(); }
+            CmdPlacedMoriartyTile(HitTransform.GetComponent<TileSpot>().Number);
         }
         else if (HolmesTilesToPlace > 0)
         {
@@ -574,20 +588,44 @@ public class M_PlayerController : M_Player {
             {
                 if (HolmesCaseCardsWon[i].CardTypes.Contains(HitTransform.GetComponent<TileSpot>().ThisCardType))
                 {
-                    if (tileArea.PlaceTile(HolmesTile, HitTransform.GetComponent<TileSpot>().Number, PlayerType.Holmes))
-                    {
-                        HolmesTilesToPlace--;
-                        HolmesCaseCardsWon[i].MoveBackDown();
-                        HolmesCaseCardsWon.Remove(HolmesCaseCardsWon[i]);
-                    }
+                    CmdPlacedHolmesTile(HitTransform.GetComponent<TileSpot>().Number, i);
                 }
             }
+        }
+    }
+    [Command]
+    void CmdPlacedMoriartyTile(int TileNumber)
+    {
+        RpcPlacedMoriartyTile(TileNumber);
+    }
 
-            if (HolmesTilesToPlace == 0)
-            {
-                CheckEndTurn();
-            }
+    [ClientRpc]
+    void RpcPlacedMoriartyTile(int TileNumber)
+    {
+        if (tileArea.PlaceTile(MoriartyTile, TileNumber, PlayerType.Moriarty)) { MoriartyTilesToPlace--; }
+        if (MoriartyTilesToPlace == 0) { CheckEndTurn(); }
+    }
 
+
+    [Command]
+    void CmdPlacedHolmesTile(int TileNumber, int CaseCardIndex)
+    {
+        RpcPlacedHolmesTile(TileNumber, CaseCardIndex);
+    }
+
+    [ClientRpc]
+    void RpcPlacedHolmesTile(int TileNumber, int CaseCardIndex)
+    {
+        if (tileArea.PlaceTile(HolmesTile, TileNumber, PlayerType.Holmes))
+        {
+            HolmesTilesToPlace--;
+            HolmesCaseCardsWon[CaseCardIndex].MoveBackDown();
+            HolmesCaseCardsWon.Remove(HolmesCaseCardsWon[CaseCardIndex]);
+        }
+
+        if (HolmesTilesToPlace == 0)
+        {
+            CheckEndTurn();
         }
     }
 

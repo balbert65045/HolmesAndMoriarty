@@ -42,7 +42,7 @@ public class M_gameManager : MonoBehaviour {
     public List<ClueCard> MoriartyCards = new List<ClueCard>();
 
     public bool[] HolmesScoreThisTurn = { false, false, false };
-    bool[] MoriartyScoreThisTurn = { false, false, false };
+    public bool[] MoriartyScoreThisTurn = { false, false, false };
 
     int totalHWins = 0;
     int totalMWins = 0;
@@ -166,9 +166,10 @@ public class M_gameManager : MonoBehaviour {
         {
             HolmesEndTurn = false;
             MoriartyEndTurn = false;
-            if (HolmesPlayer.GetComponent<PlayerController>()) { HolmesPlayer.GetComponent<PlayerController>().CheckEndTurn(); }
-            if (MoriartyPlayer.GetComponent<PlayerController>()) { MoriartyPlayer.GetComponent<PlayerController>().CheckEndTurn(); }
             EndTurn();
+            Debug.Log(CurrentTurnStatus);
+            if (HolmesPlayer.GetComponent<M_PlayerController>()) { HolmesPlayer.GetComponent<M_PlayerController>().CheckEndTurn(); }
+            if (MoriartyPlayer.GetComponent<M_PlayerController>()) { MoriartyPlayer.GetComponent<M_PlayerController>().CheckEndTurn(); }
         }
     }
 
@@ -424,6 +425,9 @@ public class M_gameManager : MonoBehaviour {
         {
             CurrentTurnStatus = TurnStatus.BoardInspect;
         }
+        Debug.Log(CurrentTurnStatus);
+        if (HolmesPlayer.GetComponent<M_PlayerController>()) { HolmesPlayer.GetComponent<M_PlayerController>().CheckEndTurn(); }
+        if (MoriartyPlayer.GetComponent<M_PlayerController>()) { MoriartyPlayer.GetComponent<M_PlayerController>().CheckEndTurn(); }
         yield return null;
     }
 
