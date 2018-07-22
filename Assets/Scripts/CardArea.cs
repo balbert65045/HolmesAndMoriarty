@@ -176,7 +176,13 @@ public class CardArea : MonoBehaviour {
         {
             RP.InUse = false;
             ClueCard card = RP.GetComponentInChildren<ClueCard>();
-            card.transform.SetParent(FindObjectOfType<ClueDeck>().transform);
+
+            if (FindObjectOfType<ClueDeck>() == null)
+            {
+                card.transform.SetParent(FindObjectOfType<M_ClueDeck>().transform);
+            }
+            else { card.transform.SetParent(FindObjectOfType<ClueDeck>().transform); }
+           
             card.transform.position = FindObjectOfType<CardSpot>().transform.position;
             card.transform.localRotation = Quaternion.Euler(new Vector3(90, 0, 0));
             card.UnfadeCard();

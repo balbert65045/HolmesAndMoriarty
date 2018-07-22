@@ -10,6 +10,14 @@ public class LevelPropertyManagerMulti : NetworkBehaviour {
     public PlayerType Player1Player;
     public PlayerType Player2Player;
 
+    public PlayerType PlayerWon;
+
+    public int TotalNumberofRounds;
+    public int NumberofHolmesCaseWon;
+    public int NumberofMoriartyCaseWon;
+
+    public TileType[,] Tile2DSaved;
+
     void Awake()
     {
         DontDestroyOnLoad(this.gameObject);
@@ -110,7 +118,25 @@ public class LevelPropertyManagerMulti : NetworkBehaviour {
         Player2Player = PlayerType.Holmes;
     }
 
-     // Use this for initialization
+    public void SaveTileArea(TileType[,] Tile2D)
+    {
+        Tile2DSaved = Tile2D;
+    }
+
+    public void SetPlayerWon(PlayerType PT)
+    {
+        PlayerWon = PT;
+    }
+
+    public void SetDetails(int TotRounds, int HolmsWins, int MoriartyWins)
+    {
+        TotalNumberofRounds = TotRounds;
+        NumberofHolmesCaseWon = HolmsWins;
+        NumberofMoriartyCaseWon = MoriartyWins;
+    }
+
+
+    // Use this for initialization
     void Start () {
 		
 	}

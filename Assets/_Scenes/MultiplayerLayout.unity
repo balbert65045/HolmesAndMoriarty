@@ -6531,6 +6531,7 @@ MonoBehaviour:
   HolmesCards: []
   MoriartyCards: []
   HolmesScoreThisTurn: 000000
+  MoriartyScoreThisTurn: 000000
   HolmesEndTurn: 0
   MoriartyEndTurn: 0
   SwapButtonsObj:

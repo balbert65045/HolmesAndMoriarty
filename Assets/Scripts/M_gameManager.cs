@@ -168,8 +168,14 @@ public class M_gameManager : MonoBehaviour {
             MoriartyEndTurn = false;
             EndTurn();
             Debug.Log(CurrentTurnStatus);
-            if (HolmesPlayer.GetComponent<M_PlayerController>()) { HolmesPlayer.GetComponent<M_PlayerController>().CheckEndTurn(); }
-            if (MoriartyPlayer.GetComponent<M_PlayerController>()) { MoriartyPlayer.GetComponent<M_PlayerController>().CheckEndTurn(); }
+            if (HolmesPlayer.GetComponent<M_PlayerController>()) {
+                HolmesPlayer.GetComponent<M_PlayerController>().ResetTurnEnded();
+             //   HolmesPlayer.GetComponent<M_PlayerController>().CheckEndTurn();
+            }
+            if (MoriartyPlayer.GetComponent<M_PlayerController>()) {
+                MoriartyPlayer.GetComponent<M_PlayerController>().ResetTurnEnded();
+             //   MoriartyPlayer.GetComponent<M_PlayerController>().CheckEndTurn();
+            }
         }
     }
 
@@ -269,12 +275,15 @@ public class M_gameManager : MonoBehaviour {
         }
 
         if (HolmesCaseWon.Count > 0) {
-            if (HolmesPlayer.GetComponent<PlayerController>())
+            if (HolmesPlayer.GetComponentInParent<myPlayer>())
             {         
-                if (HolmesPlayer.GetComponent<PlayerController>() != null) {
                     tilePromptSelection.gameObject.SetActive(true);
                     tilePromptSelection.gameObject.GetComponent<Text>().text = " Select " + HolmesCaseWon.Count + " Tiles for Holmes that meet the Case";
-                }
+            }
+            else
+            {
+                tilePromptSelection.gameObject.SetActive(true);
+                tilePromptSelection.gameObject.GetComponent<Text>().text = " Waiting on oponnent to select " + HolmesCaseWon.Count + " H tiles";
             }
             return true;
         }
@@ -300,9 +309,14 @@ public class M_gameManager : MonoBehaviour {
         }
         if (MoriartyScore == 2)
         {
-            if (HolmesPlayer.GetComponent<PlayerController>() != null) {
+            if (HolmesPlayer.GetComponentInParent<myPlayer>() != null) {
                 tilePromptSelection.gameObject.SetActive(true);
                 tilePromptSelection.gameObject.GetComponent<Text>().text = " Select " + (MoriartyScore - 1) + " open tiles for Moriarty";
+            }
+            else
+            {
+                tilePromptSelection.gameObject.SetActive(true);
+                tilePromptSelection.gameObject.GetComponent<Text>().text = " Waiting on oponnent to select " + (MoriartyScore - 1) + " M tiles";
             }
             CurrentTurnStatus = TurnStatus.PickTileMoriarty;
             HolmesPlayer.PlaceMoriartyTiles(MoriartTile, 1);
@@ -311,10 +325,17 @@ public class M_gameManager : MonoBehaviour {
         else if (MoriartyScore == 3)
         {
            
-            if (HolmesPlayer.GetComponent<PlayerController>() != null) {
+            if (HolmesPlayer.GetComponentInParent<myPlayer>() != null) {
                 tilePromptSelection.gameObject.SetActive(true);
                 tilePromptSelection.gameObject.GetComponent<Text>().text = " Select " + (MoriartyScore - 1) + " open tiles for Moriarty";
             }
+            else
+            {
+                tilePromptSelection.gameObject.SetActive(true);
+                tilePromptSelection.gameObject.GetComponent<Text>().text = " Waiting on oponnent to select " + (MoriartyScore - 1) + " M tiles";
+            }
+
+
             CurrentTurnStatus = TurnStatus.PickTileMoriarty;
             HolmesPlayer.PlaceMoriartyTiles(MoriartTile, 2);
             return true;
@@ -347,9 +368,9 @@ public class M_gameManager : MonoBehaviour {
     void MoveToScoreScreen(PlayerType PTWon)
     {
         Time.timeScale = 0;
-        FindObjectOfType<LevelPropertyManager>().SaveTileArea(tileArea.Tile2D);
-        FindObjectOfType<LevelPropertyManager>().SetPlayerWon(PTWon);
-        FindObjectOfType<LevelPropertyManager>().SetDetails(CurrentTurnOn - 1, totalHWins, totalMWins);
+        FindObjectOfType<LevelPropertyManagerMulti>().SaveTileArea(tileArea.Tile2D);
+        FindObjectOfType<LevelPropertyManagerMulti>().SetPlayerWon(PTWon);
+        FindObjectOfType<LevelPropertyManagerMulti>().SetDetails(CurrentTurnOn - 1, totalHWins, totalMWins);
 
         FindObjectOfType<LevelManager>().LoadNextLevel();
     }

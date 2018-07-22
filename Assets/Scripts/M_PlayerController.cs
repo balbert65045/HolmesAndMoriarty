@@ -26,6 +26,7 @@ public class M_PlayerController : M_Player {
     EndTurnButton endTurnButton;
    
     bool b_EnableSwapClueCards = false;
+    bool Endedturn = false;
 
     GameObject LinkedLobbyPlayer;
 
@@ -159,14 +160,8 @@ public class M_PlayerController : M_Player {
 
         if (GetComponentInParent<myPlayer>())
         {
-            //if (gamemanager.CurrentTurnStatus == M_gameManager.TurnStatus.SwitchClueCards) { }
-            //else if (gamemanager.CurrentTurnStatus == M_gameManager.TurnStatus.BoardInspect) { }
-            //else if ((gamemanager.CurrentTurnStatus == M_gameManager.TurnStatus.PickTileHolmes || gamemanager.CurrentTurnStatus == M_gameManager.TurnStatus.PickTileMoriarty) &&
-            //    MyPlayerType == PlayerType.Moriarty) { }
-            //else
-            //{
                 endTurnButton.DisableEndTurn();
-            //}
+                Endedturn = true;
         }
     }
 
@@ -185,6 +180,7 @@ public class M_PlayerController : M_Player {
     // Update is called once per frame
     void Update() {
         if (!isTheLocalPlayer) { return; }
+        if (Endedturn) { return; }
         // On Mouse/Finger up 
         if (Input.GetMouseButtonUp(0))
         {
@@ -227,7 +223,10 @@ public class M_PlayerController : M_Player {
         }
     }
 
-    
+    public void ResetTurnEnded()
+    {
+        Endedturn = false;
+    }
 
     //Timing issue!!!??????
     public void CheckEndTurn()

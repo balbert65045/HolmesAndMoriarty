@@ -44,6 +44,7 @@ public class M_CardDeck : NetworkBehaviour {
 
     public Card GetandRemoveCard(int index)
     {
+        Debug.Log(index);
         Card card = CardsInDeck[index];
         CardsInDeck.Remove(CardsInDeck[index]); 
         return (card);

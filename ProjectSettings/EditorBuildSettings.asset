@@ -15,8 +15,11 @@ EditorBuildSettings:
     path: Assets/_Scenes/ScoreScreen.unity
     guid: 1d642c708fc48b840bfd2ddc5ade0231
   - enabled: 1
+    path: Assets/_Scenes/MultiplayerLobby.unity
+    guid: 48dfdd0a698c7264db88def46d0ebabe
+  - enabled: 1
     path: Assets/_Scenes/MultiplayerLayout.unity
     guid: 931ae7897164b99439c499749ff5135f
   - enabled: 1
-    path: Assets/_Scenes/MultiplayerLobby.unity
-    guid: 48dfdd0a698c7264db88def46d0ebabe
+    path: Assets/_Scenes/MultiplayerScoreScreen.unity
+    guid: d9e802bafa85b054387ac78c971dfe03
