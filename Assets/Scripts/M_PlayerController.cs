@@ -226,6 +226,14 @@ public class M_PlayerController : M_Player {
     public void ResetTurnEnded()
     {
         Endedturn = false;
+        if (gamemanager.CurrentTurnStatus == M_gameManager.TurnStatus.PickTileHolmes ||
+            gamemanager.CurrentTurnStatus == M_gameManager.TurnStatus.PickTileMoriarty ||
+            gamemanager.CurrentTurnStatus == M_gameManager.TurnStatus.BoardInspect ||
+             gamemanager.CurrentTurnStatus == M_gameManager.TurnStatus.SwitchClueCards
+            )
+        {
+            CheckEndTurn();
+        }
     }
 
     //Timing issue!!!??????
@@ -245,6 +253,10 @@ public class M_PlayerController : M_Player {
             {
                 endTurnButton.DisableEndTurn();
             }
+        }
+        else if (gamemanager.CurrentTurnStatus == M_gameManager.TurnStatus.SwitchClueCards)
+        {
+            endTurnButton.EnableEndTurn();
         }
 
         else if (gamemanager.CurrentTurnStatus == M_gameManager.TurnStatus.PickTileHolmes)

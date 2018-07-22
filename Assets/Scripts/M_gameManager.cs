@@ -447,8 +447,6 @@ public class M_gameManager : MonoBehaviour {
             CurrentTurnStatus = TurnStatus.BoardInspect;
         }
         Debug.Log(CurrentTurnStatus);
-        if (HolmesPlayer.GetComponent<M_PlayerController>()) { HolmesPlayer.GetComponent<M_PlayerController>().CheckEndTurn(); }
-        if (MoriartyPlayer.GetComponent<M_PlayerController>()) { MoriartyPlayer.GetComponent<M_PlayerController>().CheckEndTurn(); }
         yield return null;
     }
 
