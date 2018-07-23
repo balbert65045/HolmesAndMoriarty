@@ -93,6 +93,8 @@ public class M_PlayerController : M_Player {
         transform.localPosition = Vector3.zero;
         MyPlayerType = PT;
         FindObjectOfType<M_gameManager>().setPlayer(this);
+        if (GetComponentInParent<myPlayer>() != null) { GetComponentInParent<myPlayer>().SetIndicator(); }
+        else { GetComponentInParent<myOponnent>().SetIndicator(); }
     }
 
     public override void SetupPlayer()

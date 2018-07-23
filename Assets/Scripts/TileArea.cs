@@ -13,8 +13,8 @@ public class TileArea : MonoBehaviour {
     public GameObject HolmesTile;
     public GameObject MoriartyTile;
 
-    PlayerIndicator HolmesIndicator = null;
-    PlayerIndicator MoriartyIndicator = null;
+    Transform HolmesIndicatorLocation = null;
+    Transform MoriartyIndicatorLocation = null;
 
     void Start () {
          TileSpots = GetComponentsInChildren<TileSpot>();
@@ -28,18 +28,7 @@ public class TileArea : MonoBehaviour {
             }
         }
 
-        PlayerIndicator[] PlayerIndicators = FindObjectsOfType<PlayerIndicator>();
-        foreach (PlayerIndicator PI in PlayerIndicators)
-        {
-            if (PI.ThisIndicator == PlayerType.Holmes)
-            {
-                HolmesIndicator = PI;
-            }
-            else if (PI.ThisIndicator == PlayerType.Moriarty)
-            {
-                MoriartyIndicator = PI;
-            }
-        }
+      
 
     }
 
@@ -83,6 +72,39 @@ public class TileArea : MonoBehaviour {
 
     public bool PlaceTile(GameObject tile, int Number, PlayerType PT)
     {
+        PlayerIndicator[] PlayerIndicators = FindObjectsOfType<PlayerIndicator>();
+        if (PlayerIndicators.Length > 0)
+        {
+            foreach (PlayerIndicator PI in PlayerIndicators)
+            {
+                if (PI.ThisIndicator == PlayerType.Holmes)
+                {
+                    HolmesIndicatorLocation = PI.transform;
+                }
+                else if (PI.ThisIndicator == PlayerType.Moriarty)
+                {
+                    MoriartyIndicatorLocation = PI.transform;
+                }
+            }
+        }
+        else
+        {
+            M_PlayerIndicator[] MPlayerIndicators = FindObjectsOfType<M_PlayerIndicator>();
+            foreach (M_PlayerIndicator PI in MPlayerIndicators)
+            {
+                if (PI.ThisIndicator == PlayerType.Holmes)
+                {
+                    HolmesIndicatorLocation = PI.transform;
+                }
+                else if (PI.ThisIndicator == PlayerType.Moriarty)
+                {
+                    MoriartyIndicatorLocation = PI.transform;
+                }
+            }
+        }
+        
+
+
         if (!TileSpots[Number - 1].Used)
         {
             GameObject newTile = Instantiate(tile, new Vector3(TileSpots[Number - 1].transform.position.x, TileSpots[Number - 1].transform.position.y + .1f, TileSpots[Number - 1].transform.position.z), Quaternion.Euler(90, 0, 0));
@@ -92,8 +114,8 @@ public class TileArea : MonoBehaviour {
 
             
 
-            if (PT == PlayerType.Holmes) { newTile.transform.position = HolmesIndicator.transform.position; }
-            else if (PT == PlayerType.Moriarty) { newTile.transform.position = MoriartyIndicator.transform.position; }
+            if (PT == PlayerType.Holmes) { newTile.transform.position = HolmesIndicatorLocation.position; }
+            else if (PT == PlayerType.Moriarty) { newTile.transform.position = MoriartyIndicatorLocation.transform.position; }
             Vector3 MovePos = new Vector3(0, 0, -.3f);
             newTile.GetComponent<ScoreTile>().Move(MovePos);
 

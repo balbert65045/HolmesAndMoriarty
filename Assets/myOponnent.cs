@@ -8,9 +8,17 @@ public class myOponnent : MonoBehaviour {
 	void Start () {
 		
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    public void SetIndicator()
+    {
+        M_PlayerIndicator[] Indicators = FindObjectsOfType<M_PlayerIndicator>();
+        foreach (M_PlayerIndicator PI in Indicators)
+        {
+            if (PI.myPlayer == M_PlayerIndicator.Player.oponnent)
+            {
+                PI.SetPlayerIndicator(GetComponentInChildren<M_PlayerController>().MyPlayerType);
+            }
+        }
+    }
+
+
 }

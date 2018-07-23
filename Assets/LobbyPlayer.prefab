@@ -72,7 +72,7 @@ MonoBehaviour:
     i14: 198
     i15: 102
   m_ServerOnly: 0
-  m_LocalPlayerAuthority: 0
+  m_LocalPlayerAuthority: 1
 --- !u!114 &114723025474978036
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -84,10 +84,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c140accaa3db60745a35f33fc5d34659, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Name: {fileID: 0}
   PT: 0
   Ready: 0
   PlayerID: 0
+  playerDropdown: {fileID: 0}
+  ReadyToggle: {fileID: 0}
+  Lobby: {fileID: 0}
+  LocalPlayer: 0
 --- !u!224 &224206631287578054
 RectTransform:
   m_ObjectHideFlags: 1

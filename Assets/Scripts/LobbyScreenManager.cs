@@ -41,6 +41,7 @@ public class LobbyScreenManager : MonoBehaviour {
 
     public void CheckifAllReady()
     {
+        Debug.Log("Checking if ready on server side");
         LobbyPlayer[] LobbyPlayers = FindObjectsOfType<LobbyPlayer>();
         LobbyPlayer LobbyPlayer1 = null;
         LobbyPlayer LobbyPlayer2 = null;

@@ -80,6 +80,17 @@ public class LobbyPlayer : NetworkBehaviour {
     {
         Debug.Log("Toggled Ready");
         bool Value = ReadyToggle.isOn;
+        if (isLocalPlayer)
+        {
+            if (Value)
+            {
+                GetComponent<NetworkLobbyPlayer>().SendReadyToBeginMessage();
+            }
+            else
+            {
+                GetComponent<NetworkLobbyPlayer>().SendNotReadyToBeginMessage();
+            }
+        }
         CmdToggleChanged(Value);
     }
 
@@ -93,8 +104,7 @@ public class LobbyPlayer : NetworkBehaviour {
     void RpcToggleChanged(bool Value)
     {
         ReadyToggle.isOn = Value;
-        Ready = Value;
-        GetComponent<NetworkLobbyPlayer>().readyToBegin = Value;
+        
         if (isServer) { Lobby.CheckifAllReady(); }
     }
 

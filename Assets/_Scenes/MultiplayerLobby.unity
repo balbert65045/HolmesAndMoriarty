@@ -2930,7 +2930,7 @@ MonoBehaviour:
   matchSize: 4
   isNetworkActive: 0
   matchMaker: {fileID: 0}
-  m_ShowLobbyGUI: 0
+  m_ShowLobbyGUI: 1
   m_MaxPlayers: 4
   m_MaxPlayersPerConnection: 1
   m_MinPlayers: 2
@@ -3605,8 +3605,8 @@ RectTransform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1598845982}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 452.5, y: 254.5, z: 0}
-  m_LocalScale: {x: 1.13125, y: 1.13125, z: 1.13125}
+  m_LocalPosition: {x: 569, y: 316.5, z: 0}
+  m_LocalScale: {x: 1.4225, y: 1.4225, z: 1.4225}
   m_Children:
   - {fileID: 1495601566}
   - {fileID: 796118369}

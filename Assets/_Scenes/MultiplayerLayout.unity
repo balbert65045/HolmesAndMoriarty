@@ -1119,8 +1119,8 @@ RectTransform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 125362817}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 452.5, y: 254.5, z: 0}
-  m_LocalScale: {x: 1.13125, y: 1.13125, z: 1.13125}
+  m_LocalPosition: {x: 569, y: 316.5, z: 0}
+  m_LocalScale: {x: 1.4225, y: 1.4225, z: 1.4225}
   m_Children:
   - {fileID: 1162619804}
   - {fileID: 912164860}
@@ -2250,13 +2250,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 265390263}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6b914214c90712a4082bfe5f8e31b308, type: 3}
+  m_Script: {fileID: 11500000, guid: 9a851896b60205841810f88684d5618b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   myPlayer: 1
   HolmesSprtie: {fileID: 21300000, guid: 7935b4cb462076b4ba68a42017abd518, type: 3}
   MoriartySprite: {fileID: 21300000, guid: bdcc1d2ff611e0f4badc4e1372c06482, type: 3}
-  MyPlayerType: 0
   ThisIndicator: 0
 --- !u!4 &265390269 stripped
 Transform:
@@ -2649,7 +2648,7 @@ RectTransform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 321441479}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -323.78, y: -70.95236, z: 0}
+  m_LocalPosition: {x: -323.78, y: -68.4756, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 467447830}
@@ -5982,7 +5981,7 @@ RectTransform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 912164859}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 360, y: -198.67236, z: 0}
+  m_LocalPosition: {x: 360, y: -196.1956, z: 0}
   m_LocalScale: {x: 0.5217978, y: 0.5217978, z: 0.5217978}
   m_Children:
   - {fileID: 888922426}
@@ -6681,7 +6680,7 @@ RectTransform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1059192711}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -333.2, y: 198.17236, z: 0}
+  m_LocalPosition: {x: -333.2, y: 195.69559, z: 0}
   m_LocalScale: {x: 0.5217978, y: 0.5217978, z: 0.5217978}
   m_Children:
   - {fileID: 1093209936}
@@ -8154,7 +8153,7 @@ RectTransform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1162619803}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -361.3, y: -198.67236, z: 0}
+  m_LocalPosition: {x: -361.3, y: -196.1956, z: 0}
   m_LocalScale: {x: 0.5217978, y: 0.52179766, z: 0.52179766}
   m_Children:
   - {fileID: 78143221}
@@ -8906,7 +8905,7 @@ GameObject:
   m_PrefabParentObject: {fileID: 1551244332278288, guid: 26be0ef08d3ee8f4891a60bae1a105ba,
     type: 2}
   m_PrefabInternal: {fileID: 1668274120}
---- !u!114 &1365520244
+--- !u!114 &1365520240
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
@@ -8914,13 +8913,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1365520239}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6b914214c90712a4082bfe5f8e31b308, type: 3}
+  m_Script: {fileID: 11500000, guid: 9a851896b60205841810f88684d5618b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   myPlayer: 0
   HolmesSprtie: {fileID: 21300000, guid: 7935b4cb462076b4ba68a42017abd518, type: 3}
   MoriartySprite: {fileID: 21300000, guid: bdcc1d2ff611e0f4badc4e1372c06482, type: 3}
-  MyPlayerType: 0
   ThisIndicator: 0
 --- !u!4 &1365520245 stripped
 Transform:
@@ -12025,7 +12023,7 @@ RectTransform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2031573927}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -216.29999, y: 146.77237, z: 0}
+  m_LocalPosition: {x: -216.29999, y: 144.29561, z: 0}
   m_LocalScale: {x: 0.5217978, y: 0.5217978, z: 0.5217978}
   m_Children:
   - {fileID: 1365925283}
