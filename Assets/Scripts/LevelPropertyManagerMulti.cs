@@ -23,8 +23,10 @@ public class LevelPropertyManagerMulti : NetworkBehaviour {
         DontDestroyOnLoad(this.gameObject);
         if (FindObjectOfType<LevelPropertyManager>())
         {
-            Destroy(FindObjectOfType<LevelPropertyManager>());
+            Destroy(FindObjectOfType<LevelPropertyManager>().gameObject);
         }
+        LevelPropertyManagerMulti[] LevelMultiManagers = FindObjectsOfType<LevelPropertyManagerMulti>();
+        if (LevelMultiManagers.Length > 1) { Destroy(LevelMultiManagers[0].gameObject); }
     }
 
     private void OnLevelWasLoaded(int level)

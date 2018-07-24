@@ -11,6 +11,8 @@ public class myNetworkManager : NetworkLobbyManager {
     void Awake()
     {
         DontDestroyOnLoad(transform.gameObject);
+        myNetworkManager[] NetworkManagers = FindObjectsOfType<myNetworkManager>();
+        if (NetworkManagers.Length > 1) { Destroy(NetworkManagers[0].gameObject); }
     }
 
     public void MyStartHost()

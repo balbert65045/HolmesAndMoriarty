@@ -79,6 +79,11 @@ public class CanvasManager : MonoBehaviour {
         levelManager.LoadNextLevel();
     }
 
+    public void LoadMultiplayerLobby()
+    {
+        levelManager.LoadLevel("MultiplayerLobby");
+    }
+
     // Update is called once per frame
     void Update () {
 		
