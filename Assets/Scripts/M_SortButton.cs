@@ -12,6 +12,9 @@ public class M_SortButton : NetworkBehaviour {
 	void Start () {
         NumberSortIndicator.SetActive(false);
         ColorSortIndicator.SetActive(true);
+        transform.localPosition = new Vector3(0, 0, 0);
+      //  GetComponent<RectTransform>().position = new Vector3(-40, 26.3f, 0);
+       // GetComponent<RectTransform>().localPosition = new Vector3(-40, 26.3f, 0);
     }
 	
 	public void Toggle()
