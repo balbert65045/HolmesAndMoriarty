@@ -91,6 +91,7 @@ public class M_Player : NetworkBehaviour {
     [ClientRpc]
     void RpcDrawCard(int CardIndex)
     {
+        _CardDeck = FindObjectOfType<M_ClueDeck>();
         ClueCard cardDrawn = _CardDeck.GetandRemoveCard(CardIndex) as ClueCard;
         if (transform.GetComponentInParent<myPlayer>() != null) { cardDrawn.transform.localRotation = Quaternion.Euler(new Vector3(-90, 0, 0)); }
         _CardHand.AddCard(cardDrawn, 0);
