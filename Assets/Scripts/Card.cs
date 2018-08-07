@@ -13,6 +13,16 @@ public class Card : MonoBehaviour {
         b_Move = false;
     }
 
+    public virtual void MoveUp(int pos)
+    {
+
+    }
+
+    public virtual void MoveBackDown()
+    {
+
+    }
+
     public void Move(Vector3 MovePosition)
     {
         b_Move = true;

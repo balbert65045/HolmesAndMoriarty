@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Networking;
 
-public class MyNetworkHud : NetworkBehaviour {
+public class MyNetworkHud : MonoBehaviour {
 
     public Text IpAddressText;
     public myNetworkManager networkManager;
@@ -12,6 +12,8 @@ public class MyNetworkHud : NetworkBehaviour {
     public GameObject ConnectingScreen;
     public GameObject LobbyScreen;
     public GameObject Canvas;
+
+    public Text IPHost;
 
 	// Use this for initialization
 	void Start () {
@@ -21,7 +23,8 @@ public class MyNetworkHud : NetworkBehaviour {
 
     public void HostCreate()
     {
-        networkManager.MyStartHost();
+        string HostIP = networkManager.MyStartHost();
+        IPHost.text = HostIP;
     }
 	public void ClientConnect()
     {
@@ -46,6 +49,7 @@ public class MyNetworkHud : NetworkBehaviour {
 
     public void PlayerJoinedServer()
     {
+        Debug.Log("Joining Server");
         StartMenu.SetActive(false);
         ConnectingScreen.SetActive(false);
         LobbyScreen.SetActive(true);
@@ -53,8 +57,9 @@ public class MyNetworkHud : NetworkBehaviour {
 
     public void LeaveLobby()
     {
-
+        networkManager.LeaveLobby();
     }
+
 
     // Update is called once per frame
     void Update () {

@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 65592359440909808}
   - component: {fileID: 23976794889686898}
   - component: {fileID: 114999661351701432}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: H3CaseCard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -39,7 +39,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4962038159750464}
   - component: {fileID: 212127277460465474}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: BackSprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -55,7 +55,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4890485657808052}
   - component: {fileID: 212219726039976770}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: FrontSprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -167,6 +167,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71c92d49f229a4840a5085581f2dcd92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MovePoint: {x: 0, y: 0, z: 0}
   PlayerType: 0
   CardTypes: 03000000
 --- !u!212 &212127277460465474

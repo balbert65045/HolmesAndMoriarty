@@ -39,13 +39,19 @@ public class LobbyScreenManager : MonoBehaviour {
         return (PlayerIndex - 1);
     }
 
+    public void PlayerLeft()
+    {
+        PlayerIndex--;
+    }
+
     public void CheckifAllReady()
     {
         Debug.Log("Checking if ready on server side");
         LobbyPlayer[] LobbyPlayers = FindObjectsOfType<LobbyPlayer>();
         LobbyPlayer LobbyPlayer1 = null;
         LobbyPlayer LobbyPlayer2 = null;
-        foreach(LobbyPlayer LP in LobbyPlayers)
+        LevelManager = FindObjectOfType<LevelPropertyManagerMulti>();
+        foreach (LobbyPlayer LP in LobbyPlayers)
         {
             if (LP.PlayerID == 1) { LobbyPlayer1 = LP; }
             else if (LP.PlayerID == 2) { LobbyPlayer2 = LP; }

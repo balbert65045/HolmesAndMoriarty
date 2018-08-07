@@ -40,6 +40,7 @@ public class LevelManager : MonoBehaviour {
 
     public void ReloadLevel()
     {
+        Debug.Log("Reloading Level");
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 

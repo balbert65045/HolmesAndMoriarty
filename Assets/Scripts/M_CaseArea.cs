@@ -45,6 +45,7 @@ public class M_CaseArea : NetworkBehaviour {
     [ClientRpc]
     void RpcPlaceCards(int positionIndex, int CardIndex)
     {
+        caseDeck = FindObjectOfType<M_CaseDeck>();
         Card CardDrawn = caseDeck.GetandRemoveCard(CardIndex);
         if (!Positions[positionIndex].GetComponentInChildren<CaseCard>())
         {

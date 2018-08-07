@@ -109,7 +109,7 @@ public class TileArea : MonoBehaviour {
         {
             GameObject newTile = Instantiate(tile, new Vector3(TileSpots[Number - 1].transform.position.x, TileSpots[Number - 1].transform.position.y + .1f, TileSpots[Number - 1].transform.position.z), Quaternion.Euler(90, 0, 0));
             newTile.transform.SetParent(TileSpots[Number - 1].transform);
-            newTile.transform.localScale = new Vector3(.7f, .7f, .7f);
+            newTile.transform.localScale = new Vector3(.7f, .7f, .7f); 
             TileSpots[Number - 1].Used = true;
 
             
@@ -431,12 +431,14 @@ public class TileArea : MonoBehaviour {
                     GameObject Tile = Instantiate(HolmesTile);
                     Tile.transform.position = TileSpots[i + 4 * j].transform.position;
                     Tile.transform.SetParent(TileSpots[i + 4 * j].transform);
+                    Tile.transform.localScale = new Vector3(1f, 1f, 1f);
                 }
                 else if (NewTile2D[i, j] == TileType.Moriarty)
                 {
                     GameObject Tile = Instantiate(MoriartyTile);
                     Tile.transform.position = TileSpots[i + 4 * j].transform.position;
                     Tile.transform.SetParent(TileSpots[i + 4 * j].transform);
+                    Tile.transform.localScale = new Vector3(1f, 1f, 1f);
                 }
             }
         }

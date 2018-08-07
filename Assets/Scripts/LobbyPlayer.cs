@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 
-public class LobbyPlayer : NetworkBehaviour {
+public class LobbyPlayer : NetworkLobbyPlayer {
 
     
     public PlayerType PT = PlayerType.Holmes;
@@ -24,6 +24,7 @@ public class LobbyPlayer : NetworkBehaviour {
 
     // Use this for initialization
     void Start () {
+        DontDestroyOnLoad(this.gameObject);
         Lobby = FindObjectOfType<LobbyScreenManager>();
         PlayerID = Lobby.PlayerJoin(this.gameObject);
 
@@ -49,7 +50,32 @@ public class LobbyPlayer : NetworkBehaviour {
             LocalPlayer = true;
         }
     }
-    
+
+    public void Disconnect()
+    {
+        CmdDisconnect();
+    }
+
+    [Command]
+    void CmdDisconnect()
+    {
+        RpcDisconnect();
+    }
+
+    [ClientRpc]
+    void RpcDisconnect()
+    {
+        myNetworkManager networkManager = FindObjectOfType<myNetworkManager>();
+        networkManager.MyStopClient();
+    }
+
+    public void DisablePlayerUI()
+    {
+        Debug.Log("Disabling UI");
+        ThisLobbyPlayerUI.ChildObject.SetActive(false);
+        Lobby.PlayerLeft();
+    }
+
     public void SetName(string name)
     {
         PlayerName = name;
@@ -84,11 +110,11 @@ public class LobbyPlayer : NetworkBehaviour {
         {
             if (Value)
             {
-                GetComponent<NetworkLobbyPlayer>().SendReadyToBeginMessage();
+                SendReadyToBeginMessage();
             }
             else
             {
-                GetComponent<NetworkLobbyPlayer>().SendNotReadyToBeginMessage();
+                SendNotReadyToBeginMessage();
             }
         }
         CmdToggleChanged(Value);
@@ -138,7 +164,7 @@ public class LobbyPlayer : NetworkBehaviour {
             PT = PlayerType.Random;
         }
         ReadyToggle.isOn = false;
-        GetComponent<NetworkLobbyPlayer>().readyToBegin = false;
+        readyToBegin = false;
     }
 	
 	// Update is called once per frame

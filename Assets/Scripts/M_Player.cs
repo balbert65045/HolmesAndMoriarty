@@ -68,6 +68,7 @@ public class M_Player : NetworkBehaviour {
     {
         _CardDeck = FindObjectOfType<M_ClueDeck>();
         if (!isTheLocalPlayer) { return; }
+        Debug.Log("Drawing Cards");
         IEnumerator DrawCard = DrawingCards(Number);
         StartCoroutine(DrawCard);
     }
@@ -81,6 +82,7 @@ public class M_Player : NetworkBehaviour {
     [Command]
     void CmdDrawCard(int Number)
     {
+        _CardDeck = FindObjectOfType<M_ClueDeck>();
         for (int i = 0; i < Number; i++)
         {
             int CardIndex =_CardDeck.SetCard();
@@ -93,7 +95,14 @@ public class M_Player : NetworkBehaviour {
     {
         _CardDeck = FindObjectOfType<M_ClueDeck>();
         ClueCard cardDrawn = _CardDeck.GetandRemoveCard(CardIndex) as ClueCard;
-        if (transform.GetComponentInParent<myPlayer>() != null) { cardDrawn.transform.localRotation = Quaternion.Euler(new Vector3(-90, 0, 0)); }
+        if (transform.GetComponentInParent<myPlayer>() != null) {
+            Debug.Log("Drawing Cards for myPlayer");
+            cardDrawn.transform.localRotation = Quaternion.Euler(new Vector3(-90, 0, 0));
+        }
+        else
+        {
+            Debug.Log("Drawing Cards for myOpponent");
+        }
         _CardHand.AddCard(cardDrawn, 0);
     }
 

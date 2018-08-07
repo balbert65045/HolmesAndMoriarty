@@ -20,7 +20,6 @@ GameObject:
   m_Component:
   - component: {fileID: 224206631287578054}
   - component: {fileID: 114264825038633908}
-  - component: {fileID: 114033056217765720}
   - component: {fileID: 114723025474978036}
   m_Layer: 0
   m_Name: LobbyPlayer
@@ -29,18 +28,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &114033056217765720
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1318546128955358}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 246975512, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ShowLobbyGUI: 1
 --- !u!114 &114264825038633908
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -84,6 +71,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c140accaa3db60745a35f33fc5d34659, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowLobbyGUI: 1
   PT: 0
   Ready: 0
   PlayerID: 0

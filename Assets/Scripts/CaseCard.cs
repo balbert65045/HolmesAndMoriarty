@@ -9,7 +9,7 @@ public class CaseCard : Card {
 
     GameObject OldParent;
 
-    public void MoveUp(int pos)
+    public override void MoveUp(int pos)
     {
         OldParent = transform.parent.gameObject;
         Transform MovePos;
@@ -29,7 +29,7 @@ public class CaseCard : Card {
 
     }
 
-    public void MoveBackDown()
+    public override void MoveBackDown()
     {
         Transform MovePos = OldParent.transform;
         transform.SetParent(MovePos);

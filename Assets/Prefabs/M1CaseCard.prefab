@@ -20,7 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4700286515073152}
   - component: {fileID: 212713379036282004}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: FrontSprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -39,7 +39,7 @@ GameObject:
   - component: {fileID: 65567074300281246}
   - component: {fileID: 23813255587175128}
   - component: {fileID: 114516834839608700}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: M1CaseCard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -55,7 +55,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4398578184021558}
   - component: {fileID: 212479846979877294}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: BackSprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -167,6 +167,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71c92d49f229a4840a5085581f2dcd92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MovePoint: {x: 0, y: 0, z: 0}
   PlayerType: 1
   CardTypes: 
 --- !u!212 &212479846979877294

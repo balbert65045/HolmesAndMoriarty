@@ -24,6 +24,8 @@ public class PlayerController : Player {
     int MoriartyTilesToPlace = 0;
     bool b_EnableSwapClueCards = false;
 
+    Card HighlightedCard;
+
 
     void Start() {
         ClueAreaActive = true;
@@ -130,6 +132,7 @@ public class PlayerController : Player {
         if (Input.GetMouseButtonUp(0))
         {
             Remove_Unselect_PlaceDownCard();
+            CheckToDecreaseCardSize();
         }
         // On Mouse/finger pressed Down 
         else if (Input.GetMouseButtonDown(0))
@@ -137,12 +140,53 @@ public class PlayerController : Player {
             SelectCard_PlaceTileDown();
             CheckActiveAreas();
             CheckForSwapCardsButton();
+            CheckToIncreaseCardSize();
         }
 
         // On Holding Down Mouse/Finger 
         else if (Input.GetMouseButton(0))
         {
             CheckForCardFollow();
+        }
+    }
+
+    void CheckToDecreaseCardSize()
+    {
+        if (HighlightedCard == null) { return; }
+        if (HighlightedCard.GetComponentInParent<CaseArea>() != null)
+        {
+            HighlightedCard.MoveBackDown();
+            HighlightedCard = null;
+        }
+    }
+
+    void CheckToIncreaseCardSize()
+    {
+        RaycastHit Hit;
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out Hit, 100f, Card_TileLayer))
+        {
+            //Select Card
+            if (Hit.transform.GetComponent<ClueCard>())
+            {
+
+                ClueCard card = Hit.transform.GetComponent<ClueCard>();
+                if (card.GetComponentInParent<CardArea>() != null || card.GetComponentInParent<AICardArea>() != null)
+                {
+                    if (card.GetComponentInParent<RowAreaPosition>().Case != gamemanager.CurrentCaseOn)
+                    {
+                        Debug.Log("Moving Card up");
+                        HighlightedCard = card;
+                        card.MoveUp(1);
+                    }
+                }
+            }
+            else if(Hit.transform.GetComponent<CaseCard>())
+            {
+                CaseCard card = Hit.transform.GetComponent<CaseCard>();
+                HighlightedCard = card;
+                card.MoveUp(1);
+            }
         }
     }
 

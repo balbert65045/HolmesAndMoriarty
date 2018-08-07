@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.Networking;
 
 public class M_PlayerController : M_Player {
@@ -30,6 +31,7 @@ public class M_PlayerController : M_Player {
 
     GameObject LinkedLobbyPlayer;
 
+    Card HighlightedCard;
 
     void Start() {
         ClueAreaActive = true;
@@ -53,14 +55,43 @@ public class M_PlayerController : M_Player {
                 }
             }
         }
-        StartCoroutine("SetPlayers");
 
+        if (!isServer)
+        {
+            Debug.Log("Setting players command");
+            CmdSetPlayers(); 
+        }
+        else
+        {
+            Debug.Log("this is server");
+        }
     }
 
+
+
+    
+    [Command]
+    void CmdSetPlayers()
+    {
+        Debug.Log("Setting players on server");
+        M_PlayerController[] Controllers = FindObjectsOfType<M_PlayerController>();
+        foreach (M_PlayerController controller in Controllers)
+        {
+            controller.SetPlayer();
+        }
+    }
+
+
+    public void SetPlayer()
+    {
+        Debug.Log("Set player method");
+        StartCoroutine("SetPlayers");
+    }
     // Wait a delay for all players to spawn on server and then set them all 
     IEnumerator SetPlayers()
     {
-        yield return new WaitForSeconds(.2f);
+        //need to wait have a check that all players have spawned on both client and host 
+        yield return new WaitForSeconds(.1f);
         if (isServer)
         {
             Debug.Log("Server Acting");
@@ -82,14 +113,37 @@ public class M_PlayerController : M_Player {
     void RpcSetPlayer(PlayerType PT, GameObject LP)
     {
         Debug.Log("RPC Happening");
+
+        IEnumerator PlayerSet = SetPlayer(PT, LP);
+        StartCoroutine(PlayerSet);
+
+    }
+
+    IEnumerator SetPlayer(PlayerType PT, GameObject LP)
+    {
+        yield return new WaitForSeconds(.2f);
+        M_PlayerController[] controllers = FindObjectsOfType<M_PlayerController>();
+        Debug.Log(controllers.Length);
         LinkedLobbyPlayer = LP;
-        Debug.Log(LP);
-        Debug.Log(PT);
-        if (LP.GetComponent<LobbyPlayer>().LocalPlayer) {
+        if (LP.GetComponent<LobbyPlayer>().LocalPlayer)
+        {
             isTheLocalPlayer = true;
-            this.transform.SetParent(FindObjectOfType<myPlayer>().transform);
+            if (FindObjectOfType<myPlayer>() != null)
+            {
+                Debug.Log("myPlayer found");
+                this.transform.SetParent(FindObjectOfType<myPlayer>().transform);
+            }
+            else { Debug.Log("No myPlayer found"); }
         }
-        else { this.transform.SetParent(FindObjectOfType<myOponnent>().transform); }
+        else
+        {
+            if (FindObjectOfType<myOponnent>() != null)
+            {
+                Debug.Log("myOponent found");
+                this.transform.SetParent(FindObjectOfType<myOponnent>().transform);
+            }
+            else { Debug.Log("No myOponent found"); }
+        }
         transform.localPosition = Vector3.zero;
         MyPlayerType = PT;
         FindObjectOfType<M_gameManager>().setPlayer(this);
@@ -187,6 +241,7 @@ public class M_PlayerController : M_Player {
         if (Input.GetMouseButtonUp(0))
         {
             Remove_Unselect_PlaceDownCard();
+            CheckToDecreaseCardSize();
         }
         // On Mouse/finger pressed Down 
         else if (Input.GetMouseButtonDown(0))
@@ -194,6 +249,7 @@ public class M_PlayerController : M_Player {
             SelectCard_PlaceTileDown();
             CheckActiveAreas();
             CheckForSwapCardsButton();
+            CheckToIncreaseCardSize();
         }
 
         // On Holding Down Mouse/Finger 
@@ -202,6 +258,48 @@ public class M_PlayerController : M_Player {
             CheckForCardFollow();
         }
     }
+
+    void CheckToDecreaseCardSize()
+    {
+        if (HighlightedCard == null) { return; }
+        if (HighlightedCard.GetComponentInParent<M_CaseArea>() != null)
+        {
+            HighlightedCard.MoveBackDown();
+            HighlightedCard = null;
+        }
+    }
+
+    void CheckToIncreaseCardSize()
+    {
+        RaycastHit Hit;
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out Hit, 100f, Card_TileLayer))
+        {
+            //Select Card
+            if (Hit.transform.GetComponent<ClueCard>())
+            {
+
+                ClueCard card = Hit.transform.GetComponent<ClueCard>();
+                if (card.GetComponentInParent<CardArea>() != null)
+                {
+                    if (card.GetComponentInParent<RowAreaPosition>().Case != gamemanager.CurrentCaseOn)
+                    {
+                        Debug.Log("Moving Card up");
+                        HighlightedCard = card;
+                        card.MoveUp(1);
+                    }
+                }
+            }
+            else if (Hit.transform.GetComponent<CaseCard>())
+            {
+                CaseCard card = Hit.transform.GetComponent<CaseCard>();
+                HighlightedCard = card;
+                card.MoveUp(1);
+            }
+        }
+    }
+
+
 
     void CheckForSwapCardsButton()
     {

@@ -20,7 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4934846905903604}
   - component: {fileID: 212347629842855448}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: BackSprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -36,7 +36,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4881098747380064}
   - component: {fileID: 212465828472563552}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: FrontSprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -55,7 +55,7 @@ GameObject:
   - component: {fileID: 65281128011269120}
   - component: {fileID: 23120734376568056}
   - component: {fileID: 114367363227866746}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: H7CaseCard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -167,6 +167,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71c92d49f229a4840a5085581f2dcd92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MovePoint: {x: 0, y: 0, z: 0}
   PlayerType: 0
   CardTypes: 00000000010000000300000002000000
 --- !u!212 &212347629842855448
