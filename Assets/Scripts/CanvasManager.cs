@@ -61,13 +61,13 @@ public class CanvasManager : MonoBehaviour {
     public void ChoseHolmes()
     {
         _LevelPropertyManager.SetPlayerType(PlayerType.Holmes);
-        levelManager.LoadNextLevel();
+        levelManager.LoadLevel("SplashHolmesSceen");
     }
 
     public void ChoseMoriarty()
     {
         _LevelPropertyManager.SetPlayerType(PlayerType.Moriarty);
-        levelManager.LoadNextLevel();
+        levelManager.LoadLevel("SplashMoriartySceen");
     }
 
     public void ChoseRandom()

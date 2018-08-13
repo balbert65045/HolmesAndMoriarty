@@ -9,6 +9,10 @@ public class TileSpot : MonoBehaviour {
     public bool Used = false;
     public int ThreatLevel = 0;
 
+    public bool Highlighted = false;
+    public bool GetHighlighted { get { return Highlighted; } }
+    public void SetHighlighted(bool value) {Highlighted = value;}
+
 	// Use this for initialization
 	void Start () {
 		

@@ -23,3 +23,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_Scenes/MultiplayerScoreScreen.unity
     guid: d9e802bafa85b054387ac78c971dfe03
+  - enabled: 1
+    path: Assets/_Scenes/SplashHolmesSceen.unity
+    guid: 17330977c9c51694290ba643dc825d83
+  - enabled: 1
+    path: Assets/_Scenes/SplashMoriartySceen.unity
+    guid: 3352a17542cc88a4ca989f3bd8187d34

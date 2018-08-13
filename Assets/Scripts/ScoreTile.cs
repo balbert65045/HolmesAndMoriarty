@@ -6,7 +6,7 @@ public class ScoreTile : MonoBehaviour {
 
     bool Moving = false;
     Vector3 MovePoint= Vector3.zero;
-
+    public PlayerType PT;
 
     public void Move(Vector3 MovePosition)
     {

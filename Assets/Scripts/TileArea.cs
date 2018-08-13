@@ -13,6 +13,8 @@ public class TileArea : MonoBehaviour {
     public GameObject HolmesTile;
     public GameObject MoriartyTile;
 
+    public GameObject HighlightArea;
+
     Transform HolmesIndicatorLocation = null;
     Transform MoriartyIndicatorLocation = null;
 
@@ -68,6 +70,45 @@ public class TileArea : MonoBehaviour {
         TileSpot temp = arr[index1];
         arr[index1] = arr[index2];
         arr[index2] = temp;
+    }
+
+    public PlayerType RemoveTile(int Number)
+    {
+        if (TileSpots[Number - 1].GetComponentInChildren<ScoreTile>() == null) { Debug.Log("No Score Tile here"); }
+        PlayerType tileType = TileSpots[Number - 1].GetComponentInChildren<ScoreTile>().PT;
+        Destroy(TileSpots[Number - 1].GetComponentInChildren<ScoreTile>().gameObject);
+        int HIndex = (Number - 1) % 4;
+        int VIndex = (Number - 1) / 4;
+        Tile2D[HIndex, VIndex] = TileType.None;
+        TileSpots[Number - 1].SetHighlighted(false);
+        TileSpots[Number - 1].Used = false;
+        return tileType;
+    }
+
+    public void ConfirmTiles()
+    {
+        foreach (TileSpot TS in TileSpots)
+        {
+            Debug.Log(TS.Number);
+            UnHighlightTile(TS.Number);
+        }
+    }
+
+    public void HighlightTile(int TileNumber)
+    {
+        Debug.Log("Highlight an area");
+        Instantiate(HighlightArea, TileSpots[TileNumber - 1].GetComponentInChildren<ScoreTile>().transform);
+        TileSpots[TileNumber - 1].SetHighlighted(true);
+    }
+
+    public void UnHighlightTile(int TileNumber)
+    {
+        if (TileSpots[TileNumber - 1].Highlighted)
+        {
+            Debug.Log("Destroy Highlight area");
+            Destroy(TileSpots[TileNumber - 1].GetComponentInChildren<HighlightArea>().gameObject);
+            TileSpots[TileNumber - 1].SetHighlighted(false);
+        }
     }
 
     public bool PlaceTile(GameObject tile, int Number, PlayerType PT)

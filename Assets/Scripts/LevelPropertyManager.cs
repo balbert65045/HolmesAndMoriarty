@@ -21,7 +21,7 @@ public class LevelPropertyManager : MonoBehaviour {
         Screen.orientation = ScreenOrientation.LandscapeLeft;
         DontDestroyOnLoad(this.gameObject);
         LevelPropertyManager[] LevelManagers = FindObjectsOfType<LevelPropertyManager>();
-        if (LevelManagers.Length > 1) { Destroy(LevelManagers[1].gameObject); }
+        if (LevelManagers.Length > 1) { Destroy(LevelManagers[0].gameObject); }
 
 	}
 	

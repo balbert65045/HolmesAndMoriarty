@@ -9,8 +9,12 @@ public class CaseCard : Card {
 
     GameObject OldParent;
 
+    bool MovedUp = false;
+    public bool GetMovedUp { get { return MovedUp; } }
+
     public override void MoveUp(int pos)
     {
+        MovedUp = true;
         OldParent = transform.parent.gameObject;
         Transform MovePos;
         if (GetComponentInParent<CaseArea>() != null)
@@ -31,6 +35,7 @@ public class CaseCard : Card {
 
     public override void MoveBackDown()
     {
+        MovedUp = false;
         Transform MovePos = OldParent.transform;
         transform.SetParent(MovePos);
         transform.localPosition = Vector3.zero;

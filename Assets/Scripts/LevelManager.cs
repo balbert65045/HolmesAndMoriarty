@@ -9,6 +9,13 @@ public class LevelManager : MonoBehaviour {
 
     public float autoLoadNextLevelAfter;
 
+    private void Awake()
+    {
+        LevelManager[] levelManagers = FindObjectsOfType<LevelManager>();
+        if (levelManagers.Length > 1) { Destroy(levelManagers[1].gameObject); }
+        DontDestroyOnLoad(this.gameObject);
+    }
+
     void Start()
     {
         if (autoLoadNextLevelAfter <= 0)
@@ -20,6 +27,17 @@ public class LevelManager : MonoBehaviour {
         }
     }
 
+    public void LoadLevelWithDelay(string levelName, float timeDelay)
+    {
+        IEnumerator LoadTheLevel = LoadLevel(levelName, timeDelay);
+        StartCoroutine(LoadTheLevel);
+    }
+
+    IEnumerator LoadLevel(string levelname, float delaytime)
+    {
+        yield return new WaitForSeconds(delaytime);
+        SceneManager.LoadScene(levelname);
+    }
 
 	public void LoadLevel(string name)
     {

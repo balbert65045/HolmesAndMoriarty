@@ -26,6 +26,8 @@ public class PlayerController : Player {
 
     Card HighlightedCard;
 
+    public List<CaseCard> HolmesCaseCardsWonThisTurn;
+
 
     void Start() {
         ClueAreaActive = true;
@@ -109,6 +111,7 @@ public class PlayerController : Player {
         HolmesTile = HolmesTilePrefab;
         HolmesCaseCard.MoveUp(HolmesTilesToPlace);
         HolmesCaseCardsWon.Add(HolmesCaseCard);
+        HolmesCaseCardsWonThisTurn.Add(HolmesCaseCard);
         return true;
     }
 
@@ -123,6 +126,11 @@ public class PlayerController : Player {
         {
             endTurnButton.DisableEndTurn();
         }
+    }
+
+    public void Undo()
+    {
+
     }
 
     // Update is called once per frame
@@ -438,11 +446,37 @@ public class PlayerController : Player {
         SelectedCard.transform.position = SelectedCardOriginalPosition;
     }
 
+
+    //TPODO figue out how to remove tiles 
     void CheckToPlaceDownTile(Transform HitTransform)
     {
-        if (MoriartyTilesToPlace > 0)
+        // check if the tile was recently placed. If so remove it
+        if (HitTransform.GetComponent<TileSpot>().GetHighlighted)
         {
-            if (tileArea.PlaceTile(MoriartyTile, HitTransform.GetComponent<TileSpot>().Number, PlayerType.Moriarty)) { MoriartyTilesToPlace--; }
+            PlayerType TileType = tileArea.RemoveTile(HitTransform.GetComponent<TileSpot>().Number);
+            if (TileType == PlayerType.Holmes)
+            {
+                for (int i = 0; i < HolmesCaseCardsWonThisTurn.Count; i++)
+                {
+                    if (HolmesCaseCardsWonThisTurn[i].CardTypes.Contains(HitTransform.GetComponent<TileSpot>().ThisCardType) && !HolmesCaseCardsWonThisTurn[i].GetMovedUp)
+                    {
+                        HolmesTilesToPlace++;
+                        HolmesCaseCardsWonThisTurn[i].MoveUp(HolmesTilesToPlace);
+                        HolmesCaseCardsWon.Add(HolmesCaseCardsWonThisTurn[i]);
+                        break;
+                    }
+                }
+            }
+            else if (TileType == PlayerType.Moriarty) { MoriartyTilesToPlace++; }
+            CheckEndTurn();
+        }
+
+        else if (MoriartyTilesToPlace > 0)
+        {
+            if (tileArea.PlaceTile(MoriartyTile, HitTransform.GetComponent<TileSpot>().Number, PlayerType.Moriarty)) {
+                tileArea.HighlightTile(HitTransform.GetComponent<TileSpot>().Number);
+                MoriartyTilesToPlace--;
+            }
             if (MoriartyTilesToPlace == 0) { CheckEndTurn(); }
         }
         else if (HolmesTilesToPlace > 0)
@@ -453,6 +487,7 @@ public class PlayerController : Player {
                 {
                     if (tileArea.PlaceTile(HolmesTile, HitTransform.GetComponent<TileSpot>().Number, PlayerType.Holmes))
                     {
+                        tileArea.HighlightTile(HitTransform.GetComponent<TileSpot>().Number);
                         HolmesTilesToPlace--;
                         HolmesCaseCardsWon[i].MoveBackDown();
                         HolmesCaseCardsWon.Remove(HolmesCaseCardsWon[i]);
@@ -466,6 +501,8 @@ public class PlayerController : Player {
             }
 
         }
+
+
     }
 
     void CheckToSelectCard(Transform HitTransform)

@@ -19,4 +19,10 @@ public class BackButton : MonoBehaviour {
     {
         if (levelManager != null) { levelManager.LoadLevel("New_Title_Screen"); }
     }
+
+    public void Quit()
+    {
+        if (levelManager != null) { levelManager.QuitRequest(); }
+    }
+
 }
