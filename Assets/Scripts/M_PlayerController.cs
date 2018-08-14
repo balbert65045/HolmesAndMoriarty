@@ -33,6 +33,10 @@ public class M_PlayerController : M_Player {
 
     Card HighlightedCard;
 
+    ScreenOverlay PlayerScreen;
+
+    public List<CaseCard> HolmesCaseCardsWonThisTurn;
+
     void Start() {
         ClueAreaActive = true;
         CrimeAreaActive = true;
@@ -132,6 +136,12 @@ public class M_PlayerController : M_Player {
             {
                 Debug.Log("myPlayer found");
                 this.transform.SetParent(FindObjectOfType<myPlayer>().transform);
+                // Show what player they are
+                if (PT == PlayerType.Holmes) { PlayerScreen = FindObjectOfType<HolmesScreen>(); }
+                else if(PT == PlayerType.Moriarty) { PlayerScreen = FindObjectOfType<MoriartyScreen>(); }
+                PlayerScreen.EnableOverlay();
+                yield return new WaitForSeconds(4f);
+                PlayerScreen.DisableOverlay();
             }
             else { Debug.Log("No myPlayer found"); }
         }
@@ -205,6 +215,7 @@ public class M_PlayerController : M_Player {
         HolmesTile = HolmesTilePrefab;
         HolmesCaseCard.MoveUp(HolmesTilesToPlace);
         HolmesCaseCardsWon.Add(HolmesCaseCard);
+        HolmesCaseCardsWonThisTurn.Add(HolmesCaseCard);
         return true;
     }
 
@@ -594,7 +605,8 @@ public class M_PlayerController : M_Player {
 
     void CheckForPlaceCard(Transform HitTransform)
     {
-        
+      
+
         if (HitTransform.GetComponent<CardArea>().ThisCardAreaType == CardArea.CardAreaType.Player && HitTransform.GetComponent<CardArea>().CheckForAvailableSpace(gamemanager.CurrentCaseOn))
         {
             // Moving from another row area
@@ -686,10 +698,46 @@ public class M_PlayerController : M_Player {
         }
     }
 
+    [Command]
+    void CmdRemoveTile(int TileNumber)
+    {
+        RpcRemoveTile(TileNumber);
+    }
+
+    [ClientRpc]
+    void RpcRemoveTile(int TileNumber)
+    {
+        tileArea.RemoveTile(TileNumber);
+    }
+
 
     void CheckToPlaceDownTile(Transform HitTransform)
     {
-        if (MoriartyTilesToPlace > 0)
+        // check if the tile was recently placed. If so remove it
+        if (HitTransform.GetComponent<TileSpot>().GetHighlighted)
+        {
+            PlayerType TileType = tileArea.GetTileType(HitTransform.GetComponent<TileSpot>().Number);
+            CmdRemoveTile(HitTransform.GetComponent<TileSpot>().Number);
+
+            if (TileType == PlayerType.Holmes)
+            {
+                for (int i = 0; i < HolmesCaseCardsWonThisTurn.Count; i++)
+                {
+                    if (HolmesCaseCardsWonThisTurn[i].CardTypes.Contains(HitTransform.GetComponent<TileSpot>().ThisCardType) && !HolmesCaseCardsWonThisTurn[i].GetMovedUp)
+                    {
+                        HolmesTilesToPlace++;
+                        HolmesCaseCardsWonThisTurn[i].MoveUp(HolmesTilesToPlace);
+                        HolmesCaseCardsWon.Add(HolmesCaseCardsWonThisTurn[i]);
+                        break;
+                    }
+                }
+            }
+            else if (TileType == PlayerType.Moriarty) { MoriartyTilesToPlace++; }
+            CheckEndTurn();
+        }
+
+
+        else if (MoriartyTilesToPlace > 0)
         {
             CmdPlacedMoriartyTile(HitTransform.GetComponent<TileSpot>().Number);
         }
@@ -713,7 +761,10 @@ public class M_PlayerController : M_Player {
     [ClientRpc]
     void RpcPlacedMoriartyTile(int TileNumber)
     {
-        if (tileArea.PlaceTile(MoriartyTile, TileNumber, PlayerType.Moriarty)) { MoriartyTilesToPlace--; }
+        if (tileArea.PlaceTile(MoriartyTile, TileNumber, PlayerType.Moriarty)) {
+            tileArea.HighlightTile(TileNumber);
+            MoriartyTilesToPlace--;
+        }
         if (MoriartyTilesToPlace == 0) { CheckEndTurn(); }
     }
 
@@ -729,6 +780,7 @@ public class M_PlayerController : M_Player {
     {
         if (tileArea.PlaceTile(HolmesTile, TileNumber, PlayerType.Holmes))
         {
+            tileArea.HighlightTile(TileNumber);
             HolmesTilesToPlace--;
             HolmesCaseCardsWon[CaseCardIndex].MoveBackDown();
             HolmesCaseCardsWon.Remove(HolmesCaseCardsWon[CaseCardIndex]);

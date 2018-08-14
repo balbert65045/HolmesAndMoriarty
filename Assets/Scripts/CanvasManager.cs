@@ -73,10 +73,10 @@ public class CanvasManager : MonoBehaviour {
     public void ChoseRandom()
     {
         int RandomCoinFlip = Random.Range(0, 2);
-        if (RandomCoinFlip == 0) { _LevelPropertyManager.SetPlayerType(PlayerType.Holmes); }
-        else if (RandomCoinFlip == 1) { _LevelPropertyManager.SetPlayerType(PlayerType.Moriarty); }
+        if (RandomCoinFlip == 0) { ChoseHolmes(); }
+        else if (RandomCoinFlip == 1) {ChoseMoriarty();}
         else { Debug.LogError("Coin Flip did not work"); }
-        levelManager.LoadNextLevel();
+        
     }
 
     public void LoadMultiplayerLobby()

@@ -650,7 +650,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   delayTime: 5
-  LevelName: VerticleLayout
+  LevelName: MultiplayerLayout
 --- !u!4 &964882653
 Transform:
   m_ObjectHideFlags: 0

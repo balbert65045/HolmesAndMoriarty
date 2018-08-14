@@ -233,14 +233,17 @@ public class M_gameManager : MonoBehaviour {
                 {
                     CheckForTotalScore();
                     CurrentTurnStatus = TurnStatus.Turn1;
-                }  
+                }
+                tileArea.ConfirmTiles();
                 break;
             case TurnStatus.PickTileHolmes:
                 tilePromptSelection.gameObject.SetActive(false);
+                tileArea.ConfirmTiles();
                 CheckForTotalScore();
                 CurrentTurnStatus = TurnStatus.Turn1;
                 break;
             case TurnStatus.BoardInspect:
+                tileArea.ConfirmTiles();
                 CheckForTotalScore();
                 CurrentTurnStatus = TurnStatus.Turn1;
                 break;

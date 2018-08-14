@@ -71,6 +71,13 @@ public class TileArea : MonoBehaviour {
         arr[index1] = arr[index2];
         arr[index2] = temp;
     }
+    
+    public PlayerType GetTileType(int Number)
+    {
+        if (TileSpots[Number - 1].GetComponentInChildren<ScoreTile>() == null) { Debug.Log("No Score Tile here"); }
+        PlayerType tileType = TileSpots[Number - 1].GetComponentInChildren<ScoreTile>().PT;
+        return (tileType);
+    }
 
     public PlayerType RemoveTile(int Number)
     {

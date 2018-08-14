@@ -50,7 +50,7 @@ public class M_CaseArea : NetworkBehaviour {
         if (!Positions[positionIndex].GetComponentInChildren<CaseCard>())
         {
             GameObject card = Instantiate(CardDrawn.gameObject, Positions[positionIndex]);
-            card.transform.localRotation = Quaternion.Euler(new Vector3(0, 0, 0));
+            card.transform.localRotation = Quaternion.Euler(new Vector3(0, 180, 180));
         }
     }
 
