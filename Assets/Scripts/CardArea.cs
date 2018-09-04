@@ -10,7 +10,7 @@ public class CardArea : MonoBehaviour {
 
     public enum Row { Clue, Crime }
     public Row ThisRow;
-    public Player PlayerAttached;
+    public GamePlayer PlayerAttached;
 
     public RowAreaPosition[] Positions;
 

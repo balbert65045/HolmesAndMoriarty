@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class CaseCard : Card {
 
+
+    public int CardEffect = 0; 
     public PlayerType PlayerType;
     public List<CardType> CardTypes = new List<CardType>();
 

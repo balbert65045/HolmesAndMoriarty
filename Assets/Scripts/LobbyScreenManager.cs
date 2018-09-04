@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class LobbyScreenManager : MonoBehaviour {
 
@@ -10,6 +11,9 @@ public class LobbyScreenManager : MonoBehaviour {
 
     private myNetworkManager MyNetworkManager;
     private LevelPropertyManagerMulti LevelManager;
+
+    public Text MatchName;
+
     // Use this for initialization
     void Start () {
         MyNetworkManager = FindObjectOfType<myNetworkManager>();
@@ -17,17 +21,22 @@ public class LobbyScreenManager : MonoBehaviour {
         if (LevelManager == null) { Debug.LogError("No LevelPropertyManagerMulti in the scene"); }
     }
 
+    public void SetMatchName(string name)
+    {
+        MatchName.text = name;
+    }
+
     public int PlayerJoin(GameObject Player)
     {
         if (PlayerIndex == 1)
         {
            // Player.transform.SetParent(Player1Menu.GetComponent<RectTransform>());
-            Player.GetComponent<LobbyPlayer>().SetName("Player 1");
+            Player.GetComponent<LobbyPlayerPhoton>().SetName("Player 1");
         }
         else if (PlayerIndex == 2)
         {
            // Player.transform.SetParent(Player2Menu.GetComponent<RectTransform>());
-            Player.GetComponent<LobbyPlayer>().SetName("Player 2");
+            Player.GetComponent<LobbyPlayerPhoton>().SetName("Player 2");
         }
         else
         {
@@ -44,32 +53,54 @@ public class LobbyScreenManager : MonoBehaviour {
         PlayerIndex--;
     }
 
+    public void ResetPlayers()
+    {
+        PlayerIndex = 1;
+    }
+
     public void CheckifAllReady()
     {
         Debug.Log("Checking if ready on server side");
-        LobbyPlayer[] LobbyPlayers = FindObjectsOfType<LobbyPlayer>();
-        LobbyPlayer LobbyPlayer1 = null;
-        LobbyPlayer LobbyPlayer2 = null;
+        LobbyPlayerPhoton[] LobbyPlayers = FindObjectsOfType<LobbyPlayerPhoton>();
+        LobbyPlayerPhoton LobbyPlayer1 = null;
+        LobbyPlayerPhoton LobbyPlayer2 = null;
         LevelManager = FindObjectOfType<LevelPropertyManagerMulti>();
-        foreach (LobbyPlayer LP in LobbyPlayers)
+        foreach (LobbyPlayerPhoton LP in LobbyPlayers)
         {
             if (LP.PlayerID == 1) { LobbyPlayer1 = LP; }
             else if (LP.PlayerID == 2) { LobbyPlayer2 = LP; }
         }
-        LevelManager.DecidePlayersTypes(LobbyPlayer1.PT, LobbyPlayer2.PT);
-
         if (LobbyPlayer1 != null && LobbyPlayer2 != null)
         {
+            //LevelManager.DecidePlayersTypes(LobbyPlayer1.PT, LobbyPlayer2.PT);
             if (LobbyPlayer1.Ready && LobbyPlayer2.Ready)
             {
-                MyNetworkManager.CheckReadyToBegin();
+                FindObjectOfType<PhotonLauncher>().MoveToGameScene();
             }
         }
     }
 
-	
-	// Update is called once per frame
-	void Update () {
+    public void SetPlayers()
+    {
+        LobbyPlayerPhoton[] LobbyPlayers = FindObjectsOfType<LobbyPlayerPhoton>();
+        LobbyPlayerPhoton LobbyPlayer1 = null;
+        LobbyPlayerPhoton LobbyPlayer2 = null;
+        LevelManager = FindObjectOfType<LevelPropertyManagerMulti>();
+        foreach (LobbyPlayerPhoton LP in LobbyPlayers)
+        {
+            if (LP.PlayerID == 1) { LobbyPlayer1 = LP; }
+            else if (LP.PlayerID == 2) { LobbyPlayer2 = LP; }
+        }
+        Debug.Log("Attempting to set up players");
+        if (LobbyPlayer1 != null && LobbyPlayer2 != null)
+        {
+            LevelManager.DecidePlayersTypes(LobbyPlayer1.PT, LobbyPlayer2.PT);
+        }
+    }
+
+
+        // Update is called once per frame
+        void Update () {
 		
 	}
 }

@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
-public class M_CaseArea : NetworkBehaviour {
+public class M_CaseArea : Photon.PunBehaviour
+{
 
     // Use this for initialization
     public Transform[] Positions;
@@ -29,20 +30,20 @@ public class M_CaseArea : NetworkBehaviour {
     public void PlaceCards()
     {
         caseDeck = FindObjectOfType<M_CaseDeck>();
-       if (isServer) { CmdPlaceCaseCards(); }
+        photonView.RPC("CmdPlaceCaseCards", PhotonTargets.MasterClient); 
     }
 
-    [Command]
+    [PunRPC]
     void CmdPlaceCaseCards()
     {
         for (int i = 0; i < Positions.Length; i++)
         {
             int cardDrawnIndex = caseDeck.SetCard();
-            RpcPlaceCards(i, cardDrawnIndex);
+            photonView.RPC("RpcPlaceCards", PhotonTargets.AllViaServer, i, cardDrawnIndex);
         }
     }
 
-    [ClientRpc]
+    [PunRPC]
     void RpcPlaceCards(int positionIndex, int CardIndex)
     {
         caseDeck = FindObjectOfType<M_CaseDeck>();

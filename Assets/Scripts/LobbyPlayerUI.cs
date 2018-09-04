@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class LobbyPlayerUI : MonoBehaviour {
 
@@ -18,25 +19,26 @@ public class LobbyPlayerUI : MonoBehaviour {
 
     public void DropDownChange()
     {
-        LobbyPlayer[] lobbyPlayers = FindObjectsOfType<LobbyPlayer>();
-        foreach(LobbyPlayer LP in lobbyPlayers)
+        LobbyPlayerPhoton[] lobbyPlayers = FindObjectsOfType<LobbyPlayerPhoton>();
+        foreach(LobbyPlayerPhoton LP in lobbyPlayers)
         {
            // Debug.Lo
-            if (LP.PlayerID == player)
+            if (LP.LocalPlayer)
             {
                 LP.ValueChanged();
             }
         }
     }
 
-    public void ToggleChange()
+    public void ToggleChange(bool Value)
     {
-        LobbyPlayer[] lobbyPlayers = FindObjectsOfType<LobbyPlayer>();
-        foreach (LobbyPlayer LP in lobbyPlayers)
+        LobbyPlayerPhoton[] lobbyPlayers = FindObjectsOfType<LobbyPlayerPhoton>();
+        foreach (LobbyPlayerPhoton LP in lobbyPlayers)
         {
-            if (LP.PlayerID == player)
+            if (LP.LocalPlayer)
             {
-                LP.ToggledReady();
+                Debug.Log("Toggle Changed");
+                LP.ToggledReady(Value);
             }
         }
     }

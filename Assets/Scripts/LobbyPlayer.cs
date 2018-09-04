@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class LobbyPlayer : NetworkLobbyPlayer {
 
@@ -51,6 +52,43 @@ public class LobbyPlayer : NetworkLobbyPlayer {
         }
     }
 
+    void RemakeLobby()
+    {
+        FindObjectOfType<MyNetworkHud>().PlayerJoinedServer();
+
+        Lobby = FindObjectOfType<LobbyScreenManager>();
+        PlayerID = Lobby.PlayerJoin(this.gameObject);
+
+        LobbyPlayersUI = FindObjectsOfType<LobbyPlayerUI>();
+        foreach (LobbyPlayerUI LPU in LobbyPlayersUI)
+        {
+            if (PlayerID == LPU.player) { ThisLobbyPlayerUI = LPU; }
+        }
+        ThisLobbyPlayerUI.ChildObject.SetActive(true);
+
+        Name = ThisLobbyPlayerUI.GetComponentInChildren<NameText>().GetComponent<Text>();
+        playerDropdown = ThisLobbyPlayerUI.GetComponentInChildren<Dropdown>();
+        ReadyToggle = ThisLobbyPlayerUI.GetComponentInChildren<Toggle>();
+        ChangeName();
+
+        if (!isLocalPlayer)
+        {
+            playerDropdown.interactable = false;
+            ReadyToggle.interactable = false;
+        }
+        else
+        {
+            LocalPlayer = true;
+        }
+    }
+
+    public override void OnClientExitLobby()
+    {
+        Debug.Log("Client Exited Lobby");
+     //   RemovePlayer();
+        base.OnClientExitLobby();
+    }
+
     public void Disconnect()
     {
         CmdDisconnect();
@@ -96,33 +134,30 @@ public class LobbyPlayer : NetworkLobbyPlayer {
     [ClientRpc]
     void RpcNameChange(string name)
     {
+        Debug.Log(SceneManager.GetActiveScene().name);
+        if (SceneManager.GetActiveScene().name == "MultiplayerLayout")
+        {
+            FindObjectOfType<LevelManager>().LoadLevel("MultiplayerMatchmaker");
+            RemakeLobby();
+        }
+
         if (Name != null)
         {
             Name.text = name;
         }
     }
 
-    public void ToggledReady()
+    public void ToggledReady(bool PreviousValue)
     {
-        Debug.Log("Toggled Ready");
+        Debug.Log("Toggle changining on player");
         bool Value = ReadyToggle.isOn;
-        if (isLocalPlayer)
-        {
-            if (Value)
-            {
-                SendReadyToBeginMessage();
-            }
-            else
-            {
-                SendNotReadyToBeginMessage();
-            }
-        }
         CmdToggleChanged(Value);
     }
 
     [Command]
     void CmdToggleChanged(bool Value)
     {
+        Debug.Log("Command Happening");
         RpcToggleChanged(Value);
     }
 
@@ -130,8 +165,23 @@ public class LobbyPlayer : NetworkLobbyPlayer {
     void RpcToggleChanged(bool Value)
     {
         ReadyToggle.isOn = Value;
-        
-        if (isServer) { Lobby.CheckifAllReady(); }
+        Lobby.CheckifAllReady();
+        if (isLocalPlayer)
+        {
+            if (Value)
+            {
+                if (!readyToBegin)
+                {
+                    Debug.Log("Send Ready to begin");
+                    FindObjectOfType<myNetworkManager>().EnablePlayScene();
+                    SendReadyToBeginMessage();
+                }
+            }
+            else
+            {
+                SendNotReadyToBeginMessage();
+            }
+        }
     }
 
     public void ValueChanged()
@@ -164,7 +214,6 @@ public class LobbyPlayer : NetworkLobbyPlayer {
             PT = PlayerType.Random;
         }
         ReadyToggle.isOn = false;
-        readyToBegin = false;
     }
 	
 	// Update is called once per frame

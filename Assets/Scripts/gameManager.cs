@@ -32,9 +32,9 @@ public class gameManager : MonoBehaviour {
 
     CaseArea caseArea;
 
-    Player[] Players;
-    Player HolmesPlayer;
-    Player MoriartyPlayer;
+    GamePlayer[] Players;
+    GamePlayer HolmesPlayer;
+    GamePlayer MoriartyPlayer;
 
     public ClueDeck cardDeck;
 
@@ -53,6 +53,7 @@ public class gameManager : MonoBehaviour {
     public GameObject[] SwapButtonsObj;
 
     TurnManager turnManager;
+    ScoreManager scoreManager;
 
     private void Awake()
     {
@@ -62,6 +63,7 @@ public class gameManager : MonoBehaviour {
     // Use this for initialization
     void Start () {
 
+        scoreManager = GetComponent<ScoreManager>();
         tilePromptSelection = FindObjectOfType<TileSelectionPrompt>();
         tilePromptSelection.gameObject.SetActive(false);
         WinScreen.SetActive(false);
@@ -76,8 +78,8 @@ public class gameManager : MonoBehaviour {
             obj.SetActive(false);
         }
 
-        Players = FindObjectsOfType<Player>();
-        foreach (Player player in Players)
+        Players = FindObjectsOfType<GamePlayer>();
+        foreach (GamePlayer player in Players)
         {
             switch (player.MyPlayerType)
             {
@@ -388,12 +390,16 @@ public class gameManager : MonoBehaviour {
             FlipCards(Case, out HolmesCrimeCard, out HolmesClueCard, out MoriartyCrimeCard, out MoriartyClueCard);
             // Move Crime cards up;
 
+            // Find the effect thats in play for this case
+            int Effect = caseArea.FindCaseCard(Case).CardEffect;
+
+
             // declare trump
             // Move Clue Cards up
             // declare winner and place tile
 
-            CardType Trump = CheckForTrump(HolmesCrimeCard, MoriartyCrimeCard);
-            if (CheckForHolmesWin(Trump, HolmesClueCard, MoriartyClueCard))
+            CardType Trump = scoreManager.CheckForTrump(HolmesCrimeCard, MoriartyCrimeCard, HolmesClueCard, MoriartyClueCard, Effect);
+            if (scoreManager.CheckForHolmesWin(Trump, HolmesClueCard, MoriartyClueCard, HolmesCrimeCard, MoriartyCrimeCard, Effect))
             {
                 HolmesScoreThisTurn[Case - 1] = true;
                 HolmesCrimeCard.FadeCard();
@@ -466,84 +472,5 @@ public class gameManager : MonoBehaviour {
     }
 
 
-    // put these in a score controller class??
-   CardType CheckForTrump(ClueCard HolmesCrimeCard, ClueCard MoriartyCrimeCard)
-    {
-
-        if (HolmesCrimeCard.Number > MoriartyCrimeCard.Number)
-        {
-            // check for wrap around effect 
-            switch (MoriartyCrimeCard.Number)
-            {
-                case 1:
-                    if (HolmesCrimeCard.Number > 13) { return MoriartyCrimeCard.ThisCardType; }
-                    break;
-                case 2:
-                    if (HolmesCrimeCard.Number > 14) { return MoriartyCrimeCard.ThisCardType; }
-                    break;
-                case 3:
-                    if (HolmesCrimeCard.Number > 15) { return MoriartyCrimeCard.ThisCardType; }
-                    break;
-            }
-            return HolmesCrimeCard.ThisCardType;
-        }
-        else
-        {
-            switch (HolmesCrimeCard.Number)
-            {
-                case 1:
-                    if (MoriartyCrimeCard.Number > 13) { return HolmesCrimeCard.ThisCardType; }
-                    break;
-                case 2:
-                    if (MoriartyCrimeCard.Number > 14) { return HolmesCrimeCard.ThisCardType; }
-                    break;
-                case 3:
-                    if (MoriartyCrimeCard.Number > 15) { return HolmesCrimeCard.ThisCardType; }
-                    break;
-            }
-            return MoriartyCrimeCard.ThisCardType; 
-        }
-    }
-
-    // Check to see who has the highest card with trump in play 
-    // first check who has trump and then if either both do or do not check for highest card
-    bool CheckForHolmesWin(CardType Trump, ClueCard HolmesClueCard, ClueCard MoriartyClueCard)
-    {
-        // check if both have trump
-        if (HolmesClueCard.ThisCardType == Trump && MoriartyClueCard.ThisCardType == Trump)
-        {
-            if (HolmesClueCard.Number > MoriartyClueCard.Number)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        // check if both only player has trump
-        else if (HolmesClueCard.ThisCardType == Trump)
-        {
-            return true;
-        }
-        // check if both only AI has trump
-        else if (MoriartyClueCard.ThisCardType == Trump)
-        {
-            return false;
-        }
-
-        // check if neither has trump
-        else
-        {
-            if (HolmesClueCard.Number > MoriartyClueCard.Number)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-    }
-
+   
 }

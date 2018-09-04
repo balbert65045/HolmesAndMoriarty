@@ -2911,7 +2911,7 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
-    m_Font: {fileID: 12800000, guid: f3b86f9983b289f44a256c2ce317dbae, type: 3}
+    m_Font: {fileID: 12800000, guid: c5b33e6ba3bbf5b46b47b2bcb7899861, type: 3}
     m_FontSize: 25
     m_FontStyle: 0
     m_BestFit: 0
@@ -2985,7 +2985,7 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
-    m_Font: {fileID: 12800000, guid: f3b86f9983b289f44a256c2ce317dbae, type: 3}
+    m_Font: {fileID: 12800000, guid: c5b33e6ba3bbf5b46b47b2bcb7899861, type: 3}
     m_FontSize: 39
     m_FontStyle: 0
     m_BestFit: 0
@@ -3373,11 +3373,11 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
-    m_Font: {fileID: 12800000, guid: f3b86f9983b289f44a256c2ce317dbae, type: 3}
-    m_FontSize: 20
+    m_Font: {fileID: 12800000, guid: c5b33e6ba3bbf5b46b47b2bcb7899861, type: 3}
+    m_FontSize: 25
     m_FontStyle: 0
     m_BestFit: 0
-    m_MinSize: 2
+    m_MinSize: 1
     m_MaxSize: 40
     m_Alignment: 4
     m_AlignByGeometry: 0
@@ -4048,8 +4048,8 @@ RectTransform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1598845982}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 574.5, y: 304.5, z: 0}
-  m_LocalScale: {x: 1.43625, y: 1.43625, z: 1.43625}
+  m_LocalPosition: {x: 579.5, y: 310, z: 0}
+  m_LocalScale: {x: 1.44875, y: 1.44875, z: 1.44875}
   m_Children:
   - {fileID: 1495601566}
   - {fileID: 796118369}
@@ -4312,7 +4312,7 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
-    m_Font: {fileID: 12800000, guid: f3b86f9983b289f44a256c2ce317dbae, type: 3}
+    m_Font: {fileID: 12800000, guid: c5b33e6ba3bbf5b46b47b2bcb7899861, type: 3}
     m_FontSize: 39
     m_FontStyle: 0
     m_BestFit: 0
@@ -4973,7 +4973,7 @@ RectTransform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1854333774}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -323.45, y: -134.45001, z: 0}
+  m_LocalPosition: {x: -314.25, y: -134.45001, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1328661337}
@@ -4982,7 +4982,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 390.3, y: 267.3}
+  m_AnchoredPosition: {x: 399.5, y: 267.3}
   m_SizeDelta: {x: 169.4, y: 61.6}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1854333776

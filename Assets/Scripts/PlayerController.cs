@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : Player {
+public class PlayerController : GamePlayer {
 
     // Use this for initialization
     public int HolmesTilesToPlace = 0;

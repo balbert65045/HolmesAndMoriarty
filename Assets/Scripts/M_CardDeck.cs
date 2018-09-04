@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
-public class M_CardDeck : NetworkBehaviour {
+public class M_CardDeck : Photon.PunBehaviour, IPunObservable
+{
 
     public List<Card> CardsInDeck;
     public List<Card> InitialCards;
@@ -66,5 +67,16 @@ public class M_CardDeck : NetworkBehaviour {
         }
         Debug.LogWarning("Cant find card in deck");
         return null;
+    }
+
+    void IPunObservable.OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.isWriting)
+        {
+        }
+
+        else
+        {
+        }
     }
 }

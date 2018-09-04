@@ -6,7 +6,7 @@ public class AICardArea : MonoBehaviour {
 
     // Use this for initialization
     public CardArea.Row ThisRow;
-    public Player PlayerAttached;
+    public GamePlayer PlayerAttached;
     public RowAreaPosition[] Positions;
 
 

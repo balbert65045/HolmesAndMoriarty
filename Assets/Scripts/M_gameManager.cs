@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Networking;
 
 public class M_gameManager : MonoBehaviour {
 
@@ -11,6 +12,7 @@ public class M_gameManager : MonoBehaviour {
 
     public GameObject WinScreen;
     public GameObject LoseScreen;
+    public GameObject PlayerDisconnectScreen;
 
     public GameObject ShowAreaText;
     public GameObject ShowArea;
@@ -53,6 +55,7 @@ public class M_gameManager : MonoBehaviour {
     public GameObject[] SwapButtonsObj;
 
     TurnManager turnManager;
+    ScoreManager scoreManager;
 
     private void Awake()
     {
@@ -62,6 +65,7 @@ public class M_gameManager : MonoBehaviour {
     // Use this for initialization
     void Start () {
 
+        scoreManager = FindObjectOfType<ScoreManager>();
         tilePromptSelection = FindObjectOfType<TileSelectionPrompt>();
         tilePromptSelection.gameObject.SetActive(false);
         WinScreen.SetActive(false);
@@ -103,6 +107,13 @@ public class M_gameManager : MonoBehaviour {
        
     }
 
+    public void OpponentDiscconnected()
+    {
+        PlayerDisconnectScreen.SetActive(true);
+    }
+
+
+
     public void setPlayer(M_Player P)
     {
         if (P.MyPlayerType == PlayerType.Holmes)
@@ -121,11 +132,26 @@ public class M_gameManager : MonoBehaviour {
 	
     IEnumerator PlayersDrawCards()
     {
+        Debug.Log("Placing cards DOWN");
         caseArea = FindObjectOfType<M_CaseArea>();
         yield return new WaitForSeconds(1.5f);
-        HolmesPlayer.DrawCards(7);
-        MoriartyPlayer.DrawCards(7);
+        DrawCardsFor(PlayerType.Holmes);
+        //HolmesPlayer.DrawCards(7);
+        //MoriartyPlayer.DrawCards(7);
         caseArea.PlaceCards();
+    }
+
+    public void DrawCardsFor(PlayerType PT)
+    {
+        switch (PT)
+        {
+            case PlayerType.Holmes:
+                HolmesPlayer.DrawCards(7); ;
+                break;
+            case PlayerType.Moriarty:
+                MoriartyPlayer.DrawCards(7);
+                break;
+        }
     }
 
     IEnumerator Reset()
@@ -415,9 +441,11 @@ public class M_gameManager : MonoBehaviour {
             // declare trump
             // Move Clue Cards up
             // declare winner and place tile
+            int Effect = caseArea.FindCaseCard(Case).CardEffect;
 
-            CardType Trump = CheckForTrump(HolmesCrimeCard, MoriartyCrimeCard);
-            if (CheckForHolmesWin(Trump, HolmesClueCard, MoriartyClueCard))
+
+            CardType Trump = scoreManager.CheckForTrump(HolmesCrimeCard, MoriartyCrimeCard, HolmesClueCard, MoriartyClueCard, Effect);
+            if (scoreManager.CheckForHolmesWin(Trump, HolmesClueCard, MoriartyClueCard, HolmesCrimeCard, MoriartyCrimeCard, Effect))
             {
                 HolmesScoreThisTurn[Case - 1] = true;
                 HolmesCrimeCard.FadeCard();
@@ -501,84 +529,5 @@ public class M_gameManager : MonoBehaviour {
     }
 
 
-    // put these in a score controller class??
-   CardType CheckForTrump(ClueCard HolmesCrimeCard, ClueCard MoriartyCrimeCard)
-    {
-
-        if (HolmesCrimeCard.Number > MoriartyCrimeCard.Number)
-        {
-            // check for wrap around effect 
-            switch (MoriartyCrimeCard.Number)
-            {
-                case 1:
-                    if (HolmesCrimeCard.Number > 13) { return MoriartyCrimeCard.ThisCardType; }
-                    break;
-                case 2:
-                    if (HolmesCrimeCard.Number > 14) { return MoriartyCrimeCard.ThisCardType; }
-                    break;
-                case 3:
-                    if (HolmesCrimeCard.Number > 15) { return MoriartyCrimeCard.ThisCardType; }
-                    break;
-            }
-            return HolmesCrimeCard.ThisCardType;
-        }
-        else
-        {
-            switch (HolmesCrimeCard.Number)
-            {
-                case 1:
-                    if (MoriartyCrimeCard.Number > 13) { return HolmesCrimeCard.ThisCardType; }
-                    break;
-                case 2:
-                    if (MoriartyCrimeCard.Number > 14) { return HolmesCrimeCard.ThisCardType; }
-                    break;
-                case 3:
-                    if (MoriartyCrimeCard.Number > 15) { return HolmesCrimeCard.ThisCardType; }
-                    break;
-            }
-            return MoriartyCrimeCard.ThisCardType; 
-        }
-    }
-
-    // Check to see who has the highest card with trump in play 
-    // first check who has trump and then if either both do or do not check for highest card
-    bool CheckForHolmesWin(CardType Trump, ClueCard HolmesClueCard, ClueCard MoriartyClueCard)
-    {
-        // check if both have trump
-        if (HolmesClueCard.ThisCardType == Trump && MoriartyClueCard.ThisCardType == Trump)
-        {
-            if (HolmesClueCard.Number > MoriartyClueCard.Number)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        // check if both only player has trump
-        else if (HolmesClueCard.ThisCardType == Trump)
-        {
-            return true;
-        }
-        // check if both only AI has trump
-        else if (MoriartyClueCard.ThisCardType == Trump)
-        {
-            return false;
-        }
-
-        // check if neither has trump
-        else
-        {
-            if (HolmesClueCard.Number > MoriartyClueCard.Number)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-    }
-
+  
 }

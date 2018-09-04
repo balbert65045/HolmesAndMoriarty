@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 public class LevelManager : MonoBehaviour {
 
     // Use this for initialization
-
+    
 
     public float autoLoadNextLevelAfter;
 
@@ -14,6 +14,7 @@ public class LevelManager : MonoBehaviour {
         LevelManager[] levelManagers = FindObjectsOfType<LevelManager>();
         if (levelManagers.Length > 1) { Destroy(levelManagers[1].gameObject); }
         DontDestroyOnLoad(this.gameObject);
+        
     }
 
     void Start()

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
-public class Player : NetworkBehaviour {
+public class GamePlayer : NetworkBehaviour {
 
     // Use this for initialization
     public PlayerType MyPlayerType = PlayerType.Holmes;

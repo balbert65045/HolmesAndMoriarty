@@ -4,7 +4,8 @@ using UnityEngine;
 using UnityEngine.Networking;
 
 
-public class LevelPropertyManagerMulti : NetworkBehaviour {
+public class LevelPropertyManagerMulti : Photon.PunBehaviour, IPunObservable
+{
 
 
     public PlayerType Player1Player;
@@ -109,14 +110,30 @@ public class LevelPropertyManagerMulti : NetworkBehaviour {
 
     void P1Holmes_P2Moriarty()
     {
+        Debug.Log("P1 Holmes P2 Moriarty");
         Player1Player = PlayerType.Holmes;
         Player2Player = PlayerType.Moriarty;
+        photonView.RPC("RpcSetPlayerTypes", PhotonTargets.AllViaServer, Player1Player, Player2Player);
     }
 
     void P1Moriarty_P2Holmes()
     {
+        Debug.Log("P1 Moriarty P2 Holmes");
         Player1Player = PlayerType.Moriarty;
         Player2Player = PlayerType.Holmes;
+        photonView.RPC("RpcSetPlayerTypes", PhotonTargets.AllViaServer, Player1Player, Player2Player);
+    }
+
+    [PunRPC]
+    void RpcSetPlayerTypes(PlayerType P1, PlayerType P2)
+    {
+        Debug.Log("Players set");
+        Player1Player = P1;
+        Player2Player = P2;
+        if (FindObjectOfType<LobbyScreenManager>() != null)
+        {
+            FindObjectOfType<LobbyScreenManager>().CheckifAllReady();
+        }
     }
 
     public void SaveTileArea(TileType[,] Tile2D)
@@ -146,4 +163,19 @@ public class LevelPropertyManagerMulti : NetworkBehaviour {
 	void Update () {
 		
 	}
+
+    void IPunObservable.OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.isWriting)
+        {
+            stream.SendNext(Player1Player);
+            stream.SendNext(Player2Player);
+        }
+        else
+        {
+            this.Player1Player = (PlayerType)stream.ReceiveNext();
+            this.Player2Player = (PlayerType)stream.ReceiveNext();
+        }
+    }
+
 }

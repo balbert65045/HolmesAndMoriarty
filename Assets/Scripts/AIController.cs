@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AIController : Player {
+public class AIController : GamePlayer {
 
     public ClueDeck cardDeck;
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
-public class M_Player : NetworkBehaviour {
+public class M_Player : Photon.PunBehaviour, IPunObservable {
 
     // Use this for initialization
     public PlayerType MyPlayerType = PlayerType.Holmes;
@@ -67,35 +67,61 @@ public class M_Player : NetworkBehaviour {
     public void DrawCards(int Number)
     {
         _CardDeck = FindObjectOfType<M_ClueDeck>();
-        if (!isTheLocalPlayer) { return; }
-        Debug.Log("Drawing Cards");
-        IEnumerator DrawCard = DrawingCards(Number);
-        StartCoroutine(DrawCard);
-    }
+        if ((photonView.ownerId == 1 && photonView.isMine) ||
+            (photonView.ownerId == 2 && !photonView.isMine))
+            {
+            Debug.Log("Drawing Cards");
 
-    IEnumerator DrawingCards(int Number)
-    {
-        CmdDrawCard(Number);
-        yield return null;
-    }
-
-    [Command]
-    void CmdDrawCard(int Number)
-    {
-        _CardDeck = FindObjectOfType<M_ClueDeck>();
-        for (int i = 0; i < Number; i++)
-        {
-            int CardIndex =_CardDeck.SetCard();
-            RpcDrawCard(CardIndex);
+            DrawNextCard(Number);
         }
+        //IEnumerator DrawCard = DrawingCards(Number);
+        //StartCoroutine(DrawCard);
     }
 
-    [ClientRpc]
-    void RpcDrawCard(int CardIndex)
+    //IEnumerator DrawingCards(int Number)
+    //{
+    //    _CardDeck = FindObjectOfType<M_ClueDeck>();
+    //    for (int i = 0; i < Number; i++)
+    //    {
+    //        int CardIndex = _CardDeck.SetCard();
+    //        photonView.RPC("RpcDrawCard", PhotonTargets.AllViaServer, CardIndex);
+    //        yield return new WaitForSeconds(.3f);
+    //    }
+    //    if (MyPlayerType == PlayerType.Holmes)
+    //    {
+    //        FindObjectOfType<M_gameManager>().DrawCardsFor(PlayerType.Moriarty);
+    //    }
+       
+    //}
+
+    void DrawNextCard(int CardsLeft)
     {
+        Debug.Log("Drawing Next Card");
+        int CardIndex = _CardDeck.SetCard();
+        photonView.RPC("RpcDrawCard", PhotonTargets.AllViaServer, CardIndex, CardsLeft);
+    }
+
+    //[PunRPC]
+    //void RPCSetCards(int Number)
+    //{
+    //    Debug.Log("Setting Cards");
+    //    // this is the issue
+    //    for (int i = 0; i < Number; i++)
+    //    {
+    //        int CardIndex = _CardDeck.SetCard();
+    //        photonView.RPC("RpcDrawCard", PhotonTargets.AllViaServer, CardIndex);
+    //    }
+    //}
+
+
+    [PunRPC]
+    public void RpcDrawCard(int CardIndex, int CardsLeft)
+    {
+        Debug.Log("RPC drawing cards");
         _CardDeck = FindObjectOfType<M_ClueDeck>();
         ClueCard cardDrawn = _CardDeck.GetandRemoveCard(CardIndex) as ClueCard;
-        if (transform.GetComponentInParent<myPlayer>() != null) {
+        if (transform.GetComponentInParent<myPlayer>() != null)
+        {
             Debug.Log("Drawing Cards for myPlayer");
             cardDrawn.transform.localRotation = Quaternion.Euler(new Vector3(-90, 0, 0));
         }
@@ -104,7 +130,46 @@ public class M_Player : NetworkBehaviour {
             Debug.Log("Drawing Cards for myOpponent");
         }
         _CardHand.AddCard(cardDrawn, 0);
+        CardsLeft--;
+        if ((photonView.ownerId == 1 && photonView.isMine) ||
+            (photonView.ownerId == 2 && !photonView.isMine))
+        {
+            if (CardsLeft > 0) { DrawNextCard(CardsLeft); }
+            else if (MyPlayerType == PlayerType.Holmes)
+            {
+                FindObjectOfType<M_gameManager>().DrawCardsFor(PlayerType.Moriarty);
+            }
+        }
+
     }
+
+
+    //[Command]
+    //void CmdDrawCard(int Number)
+    //{
+    //    _CardDeck = FindObjectOfType<M_ClueDeck>();
+    //    for (int i = 0; i < Number; i++)
+    //    {
+    //        int CardIndex =_CardDeck.SetCard();
+    //        RpcDrawCard(CardIndex);
+    //    }
+    //}
+
+    //[ClientRpc]
+    //void RpcDrawCard(int CardIndex)
+    //{
+    //    _CardDeck = FindObjectOfType<M_ClueDeck>();
+    //    ClueCard cardDrawn = _CardDeck.GetandRemoveCard(CardIndex) as ClueCard;
+    //    if (transform.GetComponentInParent<myPlayer>() != null) {
+    //        Debug.Log("Drawing Cards for myPlayer");
+    //        cardDrawn.transform.localRotation = Quaternion.Euler(new Vector3(-90, 0, 0));
+    //    }
+    //    else
+    //    {
+    //        Debug.Log("Drawing Cards for myOpponent");
+    //    }
+    //    _CardHand.AddCard(cardDrawn, 0);
+    //}
 
 
     public void RemoveAllCards()
@@ -125,5 +190,12 @@ public class M_Player : NetworkBehaviour {
         }
     }
 
+    void IPunObservable.OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.isWriting)
+        {
+            //stream.SendNext(ToggledReady);
+        }
+    }
 
 }

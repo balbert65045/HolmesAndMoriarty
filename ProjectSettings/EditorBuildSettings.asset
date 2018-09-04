@@ -29,3 +29,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_Scenes/SplashMoriartySceen.unity
     guid: 3352a17542cc88a4ca989f3bd8187d34
+  - enabled: 1
+    path: Assets/_Scenes/MultiplayerMatchmaker.unity
+    guid: 1560895c3bd9d2d4ea04890bf9b9f8a5

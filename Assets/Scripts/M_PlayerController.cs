@@ -60,76 +60,104 @@ public class M_PlayerController : M_Player {
             }
         }
 
-        if (!isServer)
-        {
-            Debug.Log("Setting players command");
-            CmdSetPlayers(); 
-        }
-        else
-        {
-            Debug.Log("this is server");
-        }
+        StartCoroutine("SetPlayer");
+        //if (!isServer)
+        //{
+        //    Debug.Log("Setting players command");
+        //    CmdSetPlayers(); 
+        //}
+        //else
+        //{
+        //    Debug.Log("this is server");
+        //}
     }
 
 
 
-    
-    [Command]
-    void CmdSetPlayers()
-    {
-        Debug.Log("Setting players on server");
-        M_PlayerController[] Controllers = FindObjectsOfType<M_PlayerController>();
-        foreach (M_PlayerController controller in Controllers)
-        {
-            controller.SetPlayer();
-        }
-    }
+
+    //public void SetPlayer()
+    //{
+    //    Debug.Log("Set player method");
+    //    StartCoroutine("SetPlayers");
+    //}
+    //// Wait a delay for all players to spawn on server and then set them all 
+    //IEnumerator SetPlayers()
+    //{
+    //    //need to wait have a check that all players have spawned on both client and host 
+    //    yield return new WaitForSeconds(.1f);
+    //    photonView.RPC("RpcSetPlayer" , PhotonTargets.AllViaServer, MyPlayerType, LinkedLobbyPlayer);
+    //}
+
+    //[PunRPC]
+    //void RpcSetPlayer(PlayerType PT, GameObject LP)
+    //{
+    //    Debug.Log("RPC Happening");
+
+    //    IEnumerator PlayerSet = SetPlayer(PT, LP);
+    //    StartCoroutine(PlayerSet);
+
+    //}
+
+    //[Command]
+    //void CmdSetPlayers()
+    //{
+    //    Debug.Log("Setting players on server");
+    //    M_PlayerController[] Controllers = FindObjectsOfType<M_PlayerController>();
+    //    foreach (M_PlayerController controller in Controllers)
+    //    {
+    //        controller.SetPlayer();
+    //    }
+    //}
 
 
-    public void SetPlayer()
-    {
-        Debug.Log("Set player method");
-        StartCoroutine("SetPlayers");
-    }
-    // Wait a delay for all players to spawn on server and then set them all 
-    IEnumerator SetPlayers()
-    {
-        //need to wait have a check that all players have spawned on both client and host 
-        yield return new WaitForSeconds(.1f);
-        if (isServer)
-        {
-            Debug.Log("Server Acting");
-            RpcSetPlayer(MyPlayerType, LinkedLobbyPlayer);
-        }
-    }
+    //public void SetPlayer()
+    //{
+    //    Debug.Log("Set player method");
+    //    StartCoroutine("SetPlayers");
+    //}
+    //// Wait a delay for all players to spawn on server and then set them all 
+    //IEnumerator SetPlayers()
+    //{
+    //    //need to wait have a check that all players have spawned on both client and host 
+    //    yield return new WaitForSeconds(.1f);
+    //    if (isServer)
+    //    {
+    //        Debug.Log("Server Acting");
+    //        RpcSetPlayer(MyPlayerType, LinkedLobbyPlayer);
+    //    }
+    //}
 
     //Set the player type on the server
-    public void SetPlayerType(PlayerType PT, LobbyPlayer LP)
+    //public void SetPlayerType(PlayerType PT, LobbyPlayerPhoton LP)
+    //{
+    //    LinkedLobbyPlayer = LP.gameObject;
+    //    Debug.Log("Player being set");
+    //    Debug.Log(PT);
+    //    MyPlayerType = PT;
+    //}
+
+
+    //[ClientRpc]
+    //void RpcSetPlayer(PlayerType PT, GameObject LP)
+    //{
+    //    Debug.Log("RPC Happening");
+
+    //    IEnumerator PlayerSet = SetPlayer(PT, LP);
+    //    StartCoroutine(PlayerSet);
+
+    //}
+    IEnumerator SetPlayer()
     {
-        LinkedLobbyPlayer = LP.gameObject;
-        Debug.Log("Player being set");
-        Debug.Log(PT);
-        MyPlayerType = PT;
-    }
+        Debug.Log("Getting Player Type for Player");
+        PlayerType PT = 0;
+        if (photonView.isMine) { Debug.Log(photonView.ownerId); }
+        if (photonView.ownerId == 1) { PT = FindObjectOfType<LevelPropertyManagerMulti>().GetPlayerType(1); }
+        else if (photonView.ownerId == 2) { PT = FindObjectOfType<LevelPropertyManagerMulti>().GetPlayerType(2); }
+        else { Debug.LogError("Something went terribly wrong"); }
 
-
-    [ClientRpc]
-    void RpcSetPlayer(PlayerType PT, GameObject LP)
-    {
-        Debug.Log("RPC Happening");
-
-        IEnumerator PlayerSet = SetPlayer(PT, LP);
-        StartCoroutine(PlayerSet);
-
-    }
-
-    IEnumerator SetPlayer(PlayerType PT, GameObject LP)
-    {
         yield return new WaitForSeconds(.2f);
         M_PlayerController[] controllers = FindObjectsOfType<M_PlayerController>();
-        Debug.Log(controllers.Length);
-        LinkedLobbyPlayer = LP;
-        if (LP.GetComponent<LobbyPlayer>().LocalPlayer)
+        if (photonView.isMine)
         {
             isTheLocalPlayer = true;
             if (FindObjectOfType<myPlayer>() != null)
@@ -138,7 +166,7 @@ public class M_PlayerController : M_Player {
                 this.transform.SetParent(FindObjectOfType<myPlayer>().transform);
                 // Show what player they are
                 if (PT == PlayerType.Holmes) { PlayerScreen = FindObjectOfType<HolmesScreen>(); }
-                else if(PT == PlayerType.Moriarty) { PlayerScreen = FindObjectOfType<MoriartyScreen>(); }
+                else if (PT == PlayerType.Moriarty) { PlayerScreen = FindObjectOfType<MoriartyScreen>(); }
                 PlayerScreen.EnableOverlay();
                 yield return new WaitForSeconds(4f);
                 PlayerScreen.DisableOverlay();
@@ -160,6 +188,46 @@ public class M_PlayerController : M_Player {
         if (GetComponentInParent<myPlayer>() != null) { GetComponentInParent<myPlayer>().SetIndicator(); }
         else { GetComponentInParent<myOponnent>().SetIndicator(); }
     }
+
+
+
+    //IEnumerator SetPlayer(PlayerType PT, GameObject LP)
+    //{
+    //    yield return new WaitForSeconds(.2f);
+    //    M_PlayerController[] controllers = FindObjectsOfType<M_PlayerController>();
+    //    Debug.Log(controllers.Length);
+    //    LinkedLobbyPlayer = LP;
+    //    if (LP.GetComponent<LobbyPlayerPhoton>().LocalPlayer)
+    //    {
+    //        isTheLocalPlayer = true;
+    //        if (FindObjectOfType<myPlayer>() != null)
+    //        {
+    //            Debug.Log("myPlayer found");
+    //            this.transform.SetParent(FindObjectOfType<myPlayer>().transform);
+    //            // Show what player they are
+    //            if (PT == PlayerType.Holmes) { PlayerScreen = FindObjectOfType<HolmesScreen>(); }
+    //            else if(PT == PlayerType.Moriarty) { PlayerScreen = FindObjectOfType<MoriartyScreen>(); }
+    //            PlayerScreen.EnableOverlay();
+    //            yield return new WaitForSeconds(4f);
+    //            PlayerScreen.DisableOverlay();
+    //        }
+    //        else { Debug.Log("No myPlayer found"); }
+    //    }
+    //    else
+    //    {
+    //        if (FindObjectOfType<myOponnent>() != null)
+    //        {
+    //            Debug.Log("myOponent found");
+    //            this.transform.SetParent(FindObjectOfType<myOponnent>().transform);
+    //        }
+    //        else { Debug.Log("No myOponent found"); }
+    //    }
+    //    transform.localPosition = Vector3.zero;
+    //    MyPlayerType = PT;
+    //    FindObjectOfType<M_gameManager>().setPlayer(this);
+    //    if (GetComponentInParent<myPlayer>() != null) { GetComponentInParent<myPlayer>().SetIndicator(); }
+    //    else { GetComponentInParent<myOponnent>().SetIndicator(); }
+    //}
 
     public override void SetupPlayer()
     {
@@ -223,7 +291,7 @@ public class M_PlayerController : M_Player {
 
     public void PlayerEndTurn()
     {
-        CmdEndTurn();
+        photonView.RPC("RpcEndTurn", PhotonTargets.AllViaServer);
 
         if (GetComponentInParent<myPlayer>())
         {
@@ -232,17 +300,23 @@ public class M_PlayerController : M_Player {
         }
     }
 
-    [Command]
-    void CmdEndTurn()
-    {
-        RpcEndTurn();
-    }
-
-    [ClientRpc]
+    [PunRPC]
     void RpcEndTurn()
     {
         gamemanager.PlayerEndTurn(MyPlayerType);
     }
+
+    //[Command]
+    //void CmdEndTurn()
+    //{
+    //    RpcEndTurn();
+    //}
+
+    //[ClientRpc]
+    //void RpcEndTurn()
+    //{
+    //    gamemanager.PlayerEndTurn(MyPlayerType);
+    //}
 
     // Update is called once per frame
     void Update() {
@@ -324,11 +398,11 @@ public class M_PlayerController : M_Player {
                 int buttonHit = Hit.transform.GetComponent<SwapButtons>().Button;
                 if (buttonHit == 1)
                 {
-                    CmdSwapClueCards(1, 2);
+                    photonView.RPC("RpcSwapClueCards", PhotonTargets.AllViaServer, 1, 2);
                 }
                 else if (buttonHit == 2)
                 {
-                    CmdSwapClueCards(2, 3);
+                    photonView.RPC("RpcSwapClueCards", PhotonTargets.AllViaServer, 2, 3);
                 }
             }
         }
@@ -519,16 +593,10 @@ public class M_PlayerController : M_Player {
     {
         int cardSwappingCase = cardSwapping.GetComponentInParent<RowAreaPosition>().Case;
         int SelectedCardSwappingCase = SelectedCard.GetComponentInParent<RowAreaPosition>().Case;
-        CmdSwapClueCards(cardSwappingCase, SelectedCardSwappingCase);
+        photonView.RPC("RpcSwapClueCards", PhotonTargets.AllViaServer, cardSwappingCase, SelectedCardSwappingCase);
     }
 
-    [Command]
-    void CmdSwapClueCards(int cardSwappingCase, int SelectedCardSwappingCase)
-    {
-        RpcSwapClueCards(cardSwappingCase, SelectedCardSwappingCase);
-    }
-
-    [ClientRpc]
+    [PunRPC]
     void RpcSwapClueCards(int cardSwappingCase, int SelectedCardSwappingCase)
     {
         CardArea[] CardAreas = FindObjectsOfType<CardArea>();
@@ -561,6 +629,48 @@ public class M_PlayerController : M_Player {
         }
     }
 
+
+
+
+    //[Command]
+    //void CmdSwapClueCards(int cardSwappingCase, int SelectedCardSwappingCase)
+    //{
+    //    RpcSwapClueCards(cardSwappingCase, SelectedCardSwappingCase);
+    //}
+
+    //[ClientRpc]
+    //void RpcSwapClueCards(int cardSwappingCase, int SelectedCardSwappingCase)
+    //{
+    //    CardArea[] CardAreas = FindObjectsOfType<CardArea>();
+    //    foreach (CardArea CA in CardAreas)
+    //    {
+    //        if (GetComponentInParent<myOponnent>())
+    //        {
+    //            if (CA.ThisCardAreaType == CardArea.CardAreaType.Opponent && CA.ThisRow == CardArea.Row.Clue)
+    //            {
+    //                ClueCard cardSwapping = CA.GetCard(cardSwappingCase);
+    //                ClueCard selectedCard = CA.GetCard(SelectedCardSwappingCase);
+    //                CA.MoveCard(cardSwapping);
+    //                CA.MoveCard(selectedCard);
+    //                CA.PlaceCardDown(cardSwapping, SelectedCardSwappingCase);
+    //                CA.PlaceCardDown(selectedCard, cardSwappingCase);
+    //            }
+    //        }
+    //        else if (GetComponentInParent<myPlayer>())
+    //        {
+    //            if (CA.ThisCardAreaType == CardArea.CardAreaType.Player && CA.ThisRow == CardArea.Row.Clue)
+    //            {
+    //                ClueCard cardSwapping = CA.GetCard(cardSwappingCase);
+    //                ClueCard selectedCard = CA.GetCard(SelectedCardSwappingCase);
+    //                CA.MoveCard(cardSwapping);
+    //                CA.MoveCard(selectedCard);
+    //                CA.PlaceCardUp(cardSwapping, SelectedCardSwappingCase);
+    //                CA.PlaceCardUp(selectedCard, cardSwappingCase);
+    //            }
+    //        }
+    //    }
+    //}
+
     void CheckToRemoveCardOrPlaceDown()
     {
         if (SelectedCard.GetComponentInParent<RowAreaPosition>() != null)
@@ -568,7 +678,7 @@ public class M_PlayerController : M_Player {
             //SelectedCard.GetComponentInParent<CardArea>().RemoveCard(SelectedCard);
             //cardHand.AddCard(SelectedCard, gamemanager.CurrentCaseOn - 1);
             int RowValue = (int)SelectedCard.GetComponentInParent<CardArea>().ThisRow;
-            CmdRemoveCard(RowValue);
+            photonView.RPC("RpcRemoveCard", PhotonTargets.AllViaServer, RowValue);
             SelectedCard.transform.position = SelectedCardOriginalPosition;
             return;
         }
@@ -621,7 +731,7 @@ public class M_PlayerController : M_Player {
                 // CANT pass data through server like that find another way 
                 int CardPosition = cardHand.GetCardPosition(SelectedCard);
                 int RowValue = (int)HitTransform.GetComponent<CardArea>().ThisRow;
-                CmdPlaceCard(RowValue, CardPosition);
+                photonView.RPC("RpcPlaceCard", PhotonTargets.AllViaServer, RowValue, CardPosition);
                 // DO a command and RPC that places the card out of hand and into a card area dependent on if they are player or opponent
                 //GetComponentInChildren<M_CardHand>().RemoveCard(SelectedCard);
                 //HitTransform.GetComponent<CardArea>().PlaceCard(SelectedCard, gamemanager.CurrentCaseOn);
@@ -633,13 +743,7 @@ public class M_PlayerController : M_Player {
         SelectedCard.transform.position = SelectedCardOriginalPosition;
     }
 
-    [Command]
-    public void CmdPlaceCard(int RowValue, int CardPos)
-    {
-        RpcPlaceCard(RowValue, CardPos);
-    }
-
-    [ClientRpc]
+    [PunRPC]
     public void RpcPlaceCard(int RowValue, int CardPos)
     {
         Debug.Log("RPC Moving Card");
@@ -649,14 +753,16 @@ public class M_PlayerController : M_Player {
         {
             if (GetComponentInParent<myOponnent>())
             {
-                if (CA.ThisCardAreaType == CardArea.CardAreaType.Opponent && (int)CA.ThisRow == RowValue) {
+                if (CA.ThisCardAreaType == CardArea.CardAreaType.Opponent && (int)CA.ThisRow == RowValue)
+                {
                     cardHand.RemoveCard(cardSelected);
                     CA.PlaceCardDown(cardSelected, gamemanager.CurrentCaseOn);
                 }
             }
             else if (GetComponentInParent<myPlayer>())
             {
-                if (CA.ThisCardAreaType == CardArea.CardAreaType.Player && (int)CA.ThisRow == RowValue) {
+                if (CA.ThisCardAreaType == CardArea.CardAreaType.Player && (int)CA.ThisRow == RowValue)
+                {
                     cardHand.RemoveCard(cardSelected);
                     CA.PlaceCardUp(cardSelected, gamemanager.CurrentCaseOn);
                 }
@@ -665,13 +771,41 @@ public class M_PlayerController : M_Player {
         CheckEndTurn();
     }
 
-    [Command]
-    void CmdRemoveCard(int RowValue)
-    {
-        RpcRemoveCard(RowValue);
-    }
 
-    [ClientRpc]
+    //[Command]
+    //public void CmdPlaceCard(int RowValue, int CardPos)
+    //{
+    //    RpcPlaceCard(RowValue, CardPos);
+    //}
+
+    //[ClientRpc]
+    //public void RpcPlaceCard(int RowValue, int CardPos)
+    //{
+    //    Debug.Log("RPC Moving Card");
+    //    ClueCard cardSelected = GetComponentInChildren<M_CardHand>().GetCardFromPosition(CardPos);
+    //    CardArea[] CardAreas = FindObjectsOfType<CardArea>();
+    //    foreach (CardArea CA in CardAreas)
+    //    {
+    //        if (GetComponentInParent<myOponnent>())
+    //        {
+    //            if (CA.ThisCardAreaType == CardArea.CardAreaType.Opponent && (int)CA.ThisRow == RowValue) {
+    //                cardHand.RemoveCard(cardSelected);
+    //                CA.PlaceCardDown(cardSelected, gamemanager.CurrentCaseOn);
+    //            }
+    //        }
+    //        else if (GetComponentInParent<myPlayer>())
+    //        {
+    //            if (CA.ThisCardAreaType == CardArea.CardAreaType.Player && (int)CA.ThisRow == RowValue) {
+    //                cardHand.RemoveCard(cardSelected);
+    //                CA.PlaceCardUp(cardSelected, gamemanager.CurrentCaseOn);
+    //            }
+    //        }
+    //    }
+    //    CheckEndTurn();
+    //}
+
+
+    [PunRPC]
     void RpcRemoveCard(int RowValue)
     {
         CardArea[] CardAreas = FindObjectsOfType<CardArea>();
@@ -681,7 +815,7 @@ public class M_PlayerController : M_Player {
             {
                 if (CA.ThisCardAreaType == CardArea.CardAreaType.Opponent && (int)CA.ThisRow == RowValue)
                 {
-                   ClueCard card = CA.GetCard(gamemanager.CurrentCaseOn);
+                    ClueCard card = CA.GetCard(gamemanager.CurrentCaseOn);
                     CA.RemoveCard(card);
                     cardHand.AddCard(card, gamemanager.CurrentCaseOn - 1);
                 }
@@ -698,17 +832,61 @@ public class M_PlayerController : M_Player {
         }
     }
 
-    [Command]
-    void CmdRemoveTile(int TileNumber)
-    {
-        RpcRemoveTile(TileNumber);
-    }
 
-    [ClientRpc]
+
+
+    //[Command]
+    //void CmdRemoveCard(int RowValue)
+    //{
+    //    RpcRemoveCard(RowValue);
+    //}
+
+    //[ClientRpc]
+    //void RpcRemoveCard(int RowValue)
+    //{
+    //    CardArea[] CardAreas = FindObjectsOfType<CardArea>();
+    //    foreach (CardArea CA in CardAreas)
+    //    {
+    //        if (GetComponentInParent<myOponnent>())
+    //        {
+    //            if (CA.ThisCardAreaType == CardArea.CardAreaType.Opponent && (int)CA.ThisRow == RowValue)
+    //            {
+    //               ClueCard card = CA.GetCard(gamemanager.CurrentCaseOn);
+    //                CA.RemoveCard(card);
+    //                cardHand.AddCard(card, gamemanager.CurrentCaseOn - 1);
+    //            }
+    //        }
+    //        else if (GetComponentInParent<myPlayer>())
+    //        {
+    //            if (CA.ThisCardAreaType == CardArea.CardAreaType.Player && (int)CA.ThisRow == RowValue)
+    //            {
+    //                ClueCard card = CA.GetCard(gamemanager.CurrentCaseOn);
+    //                CA.RemoveCard(card);
+    //                cardHand.AddCard(card, gamemanager.CurrentCaseOn - 1);
+    //            }
+    //        }
+    //    }
+    //}
+
+
+    [PunRPC]
     void RpcRemoveTile(int TileNumber)
     {
         tileArea.RemoveTile(TileNumber);
     }
+
+
+    //[Command]
+    //void CmdRemoveTile(int TileNumber)
+    //{
+    //    RpcRemoveTile(TileNumber);
+    //}
+
+    //[ClientRpc]
+    //void RpcRemoveTile(int TileNumber)
+    //{
+    //    tileArea.RemoveTile(TileNumber);
+    //}
 
 
     void CheckToPlaceDownTile(Transform HitTransform)
@@ -717,7 +895,7 @@ public class M_PlayerController : M_Player {
         if (HitTransform.GetComponent<TileSpot>().GetHighlighted)
         {
             PlayerType TileType = tileArea.GetTileType(HitTransform.GetComponent<TileSpot>().Number);
-            CmdRemoveTile(HitTransform.GetComponent<TileSpot>().Number);
+            photonView.RPC("RpcRemoveTile", PhotonTargets.AllViaServer, HitTransform.GetComponent<TileSpot>().Number);
 
             if (TileType == PlayerType.Holmes)
             {
@@ -739,7 +917,7 @@ public class M_PlayerController : M_Player {
 
         else if (MoriartyTilesToPlace > 0)
         {
-            CmdPlacedMoriartyTile(HitTransform.GetComponent<TileSpot>().Number);
+            photonView.RPC("RpcPlacedMoriartyTile", PhotonTargets.AllViaServer, HitTransform.GetComponent<TileSpot>().Number);
         }
         else if (HolmesTilesToPlace > 0)
         {
@@ -747,21 +925,19 @@ public class M_PlayerController : M_Player {
             {
                 if (HolmesCaseCardsWon[i].CardTypes.Contains(HitTransform.GetComponent<TileSpot>().ThisCardType))
                 {
-                    CmdPlacedHolmesTile(HitTransform.GetComponent<TileSpot>().Number, i);
+                    photonView.RPC("RpcPlacedHolmesTile", PhotonTargets.AllViaServer, HitTransform.GetComponent<TileSpot>().Number, i);
+                    
                 }
             }
         }
     }
-    [Command]
-    void CmdPlacedMoriartyTile(int TileNumber)
-    {
-        RpcPlacedMoriartyTile(TileNumber);
-    }
 
-    [ClientRpc]
+
+    [PunRPC]
     void RpcPlacedMoriartyTile(int TileNumber)
     {
-        if (tileArea.PlaceTile(MoriartyTile, TileNumber, PlayerType.Moriarty)) {
+        if (tileArea.PlaceTile(MoriartyTile, TileNumber, PlayerType.Moriarty))
+        {
             tileArea.HighlightTile(TileNumber);
             MoriartyTilesToPlace--;
         }
@@ -769,13 +945,24 @@ public class M_PlayerController : M_Player {
     }
 
 
-    [Command]
-    void CmdPlacedHolmesTile(int TileNumber, int CaseCardIndex)
-    {
-        RpcPlacedHolmesTile(TileNumber, CaseCardIndex);
-    }
+    //[Command]
+    //void CmdPlacedMoriartyTile(int TileNumber)
+    //{
+    //    RpcPlacedMoriartyTile(TileNumber);
+    //}
 
-    [ClientRpc]
+    //[ClientRpc]
+    //void RpcPlacedMoriartyTile(int TileNumber)
+    //{
+    //    if (tileArea.PlaceTile(MoriartyTile, TileNumber, PlayerType.Moriarty)) {
+    //        tileArea.HighlightTile(TileNumber);
+    //        MoriartyTilesToPlace--;
+    //    }
+    //    if (MoriartyTilesToPlace == 0) { CheckEndTurn(); }
+    //}
+
+
+    [PunRPC]
     void RpcPlacedHolmesTile(int TileNumber, int CaseCardIndex)
     {
         if (tileArea.PlaceTile(HolmesTile, TileNumber, PlayerType.Holmes))
@@ -791,6 +978,29 @@ public class M_PlayerController : M_Player {
             CheckEndTurn();
         }
     }
+
+    //[Command]
+    //void CmdPlacedHolmesTile(int TileNumber, int CaseCardIndex)
+    //{
+    //    RpcPlacedHolmesTile(TileNumber, CaseCardIndex);
+    //}
+
+    //[ClientRpc]
+    //void RpcPlacedHolmesTile(int TileNumber, int CaseCardIndex)
+    //{
+    //    if (tileArea.PlaceTile(HolmesTile, TileNumber, PlayerType.Holmes))
+    //    {
+    //        tileArea.HighlightTile(TileNumber);
+    //        HolmesTilesToPlace--;
+    //        HolmesCaseCardsWon[CaseCardIndex].MoveBackDown();
+    //        HolmesCaseCardsWon.Remove(HolmesCaseCardsWon[CaseCardIndex]);
+    //    }
+
+    //    if (HolmesTilesToPlace == 0)
+    //    {
+    //        CheckEndTurn();
+    //    }
+    //}
 
     void CheckToSelectCard(Transform HitTransform)
     {
@@ -852,21 +1062,29 @@ public class M_PlayerController : M_Player {
 
     public void SortCardsToggle()
     {
-        CmdToggleSort();
+        photonView.RPC("RpcToggleSort", PhotonTargets.AllViaServer);
     }
 
-    [Command]
-    void CmdToggleSort()
-    {
-        RpcToggleSort();
-    }
 
-    [ClientRpc]
+    [PunRPC]
     void RpcToggleSort()
     {
         Debug.Log("Sorting hand");
         cardHand.ToggleSort();
     }
+
+    //[Command]
+    //void CmdToggleSort()
+    //{
+    //    RpcToggleSort();
+    //}
+
+    //[ClientRpc]
+    //void RpcToggleSort()
+    //{
+    //    Debug.Log("Sorting hand");
+    //    cardHand.ToggleSort();
+    //}
 
 
 }
