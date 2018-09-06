@@ -5,10 +5,12 @@ using UnityEngine.UI;
 using UnityEngine.Networking;
 using UnityEngine.Networking.Match;
 
-public class MyNetworkHud : MonoBehaviour {
+
+public class MyNetworkHud : Photon.PunBehaviour {
 
     public Text IpAddressText;
     public myNetworkManager networkManager;
+    public PhotonLauncher photonLauncher;
     public GameObject StartMenu;
     public GameObject MatchesMenu;
     public GameObject ConnectingScreen;
@@ -26,15 +28,34 @@ public class MyNetworkHud : MonoBehaviour {
 
     public void CreateMatch()
     {
-        networkManager = FindObjectOfType<myNetworkManager>();
-        networkManager.MyStartMatch(MatchName.text);
+        photonLauncher = FindObjectOfType<PhotonLauncher>();
+        if (MatchName.text == "") { Debug.LogWarning("Need room name!"); return;  }
+        photonLauncher.MyStartMatch(MatchName.text);
     }
 
-    public void FindMatches()
+    public void FindRooms()
     {
-        networkManager = FindObjectOfType<myNetworkManager>();
-        networkManager.FindMatches();
+        photonLauncher = FindObjectOfType<PhotonLauncher>();
+        photonLauncher.FindRooms();
     }
+
+    public void ShowRooms(RoomInfo[] Rooms)
+    {
+        StartMenu.SetActive(false);
+        MatchesMenu.SetActive(true);
+        MatchesMenu.GetComponent<matchScreen>().SetRooms(Rooms);
+    }
+
+    public void JoinRoom(RoomInfo room)
+    {
+        photonLauncher.JoinRoom(room);
+    } 
+
+    public void NonHostPlayerLeft()
+    {
+         LobbyScreen.GetComponent<LobbyScreenManager>().PlayerLeft(); 
+    }
+
 
     public void ShowMatches(List<MatchInfoSnapshot> Matches)
     {
@@ -65,7 +86,7 @@ public class MyNetworkHud : MonoBehaviour {
 
     public void StopClientConnect()
     {
-        LobbyScreen.GetComponent<LobbyScreenManager>().ResetPlayers();
+  //      LobbyScreen.GetComponent<LobbyScreenManager>().ResetPlayers();
         networkManager.MyStopClient();
         StartMenu.SetActive(true);
         ConnectingScreen.SetActive(false);
@@ -82,7 +103,7 @@ public class MyNetworkHud : MonoBehaviour {
         MyMatchName = MatchName;
     }
 
-    public void PlayerJoinedServer()
+    public void PlayerJoinedServer(string RoomName)
     {
         Debug.Log("Joining Server");
         StartMenu.SetActive(false);
@@ -90,12 +111,17 @@ public class MyNetworkHud : MonoBehaviour {
         LobbyScreen.SetActive(true);
         MatchesMenu.SetActive(false);
 
-        LobbyScreen.GetComponent<LobbyScreenManager>().SetMatchName(MyMatchName);
+        LobbyScreen.GetComponent<LobbyScreenManager>().SetMatchName(RoomName);
     }
 
 
     public void GoBackToStart()
     {
+        if (LobbyScreen.activeSelf)
+        {
+            LobbyScreen.GetComponent<LobbyScreenManager>().ResetPlayers();
+        }
+
         StartMenu.SetActive(true);
         ConnectingScreen.SetActive(false);
         LobbyScreen.SetActive(false);
@@ -104,9 +130,15 @@ public class MyNetworkHud : MonoBehaviour {
 
     public void LeaveLobby()
     {
-        networkManager.LeaveLobby();
+        photonLauncher = FindObjectOfType<PhotonLauncher>();
+        photonLauncher.LeaveRoom();
     }
 
+    public void LeaveRoomList()
+    {
+        photonLauncher = FindObjectOfType<PhotonLauncher>();
+        photonLauncher.LeaveRoomList();
+    }
 
     // Update is called once per frame
     void Update () {

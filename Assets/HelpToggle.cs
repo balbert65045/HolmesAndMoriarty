@@ -9,7 +9,7 @@ public class HelpToggle : MonoBehaviour {
     public MeshRenderer Crime1;
     public MeshRenderer Crime2;
 
-    bool HelpOn = false;
+    bool HelpOn = true;
 
     public void ToggleHelp()
     {

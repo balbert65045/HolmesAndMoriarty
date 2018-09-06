@@ -68,7 +68,7 @@ public class M_Player : Photon.PunBehaviour, IPunObservable {
     {
         _CardDeck = FindObjectOfType<M_ClueDeck>();
         if ((photonView.ownerId == 1 && photonView.isMine) ||
-            (photonView.ownerId == 2 && !photonView.isMine))
+            (photonView.ownerId > 1 && !photonView.isMine))
             {
             Debug.Log("Drawing Cards");
 
@@ -132,7 +132,7 @@ public class M_Player : Photon.PunBehaviour, IPunObservable {
         _CardHand.AddCard(cardDrawn, 0);
         CardsLeft--;
         if ((photonView.ownerId == 1 && photonView.isMine) ||
-            (photonView.ownerId == 2 && !photonView.isMine))
+            (photonView.ownerId > 1 && !photonView.isMine))
         {
             if (CardsLeft > 0) { DrawNextCard(CardsLeft); }
             else if (MyPlayerType == PlayerType.Holmes)

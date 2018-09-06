@@ -29,7 +29,9 @@ public class LobbyPlayerPhoton : Photon.PunBehaviour, IPunObservable {
         DontDestroyOnLoad(this.gameObject);
         Lobby = FindObjectOfType<LobbyScreenManager>();
 
-        PlayerID = photonView.ownerId;
+        if (photonView.ownerId > 2){ PlayerID = 2; }
+        else{ PlayerID = photonView.ownerId; }
+
         LobbyPlayersUI = FindObjectsOfType<LobbyPlayerUI>();
         foreach (LobbyPlayerUI LPU in LobbyPlayersUI)
         {
@@ -52,6 +54,8 @@ public class LobbyPlayerPhoton : Photon.PunBehaviour, IPunObservable {
         }
         else
         {
+            playerDropdown.interactable = true;
+            ReadyToggle.interactable = true;
             LocalPlayer = true;
         }
     }

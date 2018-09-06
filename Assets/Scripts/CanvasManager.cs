@@ -81,7 +81,7 @@ public class CanvasManager : MonoBehaviour {
 
     public void LoadMultiplayerLobby()
     {
-        levelManager.LoadLevel("MultiplayerMatchMaker");
+        levelManager.LoadLevel("PhotonMultiplayerLobby");
     }
 
     // Update is called once per frame

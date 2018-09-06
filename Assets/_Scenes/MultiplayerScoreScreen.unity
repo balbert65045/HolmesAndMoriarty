@@ -196,6 +196,7 @@ MonoBehaviour:
   Number: 14
   Used: 0
   ThreatLevel: 0
+  Highlighted: 0
 --- !u!1 &130067826
 GameObject:
   m_ObjectHideFlags: 0
@@ -261,6 +262,7 @@ MonoBehaviour:
   HolmesTile: {fileID: 1970626819709662, guid: bc32641062816b14c9cb40d089786787, type: 2}
   MoriartyTile: {fileID: 1694548597298064, guid: 7a9a83837126ec941b17ca577d9362cb,
     type: 2}
+  HighlightArea: {fileID: 0}
 --- !u!1 &200330681
 GameObject:
   m_ObjectHideFlags: 0
@@ -345,6 +347,7 @@ MonoBehaviour:
   Number: 3
   Used: 0
   ThreatLevel: 0
+  Highlighted: 0
 --- !u!1 &220602140
 GameObject:
   m_ObjectHideFlags: 0
@@ -563,6 +566,7 @@ GameObject:
   - component: {fileID: 299330723}
   - component: {fileID: 299330722}
   - component: {fileID: 299330721}
+  - component: {fileID: 299330724}
   m_Layer: 5
   m_Name: MenuButton
   m_TagString: Untagged
@@ -577,7 +581,7 @@ RectTransform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 299330719}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 272.7, y: -170.28537, z: 0}
+  m_LocalPosition: {x: 272.7, y: -188.09528, z: 0}
   m_LocalScale: {x: 0.7, y: 0.7, z: 1}
   m_Children:
   - {fileID: 1914051481}
@@ -628,9 +632,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 940331258}
-        m_MethodName: LoadLevel
-        m_Mode: 5
+      - m_Target: {fileID: 299330724}
+        m_MethodName: GoBackToStart
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -674,6 +678,17 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 299330719}
+--- !u!114 &299330724
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 299330719}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb18a0465cfb95343a10b61f45d1d318, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &308449252
 GameObject:
   m_ObjectHideFlags: 0
@@ -797,6 +812,7 @@ MonoBehaviour:
   Number: 8
   Used: 0
   ThreatLevel: 0
+  Highlighted: 0
 --- !u!1 &362900338
 GameObject:
   m_ObjectHideFlags: 0
@@ -881,6 +897,7 @@ MonoBehaviour:
   Number: 15
   Used: 0
   ThreatLevel: 0
+  Highlighted: 0
 --- !u!1 &460135713
 GameObject:
   m_ObjectHideFlags: 0
@@ -965,6 +982,7 @@ MonoBehaviour:
   Number: 2
   Used: 0
   ThreatLevel: 0
+  Highlighted: 0
 --- !u!1 &470150298
 GameObject:
   m_ObjectHideFlags: 0
@@ -1307,6 +1325,7 @@ MonoBehaviour:
   Number: 10
   Used: 0
   ThreatLevel: 0
+  Highlighted: 0
 --- !u!1 &809903386
 GameObject:
   m_ObjectHideFlags: 0
@@ -1391,6 +1410,7 @@ MonoBehaviour:
   Number: 16
   Used: 0
   ThreatLevel: 0
+  Highlighted: 0
 --- !u!1 &812221200
 GameObject:
   m_ObjectHideFlags: 0
@@ -1402,6 +1422,7 @@ GameObject:
   - component: {fileID: 812221204}
   - component: {fileID: 812221203}
   - component: {fileID: 812221202}
+  - component: {fileID: 812221205}
   m_Layer: 5
   m_Name: QuitButton
   m_TagString: Untagged
@@ -1416,7 +1437,7 @@ RectTransform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 812221200}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -234.30002, y: -170.28537, z: 0}
+  m_LocalPosition: {x: -234.30002, y: -188.09528, z: 0}
   m_LocalScale: {x: 0.7, y: 0.7, z: 1}
   m_Children:
   - {fileID: 873692625}
@@ -1467,8 +1488,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 940331258}
-        m_MethodName: QuitRequest
+      - m_Target: {fileID: 299330724}
+        m_MethodName: Quit
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1513,6 +1534,17 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 812221200}
+--- !u!114 &812221205
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 812221200}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb18a0465cfb95343a10b61f45d1d318, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &817177663
 GameObject:
   m_ObjectHideFlags: 0
@@ -1597,6 +1629,7 @@ MonoBehaviour:
   Number: 11
   Used: 0
   ThreatLevel: 0
+  Highlighted: 0
 --- !u!1 &836413894
 GameObject:
   m_ObjectHideFlags: 0
@@ -1681,6 +1714,7 @@ MonoBehaviour:
   Number: 12
   Used: 0
   ThreatLevel: 0
+  Highlighted: 0
 --- !u!1 &853355073
 GameObject:
   m_ObjectHideFlags: 0
@@ -1765,6 +1799,7 @@ MonoBehaviour:
   Number: 13
   Used: 0
   ThreatLevel: 0
+  Highlighted: 0
 --- !u!1 &873692624
 GameObject:
   m_ObjectHideFlags: 0
@@ -1923,8 +1958,8 @@ RectTransform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 902432265}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 953, y: 493.5, z: 0}
-  m_LocalScale: {x: 2.3825, y: 2.3825, z: 2.3825}
+  m_LocalPosition: {x: 457, y: 257, z: 0}
+  m_LocalScale: {x: 1.1425, y: 1.1425, z: 1.1425}
   m_Children:
   - {fileID: 283866991}
   - {fileID: 130067827}
@@ -1985,12 +2020,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &940331258 stripped
-MonoBehaviour:
-  m_PrefabParentObject: {fileID: 114028790317454004, guid: 4a2ca057377c6d74385ec3caf602a65a,
-    type: 2}
-  m_PrefabInternal: {fileID: 724786861}
-  m_Script: {fileID: 11500000, guid: e66dd25313b28b1428d302ec9f6b9216, type: 3}
 --- !u!1 &1105664710
 GameObject:
   m_ObjectHideFlags: 0
@@ -2223,6 +2252,7 @@ MonoBehaviour:
   Number: 5
   Used: 0
   ThreatLevel: 0
+  Highlighted: 0
 --- !u!1 &1741334375
 GameObject:
   m_ObjectHideFlags: 0
@@ -2381,6 +2411,7 @@ MonoBehaviour:
   Number: 6
   Used: 0
   ThreatLevel: 0
+  Highlighted: 0
 --- !u!1 &1804766833
 GameObject:
   m_ObjectHideFlags: 0
@@ -2465,6 +2496,7 @@ MonoBehaviour:
   Number: 9
   Used: 0
   ThreatLevel: 0
+  Highlighted: 0
 --- !u!1 &1891374651
 GameObject:
   m_ObjectHideFlags: 0
@@ -2549,6 +2581,7 @@ MonoBehaviour:
   Number: 7
   Used: 0
   ThreatLevel: 0
+  Highlighted: 0
 --- !u!1 &1914051480
 GameObject:
   m_ObjectHideFlags: 0
@@ -2647,7 +2680,7 @@ RectTransform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1927382110}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 168.03537, z: 0}
+  m_LocalPosition: {x: 0, y: 185.84528, z: 0}
   m_LocalScale: {x: 0.7, y: 0.7, z: 1}
   m_Children: []
   m_Father: {fileID: 902432269}
@@ -2855,6 +2888,7 @@ MonoBehaviour:
   Number: 1
   Used: 0
   ThreatLevel: 0
+  Highlighted: 0
 --- !u!1 &2137237049
 GameObject:
   m_ObjectHideFlags: 0
@@ -2939,3 +2973,4 @@ MonoBehaviour:
   Number: 4
   Used: 0
   ThreatLevel: 0
+  Highlighted: 0

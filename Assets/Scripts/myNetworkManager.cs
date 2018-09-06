@@ -359,7 +359,7 @@ public class myNetworkManager : NetworkLobbyManager {
 
     public override void OnLobbyClientConnect(NetworkConnection conn)
     {
-        Hud.PlayerJoinedServer();
+      //  Hud.PlayerJoinedServer();
         Debug.Log(onlineScene);
         base.OnLobbyClientConnect(conn);
         Debug.Log(Time.timeSinceLevelLoad + " Client connected to IP:" + conn.address);

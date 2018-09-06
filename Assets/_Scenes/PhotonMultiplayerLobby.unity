@@ -291,8 +291,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1704414949}
-        m_MethodName: Connect
+      - m_Target: {fileID: 965072132}
+        m_MethodName: CreateMatch
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1725,8 +1725,8 @@ RectTransform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 473121554}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 461, y: 259.5, z: 0}
-  m_LocalScale: {x: 1.1525, y: 1.1525, z: 1.1525}
+  m_LocalPosition: {x: 457, y: 257, z: 0}
+  m_LocalScale: {x: 1.1425, y: 1.1425, z: 1.1425}
   m_Children:
   - {fileID: 2043358704}
   - {fileID: 1399103356}
@@ -2215,7 +2215,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 845216401}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.42909816
+  m_Size: 0.42909813
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -2810,6 +2810,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   IpAddressText: {fileID: 0}
   networkManager: {fileID: 0}
+  photonLauncher: {fileID: 0}
   StartMenu: {fileID: 1399103355}
   MatchesMenu: {fileID: 2126256938}
   ConnectingScreen: {fileID: 340360879}
@@ -4865,8 +4866,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1704414949}
-        m_MethodName: Connect
+      - m_Target: {fileID: 965072132}
+        m_MethodName: FindRooms
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5206,7 +5207,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 965072132}
-        m_MethodName: GoBackToStart
+        m_MethodName: LeaveRoomList
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5541,6 +5542,7 @@ MonoBehaviour:
     type: 2}
   GamePlayer: {fileID: 1370142603639204, guid: 721d237ae2f9d634ca72dce27119a4fc, type: 2}
   str_GameSceneName: MultiplayerLayout
+  str_ScoreSceneName: MultiplayerScoreScreen
 --- !u!4 &1704414950
 Transform:
   m_ObjectHideFlags: 0

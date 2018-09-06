@@ -27,7 +27,7 @@ public class LobbyPlayer : NetworkLobbyPlayer {
     void Start () {
         DontDestroyOnLoad(this.gameObject);
         Lobby = FindObjectOfType<LobbyScreenManager>();
-        PlayerID = Lobby.PlayerJoin(this.gameObject);
+     //   PlayerID = Lobby.PlayerJoin(this.gameObject);
 
         LobbyPlayersUI = FindObjectsOfType<LobbyPlayerUI>();
         foreach (LobbyPlayerUI LPU in LobbyPlayersUI)
@@ -54,10 +54,10 @@ public class LobbyPlayer : NetworkLobbyPlayer {
 
     void RemakeLobby()
     {
-        FindObjectOfType<MyNetworkHud>().PlayerJoinedServer();
+    //    FindObjectOfType<MyNetworkHud>().PlayerJoinedServer();
 
         Lobby = FindObjectOfType<LobbyScreenManager>();
-        PlayerID = Lobby.PlayerJoin(this.gameObject);
+        //PlayerID = Lobby.PlayerJoin(this.gameObject);
 
         LobbyPlayersUI = FindObjectsOfType<LobbyPlayerUI>();
         foreach (LobbyPlayerUI LPU in LobbyPlayersUI)
@@ -111,7 +111,7 @@ public class LobbyPlayer : NetworkLobbyPlayer {
     {
         Debug.Log("Disabling UI");
         ThisLobbyPlayerUI.ChildObject.SetActive(false);
-        Lobby.PlayerLeft();
+     //   Lobby.PlayerLeft();
     }
 
     public void SetName(string name)

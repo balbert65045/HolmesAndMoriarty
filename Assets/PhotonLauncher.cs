@@ -12,27 +12,78 @@ public class PhotonLauncher : Photon.PunBehaviour {
     public GameObject LobbyPlayer;
     public GameObject GamePlayer;
     public string str_GameSceneName;
+    public string str_ScoreSceneName;
 
+    string RoomName;
+    bool CreateRoom = false;
+    bool GetRooms = false;
     // Use this for initialization
     void Start () {
         DontDestroyOnLoad(this.gameObject);
+        
 	}
-	
-	// Update is called once per frame
-	void Update () {
+
+    private void Awake()
+    {
+        PhotonLauncher[] photonLauncher = FindObjectsOfType<PhotonLauncher>();
+        if (photonLauncher.Length > 1) { Destroy(photonLauncher[1].gameObject); }
+    }
+
+    // Update is called once per frame
+    void Update () {
 		
 	}
 
-    public override void OnConnectedToMaster()
+    //public override void OnConnectedToMaster()
+    //{
+    //    //FindObjectOfType<MyNetworkHud>().PlayerJoinedServer();
+    //    Debug.Log("Connected to master");
+    //    base.OnConnectedToMaster();
+    //    if (CreateRoom)
+    //    {
+    //        CreateRoom = false;
+    //        RoomOptions roomOptions = new RoomOptions();
+    //        roomOptions.IsVisible = false;
+    //        roomOptions.MaxPlayers = 2;
+    //        PhotonNetwork.JoinOrCreateRoom(RoomName, roomOptions, TypedLobby.Default);
+    //    }
+    //    else
+    //    {
+    //        MyNetworkHud hud = FindObjectOfType<MyNetworkHud>();
+    //        Debug.Log(PhotonNetwork.GetCustomRoomList(TypedLobby.Default, ""));
+    //        Debug.Log(PhotonNetwork.GetRoomList().Length);
+    //        hud.ShowRooms(PhotonNetwork.GetRoomList());
+    //    }
+    //}
+
+    public override void OnJoinedLobby()
     {
         //FindObjectOfType<MyNetworkHud>().PlayerJoinedServer();
-        Debug.Log("Connected to master");
-        RoomOptions roomOptions = new RoomOptions();
-        roomOptions.IsVisible = false;
-        roomOptions.MaxPlayers = 2;
-        PhotonNetwork.JoinOrCreateRoom("Ben5's Room", roomOptions, TypedLobby.Default);
-        base.OnConnectedToMaster();
+        Debug.Log("Connected to Lobby");
+        base.OnJoinedLobby();
+        if (CreateRoom)
+        {
+            CreateRoom = false;
+            RoomOptions roomOptions = new RoomOptions();
+            roomOptions.IsVisible = true;
+            roomOptions.MaxPlayers = 2;
+            PhotonNetwork.JoinOrCreateRoom(RoomName, roomOptions, TypedLobby.Default);
+        }
     }
+
+    public override void OnReceivedRoomListUpdate()
+    {
+        if (GetRooms)
+        {
+            GetRooms = false;
+            MyNetworkHud hud = FindObjectOfType<MyNetworkHud>();
+            Debug.Log(PhotonNetwork.GetRoomList().Length);
+            hud.ShowRooms(PhotonNetwork.GetRoomList());
+        }
+
+        base.OnReceivedRoomListUpdate();
+    }
+
 
     public override void OnDisconnectedFromPhoton()
     {
@@ -49,10 +100,42 @@ public class PhotonLauncher : Photon.PunBehaviour {
 
     public override void OnJoinedRoom()
     {
-        FindObjectOfType<MyNetworkHud>().PlayerJoinedServer();
+        // ro
+       
+        FindObjectOfType<MyNetworkHud>().PlayerJoinedServer(PhotonNetwork.room.Name);
         GameObject LPlayer = PhotonNetwork.Instantiate(this.LobbyPlayer.name, new Vector3(0f, 5f, 0f), Quaternion.identity, 0);
         //LPlayer.GetComponent<LobbyPlayerPhoton>().SetUpLobbyPlayer();
         Debug.Log("DemoAnimator/Launcher: OnJoinedRoom() called by PUN. Now this client is in a room.");
+    }
+
+    public override void OnPhotonPlayerDisconnected(PhotonPlayer otherPlayer)
+    {
+        Debug.Log(otherPlayer.ID);
+        // disconnect during game
+        if (SceneManager.GetActiveScene().name == str_GameSceneName)
+        {
+            PhotonNetwork.LeaveRoom(false);
+            PhotonNetwork.Disconnect();
+            FindObjectOfType<M_gameManager>().OpponentDiscconnected();
+        }
+
+        else if (SceneManager.GetActiveScene().name == str_ScoreSceneName)
+        {
+
+        }
+        // disconnect during lobby
+        else
+        {
+            if (otherPlayer.ID == 1)
+            {
+                PhotonNetwork.LeaveRoom(false);
+                PhotonNetwork.Disconnect();
+                FindObjectOfType<MyNetworkHud>().GoBackToStart();
+            }
+            else { FindObjectOfType<MyNetworkHud>().NonHostPlayerLeft(); }
+        }
+        
+        base.OnPhotonPlayerDisconnected(otherPlayer);
     }
 
     public override void OnPhotonRandomJoinFailed(object[] codeAndMsg)
@@ -73,34 +156,65 @@ public class PhotonLauncher : Photon.PunBehaviour {
         {
             CreateGamePlayer();
         }
+        else if (SceneManager.GetActiveScene().name == str_ScoreSceneName)
+        {
+            PhotonNetwork.LeaveRoom(false);
+            PhotonNetwork.Disconnect();
+        }
     }
 
     public void CreateGamePlayer()
     {
         GameObject Player = PhotonNetwork.Instantiate(this.GamePlayer.name, new Vector3(0f, 5f, 0f), Quaternion.identity, 0);
-        //LobbyPlayerPhoton[] LobbyPlayers = FindObjectsOfType<LobbyPlayerPhoton>();
-        //foreach (LobbyPlayerPhoton LP in LobbyPlayers)
-        //{
-        //    if (LP.PlayerID == 1 && LP.PlayerID == Player.GetPhotonView().ownerId) { Player.GetComponent<M_PlayerController>().SetPlayerType(FindObjectOfType<LevelPropertyManagerMulti>().Player1Player, LP); }
-        //    else if (LP.PlayerID == 2 && LP.PlayerID == Player.GetPhotonView().ownerId) { Player.GetComponent<M_PlayerController>().SetPlayerType(FindObjectOfType<LevelPropertyManagerMulti>().Player1Player, LP); }
-        //    else Debug.LogError("Something went wrong");
-        //}
     }
 
 
-
-    public void Connect()
+    public void MyStartMatch(string matchName)
     {
-        if (PhotonNetwork.connected)
-        {
-            Debug.Log("Joined a random room");
-            PhotonNetwork.JoinRandomRoom();
-        }
-        else
-        {
-            Debug.Log("Created a random room");
-            PhotonNetwork.ConnectUsingSettings("");
-        }
+        PhotonNetwork.autoJoinLobby = true;
+        RoomName = matchName;
+        CreateRoom = true;
+        PhotonNetwork.ConnectUsingSettings("");
+    } 
+
+    public void FindRooms()
+    {
+        PhotonNetwork.autoJoinLobby = true;
+        GetRooms = true;
+        PhotonNetwork.ConnectUsingSettings("");
     }
+
+    public void JoinRoom(RoomInfo room)
+    {
+        Debug.Log("Joining a room");
+        PhotonNetwork.JoinRoom(room.Name);
+    }
+
+    public void LeaveRoom()
+    {
+        PhotonNetwork.LeaveRoom(false);
+        PhotonNetwork.Disconnect();
+        FindObjectOfType<MyNetworkHud>().GoBackToStart();
+    }
+
+    public void LeaveRoomList()
+    {
+        PhotonNetwork.Disconnect();
+        FindObjectOfType<MyNetworkHud>().GoBackToStart();
+    }
+
+    //public void Connect()
+    //{
+    //    if (PhotonNetwork.connected)
+    //    {
+    //        Debug.Log("Joined a random room");
+    //        PhotonNetwork.JoinRandomRoom();
+    //    }
+    //    else
+    //    {
+    //        Debug.Log("Created a random room");
+    //        PhotonNetwork.ConnectUsingSettings("");
+    //    }
+    //}
 
 }

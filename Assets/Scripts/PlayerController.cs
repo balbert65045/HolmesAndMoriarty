@@ -185,7 +185,7 @@ public class PlayerController : GamePlayer {
                     {
                         Debug.Log("Moving Card up");
                         HighlightedCard = card;
-                        card.MoveUp(1);
+                        card.MoveUp(4);
                     }
                 }
             }
@@ -193,7 +193,7 @@ public class PlayerController : GamePlayer {
             {
                 CaseCard card = Hit.transform.GetComponent<CaseCard>();
                 HighlightedCard = card;
-                card.MoveUp(1);
+                card.MoveUp(4);
             }
         }
     }

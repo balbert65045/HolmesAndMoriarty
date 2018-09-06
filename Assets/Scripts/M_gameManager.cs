@@ -138,7 +138,7 @@ public class M_gameManager : MonoBehaviour {
         DrawCardsFor(PlayerType.Holmes);
         //HolmesPlayer.DrawCards(7);
         //MoriartyPlayer.DrawCards(7);
-        caseArea.PlaceCards();
+        //caseArea.PlaceCards();
     }
 
     public void DrawCardsFor(PlayerType PT)
@@ -150,6 +150,7 @@ public class M_gameManager : MonoBehaviour {
                 break;
             case PlayerType.Moriarty:
                 MoriartyPlayer.DrawCards(7);
+                caseArea.PlaceCards();
                 break;
         }
     }

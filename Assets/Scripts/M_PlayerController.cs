@@ -152,8 +152,8 @@ public class M_PlayerController : M_Player {
         PlayerType PT = 0;
         if (photonView.isMine) { Debug.Log(photonView.ownerId); }
         if (photonView.ownerId == 1) { PT = FindObjectOfType<LevelPropertyManagerMulti>().GetPlayerType(1); }
-        else if (photonView.ownerId == 2) { PT = FindObjectOfType<LevelPropertyManagerMulti>().GetPlayerType(2); }
-        else { Debug.LogError("Something went terribly wrong"); }
+        //else if (photonView.ownerId == 2) { PT = FindObjectOfType<LevelPropertyManagerMulti>().GetPlayerType(2); }
+        else { PT = FindObjectOfType<LevelPropertyManagerMulti>().GetPlayerType(2); }
 
         yield return new WaitForSeconds(.2f);
         M_PlayerController[] controllers = FindObjectsOfType<M_PlayerController>();
