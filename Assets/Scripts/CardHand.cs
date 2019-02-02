@@ -63,6 +63,7 @@ public class CardHand : MonoBehaviour {
     public void AddCards(List<ClueCard> cards, int StartingPosition)
     {
         int index = StartingPosition;
+        Debug.Log(index);
         foreach (ClueCard card in cards)
         {
             CardsHolding.Add(card);

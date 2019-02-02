@@ -164,12 +164,6 @@ public class M_PlayerController : M_Player {
             {
                 Debug.Log("myPlayer found");
                 this.transform.SetParent(FindObjectOfType<myPlayer>().transform);
-                // Show what player they are
-                if (PT == PlayerType.Holmes) { PlayerScreen = FindObjectOfType<HolmesScreen>(); }
-                else if (PT == PlayerType.Moriarty) { PlayerScreen = FindObjectOfType<MoriartyScreen>(); }
-                PlayerScreen.EnableOverlay();
-                yield return new WaitForSeconds(4f);
-                PlayerScreen.DisableOverlay();
             }
             else { Debug.Log("No myPlayer found"); }
         }
@@ -371,15 +365,18 @@ public class M_PlayerController : M_Player {
                     {
                         Debug.Log("Moving Card up");
                         HighlightedCard = card;
-                        card.MoveUp(1);
+                        card.MoveUp(4);
                     }
                 }
             }
             else if (Hit.transform.GetComponent<CaseCard>())
             {
                 CaseCard card = Hit.transform.GetComponent<CaseCard>();
-                HighlightedCard = card;
-                card.MoveUp(1);
+                if (card.GetComponentInParent<M_CaseArea>() != null)
+                {
+                    HighlightedCard = card;
+                    card.MoveUp(4);
+                }
             }
         }
     }
@@ -589,7 +586,64 @@ public class M_PlayerController : M_Player {
         SelectedCard.transform.position = SelectedCardOriginalPosition;
     }
 
-    void SwapClueCards(ClueCard cardSwapping, CardArea clueArea)
+
+    public void SwapClueCardsButton(int ButtonNumber)
+    {
+        if (ButtonNumber == 1)
+        {
+
+            photonView.RPC("RpcSwapClueCardsButton", PhotonTargets.AllViaServer, 1, 2);
+
+        }
+        else if (ButtonNumber == 2)
+        {
+            photonView.RPC("RpcSwapClueCardsButton", PhotonTargets.AllViaServer, 2, 3);
+        }
+    }
+
+    //TODO Still got problems with swapping 
+    [PunRPC]
+    void RpcSwapClueCardsButton(int Ncard1, int Ncard2)
+    {
+        CardArea[] CardAreas = FindObjectsOfType<CardArea>();
+        foreach (CardArea CA in CardAreas)
+        {
+            if (GetComponentInParent<myOponnent>())
+            {
+                if (CA.ThisCardAreaType == CardArea.CardAreaType.Opponent && CA.ThisRow == CardArea.Row.Clue)
+                {
+                    ClueCard Card1 = CA.GetCard(Ncard1);
+                    ClueCard Card2 = CA.GetCard(Ncard2);
+
+                    CA.SetCard(Card1, Ncard2);
+                    CA.SetCard(Card2, Ncard1);
+
+                    Card1.SwapMove(Card2.transform);
+                    Card2.SwapMove(Card1.transform);
+
+                }
+            }
+            else if (GetComponentInParent<myPlayer>())
+            {
+                if (CA.ThisCardAreaType == CardArea.CardAreaType.Player && CA.ThisRow == CardArea.Row.Clue)
+                {
+                    ClueCard Card1 = CA.GetCard(Ncard1);
+                    ClueCard Card2 = CA.GetCard(Ncard2);
+
+                    CA.SetCard(Card1, Ncard2);
+                    CA.SetCard(Card2, Ncard1);
+
+                    Card1.SwapMove(Card2.transform);
+                    Card2.SwapMove(Card1.transform);
+                }
+            }
+        }
+
+
+    }
+
+
+    public void SwapClueCards(ClueCard cardSwapping, CardArea clueArea)
     {
         int cardSwappingCase = cardSwapping.GetComponentInParent<RowAreaPosition>().Case;
         int SelectedCardSwappingCase = SelectedCard.GetComponentInParent<RowAreaPosition>().Case;

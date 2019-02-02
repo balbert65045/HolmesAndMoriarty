@@ -28,20 +28,28 @@ public class LevelManager : MonoBehaviour {
         }
     }
 
+    private void Update()
+    {
+        
+    }
+
     public void LoadLevelWithDelay(string levelName, float timeDelay)
     {
         IEnumerator LoadTheLevel = LoadLevel(levelName, timeDelay);
+        Debug.Log("Hitting Coroutine");
         StartCoroutine(LoadTheLevel);
     }
 
     IEnumerator LoadLevel(string levelname, float delaytime)
     {
+        Debug.Log("Coroutine start");
         yield return new WaitForSeconds(delaytime);
         SceneManager.LoadScene(levelname);
     }
 
 	public void LoadLevel(string name)
     {
+        Debug.Log("Level load requested for: " + name);
         SceneManager.LoadScene(name);
         Debug.Log("Level load requested for: " + name);
     }

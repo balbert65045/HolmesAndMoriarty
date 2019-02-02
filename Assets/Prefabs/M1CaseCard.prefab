@@ -167,6 +167,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71c92d49f229a4840a5085581f2dcd92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MoveSpeed: 0.2
   MovePoint: {x: 0, y: 0, z: 0}
   CardEffect: 1
   PlayerType: 1

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class PhotonLauncher : Photon.PunBehaviour {
@@ -11,50 +12,51 @@ public class PhotonLauncher : Photon.PunBehaviour {
     public GameObject LevelPropertyManager;
     public GameObject LobbyPlayer;
     public GameObject GamePlayer;
+    public string str_HolmesStartScene;
+    public string str_MoriartyStartScene;
+    public string str_LobbyScene;
     public string str_GameSceneName;
     public string str_ScoreSceneName;
 
-    string RoomName;
+    public string RoomName;
     bool CreateRoom = false;
     bool GetRooms = false;
+
+    public bool LostInThoughtEnabled;
+
+    public bool Rematch = false;
+    bool LoadGameLevel = false;
+
+    RoomOptions oldRoomOptions;
+
     // Use this for initialization
     void Start () {
         DontDestroyOnLoad(this.gameObject);
-        
-	}
+    }
 
     private void Awake()
     {
         PhotonLauncher[] photonLauncher = FindObjectsOfType<PhotonLauncher>();
-        if (photonLauncher.Length > 1) { Destroy(photonLauncher[1].gameObject); }
+        if (photonLauncher.Length > 1) {
+            Destroy(photonLauncher[1].gameObject);
+            Debug.Log("Deleted other launcher");
+        }
     }
+
+
 
     // Update is called once per frame
     void Update () {
-		
+        //if (LoadGameLevel)
+        //{
+        //    if (Time.timeSinceLevelLoad > 5f)
+        //    {
+        //        Debug.Log("Loading game scene");
+        //        LoadGameLevel = false;
+        //        MoveToGameScene();
+        //    }
+        //}
 	}
-
-    //public override void OnConnectedToMaster()
-    //{
-    //    //FindObjectOfType<MyNetworkHud>().PlayerJoinedServer();
-    //    Debug.Log("Connected to master");
-    //    base.OnConnectedToMaster();
-    //    if (CreateRoom)
-    //    {
-    //        CreateRoom = false;
-    //        RoomOptions roomOptions = new RoomOptions();
-    //        roomOptions.IsVisible = false;
-    //        roomOptions.MaxPlayers = 2;
-    //        PhotonNetwork.JoinOrCreateRoom(RoomName, roomOptions, TypedLobby.Default);
-    //    }
-    //    else
-    //    {
-    //        MyNetworkHud hud = FindObjectOfType<MyNetworkHud>();
-    //        Debug.Log(PhotonNetwork.GetCustomRoomList(TypedLobby.Default, ""));
-    //        Debug.Log(PhotonNetwork.GetRoomList().Length);
-    //        hud.ShowRooms(PhotonNetwork.GetRoomList());
-    //    }
-    //}
 
     public override void OnJoinedLobby()
     {
@@ -67,7 +69,22 @@ public class PhotonLauncher : Photon.PunBehaviour {
             RoomOptions roomOptions = new RoomOptions();
             roomOptions.IsVisible = true;
             roomOptions.MaxPlayers = 2;
+            if (FindObjectOfType<LostInThoughtToggle>().GetComponent<Toggle>().isOn)
+            {
+                roomOptions.CustomRoomProperties = new ExitGames.Client.Photon.Hashtable() { { "L0", 1 } };
+            }
+            else
+            {
+                roomOptions.CustomRoomProperties = new ExitGames.Client.Photon.Hashtable() { { "L0", 0 } };
+            }
+        
+            roomOptions.CustomRoomPropertiesForLobby = new string[] { "L0" };
             PhotonNetwork.JoinOrCreateRoom(RoomName, roomOptions, TypedLobby.Default);
+        }
+        else if (Rematch)
+        {
+            Rematch = false;
+            ReJoinRoom();
         }
     }
 
@@ -101,7 +118,17 @@ public class PhotonLauncher : Photon.PunBehaviour {
     public override void OnJoinedRoom()
     {
         // ro
-       
+        RoomName = PhotonNetwork.room.Name;
+        Debug.Log(PhotonNetwork.room.CustomProperties["L0"]);
+        if ((int)PhotonNetwork.room.CustomProperties["L0"] == 1)
+        {
+            LostInThoughtEnabled = true;
+        }
+        else
+        {
+            LostInThoughtEnabled = false;
+        }
+
         FindObjectOfType<MyNetworkHud>().PlayerJoinedServer(PhotonNetwork.room.Name);
         GameObject LPlayer = PhotonNetwork.Instantiate(this.LobbyPlayer.name, new Vector3(0f, 5f, 0f), Quaternion.identity, 0);
         //LPlayer.GetComponent<LobbyPlayerPhoton>().SetUpLobbyPlayer();
@@ -117,6 +144,12 @@ public class PhotonLauncher : Photon.PunBehaviour {
             PhotonNetwork.LeaveRoom(false);
             PhotonNetwork.Disconnect();
             FindObjectOfType<M_gameManager>().OpponentDiscconnected();
+        }
+
+        else if (SceneManager.GetActiveScene().name == str_MoriartyStartScene || SceneManager.GetActiveScene().name == str_HolmesStartScene)
+        {
+            PhotonNetwork.LeaveRoom(false);
+            PhotonNetwork.Disconnect();
         }
 
         else if (SceneManager.GetActiveScene().name == str_ScoreSceneName)
@@ -145,21 +178,64 @@ public class PhotonLauncher : Photon.PunBehaviour {
         PhotonNetwork.CreateRoom(null, new RoomOptions() { MaxPlayers = 4 }, null);
     }
 
+    public void MoveToSplashScene(PlayerType PT)
+    {
+        switch (PT)
+        {
+            case PlayerType.Holmes:
+                PhotonNetwork.LoadLevel(str_HolmesStartScene);
+                break;
+            case PlayerType.Moriarty:
+                PhotonNetwork.LoadLevel(str_MoriartyStartScene);
+                break; 
+        }
+    }
+
     public void MoveToGameScene()
     {
-        PhotonNetwork.LoadLevel(str_GameSceneName);
+        Debug.Log("Attempting to load game scene");
+        FindObjectOfType<LevelManager>().LoadLevel(str_GameSceneName);
+    }
+
+    public void MoveToBacktoLobby()
+    {
+        Rematch = true;
+        FindObjectOfType<LevelManager>().LoadLevel(str_LobbyScene);
     }
 
     private void OnLevelWasLoaded(int level)
     {
-        if (SceneManager.GetActiveScene().name == str_GameSceneName)
+        if (SceneManager.GetActiveScene().name == str_HolmesStartScene || SceneManager.GetActiveScene().name == str_MoriartyStartScene)
         {
-            CreateGamePlayer();
+            Debug.Log("Loading GameScene");
+        }
+
+        else if (SceneManager.GetActiveScene().name == str_GameSceneName)
+        {
+            if (PhotonNetwork.room != null)
+            {
+                CreateGamePlayer();
+            }
+            else
+            {
+                FindObjectOfType<M_gameManager>().OpponentDiscconnected();
+            }
         }
         else if (SceneManager.GetActiveScene().name == str_ScoreSceneName)
         {
+            //TODO figure out how to make rematch work
             PhotonNetwork.LeaveRoom(false);
             PhotonNetwork.Disconnect();
+        }
+        else if (SceneManager.GetActiveScene().name == str_LobbyScene)
+        {
+            if (Rematch)
+            {
+                FindObjectOfType<MyNetworkHud>().ShowconnectingScreen();
+                Debug.Log("Rejoining lobby");
+                PhotonNetwork.ConnectUsingSettings("");
+                //ReJoinRoom();
+            }
         }
     }
 
@@ -175,6 +251,7 @@ public class PhotonLauncher : Photon.PunBehaviour {
         RoomName = matchName;
         CreateRoom = true;
         PhotonNetwork.ConnectUsingSettings("");
+
     } 
 
     public void FindRooms()
@@ -182,6 +259,22 @@ public class PhotonLauncher : Photon.PunBehaviour {
         PhotonNetwork.autoJoinLobby = true;
         GetRooms = true;
         PhotonNetwork.ConnectUsingSettings("");
+    }
+
+    public void ReJoinRoom()
+    {
+        RoomOptions roomOptions = new RoomOptions();
+        roomOptions.IsVisible = true;
+        roomOptions.MaxPlayers = 2;
+        if (LostInThoughtEnabled)
+        {
+            roomOptions.CustomRoomProperties = new ExitGames.Client.Photon.Hashtable() { { "L0", 1 } };
+        }
+        else
+        {
+            roomOptions.CustomRoomProperties = new ExitGames.Client.Photon.Hashtable() { { "L0", 0 } };
+        }
+        PhotonNetwork.JoinOrCreateRoom(RoomName, roomOptions, TypedLobby.Default);
     }
 
     public void JoinRoom(RoomInfo room)
@@ -194,6 +287,7 @@ public class PhotonLauncher : Photon.PunBehaviour {
     {
         PhotonNetwork.LeaveRoom(false);
         PhotonNetwork.Disconnect();
+        Rematch = false;
         FindObjectOfType<MyNetworkHud>().GoBackToStart();
     }
 

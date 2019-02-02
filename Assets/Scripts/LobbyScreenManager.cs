@@ -87,7 +87,11 @@ public class LobbyScreenManager : MonoBehaviour {
             //LevelManager.DecidePlayersTypes(LobbyPlayer1.PT, LobbyPlayer2.PT);
             if (LobbyPlayer1.Ready && LobbyPlayer2.Ready)
             {
-                FindObjectOfType<PhotonLauncher>().MoveToGameScene();
+                foreach (LobbyPlayerPhoton LP in LobbyPlayers)
+                {
+                    if (LP.LocalPlayer && LP.PlayerID == 1) {FindObjectOfType<PhotonLauncher>().MoveToSplashScene(FindObjectOfType<LevelPropertyManagerMulti>().Player1Player); }
+                    else if (LP.LocalPlayer && LP.PlayerID == 2) { FindObjectOfType<PhotonLauncher>().MoveToSplashScene(FindObjectOfType<LevelPropertyManagerMulti>().Player2Player); }
+                }
             }
         }
     }

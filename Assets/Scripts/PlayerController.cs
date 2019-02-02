@@ -117,15 +117,17 @@ public class PlayerController : GamePlayer {
 
     public void PlayerEndTurn()
     {
+        Debug.Log(MyPlayerType + "Disabling end turn");
+        endTurnButton.DisableEndTurn();
         gamemanager.PlayerEndTurn(MyPlayerType);
-        if (gamemanager.CurrentTurnStatus == gameManager.TurnStatus.SwitchClueCards) { }
-        else if (gamemanager.CurrentTurnStatus == gameManager.TurnStatus.BoardInspect) { }
-        else if ((gamemanager.CurrentTurnStatus == gameManager.TurnStatus.PickTileHolmes || gamemanager.CurrentTurnStatus == gameManager.TurnStatus.PickTileMoriarty) &&
-            MyPlayerType == PlayerType.Moriarty) { }
-        else
-        {
-            endTurnButton.DisableEndTurn();
-        }
+        //if (gamemanager.CurrentTurnStatus == gameManager.TurnStatus.SwitchClueCards) { }
+        //else if (gamemanager.CurrentTurnStatus == gameManager.TurnStatus.BoardInspect) { }
+        //else if ((gamemanager.CurrentTurnStatus == gameManager.TurnStatus.PickTileHolmes || gamemanager.CurrentTurnStatus == gameManager.TurnStatus.PickTileMoriarty) &&
+        //    MyPlayerType == PlayerType.Moriarty) { }
+        //else
+        //{
+        //    endTurnButton.DisableEndTurn();
+        //}
     }
 
     public void Undo()
@@ -179,9 +181,20 @@ public class PlayerController : GamePlayer {
             {
 
                 ClueCard card = Hit.transform.GetComponent<ClueCard>();
-                if (card.GetComponentInParent<CardArea>() != null || card.GetComponentInParent<AICardArea>() != null)
+                if (card.GetComponentInParent<CardArea>() != null)
                 {
                     if (card.GetComponentInParent<RowAreaPosition>().Case != gamemanager.CurrentCaseOn)
+                    {
+                        Debug.Log("Moving Card up");
+                        HighlightedCard = card;
+                        card.MoveUp(4);
+                    }
+                }
+                else if  (card.GetComponentInParent<AICardArea>() != null)
+                {
+                    if (gamemanager.CurrentTurnStatus != gameManager.TurnStatus.Turn1 &&
+                        gamemanager.CurrentTurnStatus != gameManager.TurnStatus.Turn2 &&
+                        gamemanager.CurrentTurnStatus != gameManager.TurnStatus.Turn3)
                     {
                         Debug.Log("Moving Card up");
                         HighlightedCard = card;
@@ -198,32 +211,76 @@ public class PlayerController : GamePlayer {
         }
     }
 
+
+    public void SwapClueCards(int ButtonNumber)
+    {
+        if (ButtonNumber == 1)
+        {
+            ClueCard Card1 = ClueArea.GetCard(1);
+            ClueCard Card2 = ClueArea.GetCard(2);
+
+            ClueArea.SetCard(Card1, 2);
+            ClueArea.SetCard(Card2, 1);
+
+            Card1.SwapMove(Card2.transform);
+            Card2.SwapMove(Card1.transform);
+
+        }
+        else if (ButtonNumber == 2)
+        {
+            ClueCard Card1 = ClueArea.GetCard(2);
+            ClueCard Card2 = ClueArea.GetCard(3);
+
+            ClueArea.SetCard(Card1, 3);
+            ClueArea.SetCard(Card2, 2);
+
+            Card1.SwapMove(Card2.transform);
+            Card2.SwapMove(Card1.transform);
+        }
+    }
+
     void CheckForSwapCardsButton()
     {
-        RaycastHit Hit;
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out Hit, 100f))
-        {
+        //RaycastHit Hit;
+        //Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        //if (Physics.Raycast(ray, out Hit, 100f))
+        //{
          
-            if (Hit.transform.GetComponent<SwapButtons>() != null)
-            {
-                int buttonHit = Hit.transform.GetComponent<SwapButtons>().Button;
-                if (buttonHit == 1)
-                {
-                    ClueCard Card1 = ClueArea.GetCard(1);
-                    ClueCard Card2 = ClueArea.GetCard(2);
-                    ClueArea.PlaceCard(Card1, 2);
-                    ClueArea.PlaceCard(Card2, 1);
-                }
-                else if (buttonHit == 2)
-                {
-                    ClueCard Card1 = ClueArea.GetCard(2);
-                    ClueCard Card2 = ClueArea.GetCard(3);
-                    ClueArea.PlaceCard(Card1, 3);
-                    ClueArea.PlaceCard(Card2, 2);
-                }
-            }
-        }
+        //    if (Hit.transform.GetComponent<SwapButtons>() != null)
+        //    {
+        //        int buttonHit = Hit.transform.GetComponent<SwapButtons>().Button;
+        //        if (buttonHit == 1)
+        //        {
+        //            ClueCard Card1 = ClueArea.GetCard(1);
+        //            ClueCard Card2 = ClueArea.GetCard(2);
+        //            //Card1.transform.SetParent(null);
+        //            //Card2.transform.SetParent(null);
+
+        //            ClueArea.SetCard(Card1, 2);
+        //            ClueArea.SetCard(Card2, 1);
+
+        //            Card1.SwapMove(Card2.transform);
+        //            Card2.SwapMove(Card1.transform);
+
+        //            //  ClueArea.PlaceCard(Card1, 2);
+        //            //  ClueArea.PlaceCard(Card2, 1);
+        //        }
+        //        else if (buttonHit == 2)
+        //        {
+        //            ClueCard Card1 = ClueArea.GetCard(2);
+        //            ClueCard Card2 = ClueArea.GetCard(3);
+
+        //            ClueArea.SetCard(Card1, 3);
+        //            ClueArea.SetCard(Card2, 2);
+
+        //            Card1.SwapMove(Card2.transform);
+        //            Card2.SwapMove(Card1.transform);
+
+        //            //ClueArea.PlaceCard(Card1, 3);
+        //            //ClueArea.PlaceCard(Card2, 2);
+        //        }
+        //    }
+        //}
     }
 
 
@@ -232,6 +289,8 @@ public class PlayerController : GamePlayer {
         if (gamemanager.CurrentTurnStatus == gameManager.TurnStatus.Turn1 || gamemanager.CurrentTurnStatus == gameManager.TurnStatus.Turn2 
             || gamemanager.CurrentTurnStatus == gameManager.TurnStatus.Turn3)
             {
+                Debug.Log("Turn 1 2 or 3");
+                Debug.Log(gamemanager.CurrentCaseOn);
                 if (!ClueArea.CheckForAvailableSpace(gamemanager.CurrentCaseOn) && !CrimeArea.CheckForAvailableSpace(gamemanager.CurrentCaseOn))
                 {
                     endTurnButton.EnableEndTurn();
@@ -241,8 +300,14 @@ public class PlayerController : GamePlayer {
                     endTurnButton.DisableEndTurn();
                 }
             }
+        else if (gamemanager.CurrentTurnStatus == gameManager.TurnStatus.SwitchClueCards)
+        {
+            Debug.Log("Switch Clue cards");
+            endTurnButton.EnableEndTurn();
+        }
         else if (gamemanager.CurrentTurnStatus == gameManager.TurnStatus.PickTileHolmes)
         {
+            Debug.Log("Picking Holmes Tiles");
             if (HolmesTilesToPlace == 0)
             {
                 endTurnButton.EnableEndTurn();
@@ -259,6 +324,7 @@ public class PlayerController : GamePlayer {
         }
         else if( gamemanager.CurrentTurnStatus == gameManager.TurnStatus.PickTileMoriarty)
         {
+            Debug.Log("Picking Moriarty Tiles");
             if (MoriartyTilesToPlace == 0)
             {
                 endTurnButton.EnableEndTurn();
@@ -272,6 +338,10 @@ public class PlayerController : GamePlayer {
             {
                 endTurnButton.DisableEndTurn();
             }
+        }
+        else if (gamemanager.CurrentTurnStatus == gameManager.TurnStatus.BoardInspect)
+        {
+            endTurnButton.EnableEndTurn();
         }
     }
 
@@ -519,14 +589,11 @@ public class PlayerController : GamePlayer {
             {
                 SelectCard(card);
             }
-            else if ((card.GetComponentInParent<CardArea>().ThisRow == CardArea.Row.Clue && b_EnableSwapClueCards))
-            {
-                SelectCard(card);
-            }
             return;
         }
         // if in hand
-        else if (card.GetComponentInParent<CardHand>() && !b_EnableSwapClueCards)
+        else if (card.GetComponentInParent<CardHand>() && !b_EnableSwapClueCards 
+            && card.GetComponentInParent<PlayerController>())
         {
             SelectCard(card);
         }

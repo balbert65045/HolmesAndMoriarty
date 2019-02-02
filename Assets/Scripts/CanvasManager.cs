@@ -84,6 +84,11 @@ public class CanvasManager : MonoBehaviour {
         levelManager.LoadLevel("PhotonMultiplayerLobby");
     }
 
+    public void LoadCardsScene()
+    {
+        levelManager.LoadLevel("Cards");
+    }
+
     // Update is called once per frame
     void Update () {
 		

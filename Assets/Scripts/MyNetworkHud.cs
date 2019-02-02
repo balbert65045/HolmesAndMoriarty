@@ -28,6 +28,7 @@ public class MyNetworkHud : Photon.PunBehaviour {
 
     public void CreateMatch()
     {
+        Debug.Log("Creating Match");
         photonLauncher = FindObjectOfType<PhotonLauncher>();
         if (MatchName.text == "") { Debug.LogWarning("Need room name!"); return;  }
         photonLauncher.MyStartMatch(MatchName.text);
@@ -82,6 +83,14 @@ public class MyNetworkHud : Photon.PunBehaviour {
         ConnectingScreen.SetActive(true);
         MatchesMenu.SetActive(false);
         ConnectingScreen.GetComponentInChildren<NetworkConectionPrompt>().gameObject.GetComponent<Text>().text = "Connecting To " + IpAddressText.text;
+    }
+
+    public void ShowconnectingScreen()
+    {
+        StartMenu.SetActive(false);
+        ConnectingScreen.SetActive(true);
+        MatchesMenu.SetActive(false);
+        ConnectingScreen.GetComponentInChildren<NetworkConectionPrompt>().gameObject.GetComponent<Text>().text = "Rejoining Lobby";
     }
 
     public void StopClientConnect()

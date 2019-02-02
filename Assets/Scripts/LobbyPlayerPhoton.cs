@@ -171,6 +171,7 @@ public class LobbyPlayerPhoton : Photon.PunBehaviour, IPunObservable {
         {
             PT = PlayerType.Random;
         }
+        Ready = false;
         ReadyToggle.GetComponent<ReadyButton>().SetValue(false);
     }
 

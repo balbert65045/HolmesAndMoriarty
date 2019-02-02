@@ -1,9 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Networking;
+//using UnityEngine.Networking;
 
-public class M_SortButton : NetworkBehaviour {
+public class M_SortButton : MonoBehaviour {
 
     public GameObject NumberSortIndicator;
     public GameObject ColorSortIndicator;

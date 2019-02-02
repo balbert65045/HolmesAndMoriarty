@@ -15,4 +15,10 @@ public class SwapButtons : MonoBehaviour {
 	void Update () {
 		
 	}
+
+    public void Swap()
+    {
+        if (FindObjectOfType<PlayerController>() != null) { FindObjectOfType<PlayerController>().SwapClueCards(Button); }
+        else { FindObjectOfType<myPlayer>().GetComponentInChildren<M_PlayerController>().SwapClueCardsButton(Button); }
+    }
 }

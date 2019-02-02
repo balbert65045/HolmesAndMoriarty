@@ -9,20 +9,23 @@ EditorBuildSettings:
     path: Assets/_Scenes/New_Title_Screen.unity
     guid: 369008f26a1b03d4e9ce2632c238d163
   - enabled: 1
-    path: Assets/_Scenes/VerticleLayout.unity
-    guid: d20d02b5e34a63349a40f93fe6cb856b
-  - enabled: 1
-    path: Assets/_Scenes/ScoreScreen.unity
-    guid: 1d642c708fc48b840bfd2ddc5ade0231
-  - enabled: 1
-    path: Assets/_Scenes/MultiplayerLobby.unity
-    guid: 48dfdd0a698c7264db88def46d0ebabe
-  - enabled: 1
     path: Assets/_Scenes/MultiplayerLayout.unity
     guid: 931ae7897164b99439c499749ff5135f
   - enabled: 1
     path: Assets/_Scenes/MultiplayerScoreScreen.unity
     guid: d9e802bafa85b054387ac78c971dfe03
+  - enabled: 1
+    path: Assets/_Scenes/MultiplayerSplashHolmesSceen.unity
+    guid: f18b14f98adf92346bfe89718cdb749a
+  - enabled: 1
+    path: Assets/_Scenes/MultiplayerSplashMoriartySceen.unity
+    guid: f263a1e6ad831f64aa7003200b67c05f
+  - enabled: 1
+    path: Assets/_Scenes/PhotonMultiplayerLobby.unity
+    guid: 29679dde7ea82b148be2422640bd4266
+  - enabled: 1
+    path: Assets/_Scenes/ScoreScreen.unity
+    guid: 1d642c708fc48b840bfd2ddc5ade0231
   - enabled: 1
     path: Assets/_Scenes/SplashHolmesSceen.unity
     guid: 17330977c9c51694290ba643dc825d83
@@ -30,8 +33,14 @@ EditorBuildSettings:
     path: Assets/_Scenes/SplashMoriartySceen.unity
     guid: 3352a17542cc88a4ca989f3bd8187d34
   - enabled: 1
-    path: Assets/_Scenes/MultiplayerMatchmaker.unity
-    guid: 1560895c3bd9d2d4ea04890bf9b9f8a5
+    path: Assets/_Scenes/VerticleLayout.unity
+    guid: d20d02b5e34a63349a40f93fe6cb856b
   - enabled: 1
-    path: Assets/_Scenes/PhotonMultiplayerLobby.unity
-    guid: 29679dde7ea82b148be2422640bd4266
+    path: Assets/_Scenes/M_SplashHolmesSceen.unity
+    guid: 9c19f106a2612c04f9e3e8dca5c83c91
+  - enabled: 1
+    path: Assets/_Scenes/M_SplashMoriartySceen.unity
+    guid: 4f744a77e596b524998311f443562655
+  - enabled: 1
+    path: Assets/_Scenes/Cards.unity
+    guid: 2bb74ea96af7fc9419995f62ebda1cb0

@@ -65,7 +65,7 @@ public class gameManager : MonoBehaviour {
 
         scoreManager = GetComponent<ScoreManager>();
         tilePromptSelection = FindObjectOfType<TileSelectionPrompt>();
-        tilePromptSelection.gameObject.SetActive(false);
+        //tilePromptSelection.gameObject.SetActive(false);
         WinScreen.SetActive(false);
         LoseScreen.SetActive(false);
         ShowAreaText.SetActive(false);
@@ -119,13 +119,15 @@ public class gameManager : MonoBehaviour {
 
         StartCoroutine("PlayersDrawCards");
     }
-	
+
     IEnumerator PlayersDrawCards()
     {
         yield return new WaitForSeconds(1.5f);
         HolmesPlayer.DrawCards(7);
         MoriartyPlayer.DrawCards(7);
         caseArea.PlaceCards();
+        yield return new WaitForSeconds(1.5f);
+        StartCoroutine("PopUpCaseCard", 1);
     }
 
     IEnumerator Reset()
@@ -149,6 +151,8 @@ public class gameManager : MonoBehaviour {
             HolmesScoreThisTurn[i] = false;
             MoriartyScoreThisTurn[i] = false;
         }
+        ChangeTurn(TurnStatus.Turn1);
+        //PlayersDrawCards();
     }
 
     public void PlayerEndTurn(PlayerType PT)
@@ -166,10 +170,15 @@ public class gameManager : MonoBehaviour {
         {
             HolmesEndTurn = false;
             MoriartyEndTurn = false;
-            if (HolmesPlayer.GetComponent<PlayerController>()) { HolmesPlayer.GetComponent<PlayerController>().CheckEndTurn(); }
-            if (MoriartyPlayer.GetComponent<PlayerController>()) { MoriartyPlayer.GetComponent<PlayerController>().CheckEndTurn(); }
             EndTurn();
         }
+    }
+
+    void ChangeTurn(TurnStatus newStatus)
+    {
+        CurrentTurnStatus = newStatus;
+        if (HolmesPlayer.GetComponent<PlayerController>()) { HolmesPlayer.GetComponent<PlayerController>().CheckEndTurn(); }
+        if (MoriartyPlayer.GetComponent<PlayerController>()) { MoriartyPlayer.GetComponent<PlayerController>().CheckEndTurn(); }
     }
 
     public void EndTurn()
@@ -179,26 +188,30 @@ public class gameManager : MonoBehaviour {
             case TurnStatus.Turn1:
                 CurrentCaseOn++;
                 StartCoroutine("SwapCards");
-                CurrentTurnStatus = TurnStatus.Turn2;
+                StartCoroutine("PopUpCaseCard", 2);
+                ChangeTurn(TurnStatus.Turn2);
+
                 break;
 
             case TurnStatus.Turn2:
                 CurrentCaseOn++;
                 StartCoroutine("SwapCards");
-                CurrentTurnStatus = TurnStatus.Turn3;
+                StartCoroutine("PopUpCaseCard", 3);
+                ChangeTurn(TurnStatus.Turn3);
                 break;
 
             case TurnStatus.Turn3:
                 CurrentCaseOn++;
-                tilePromptSelection.gameObject.SetActive(true);
-                tilePromptSelection.gameObject.GetComponent<Text>().text = "Move Clue cards";
+                // tilePromptSelection.gameObject.SetActive(true);
+                //tilePromptSelection.gameObject.GetComponent<Text>().text = "Move Clue cards";
+                tilePromptSelection.SetText("Move Clue cards");
                 foreach (GameObject obj in SwapButtonsObj)
                 {
                     obj.SetActive(true);
                 }
                 HolmesPlayer.EnableSwapClueCards();
                 MoriartyPlayer.EnableSwapClueCards();
-                CurrentTurnStatus = TurnStatus.SwitchClueCards;
+                ChangeTurn(TurnStatus.SwitchClueCards);
                 break;
 
             case TurnStatus.SwitchClueCards:
@@ -207,7 +220,8 @@ public class gameManager : MonoBehaviour {
                 {
                     obj.SetActive(false);
                 }
-                tilePromptSelection.gameObject.SetActive(false);
+                //tilePromptSelection.gameObject.SetActive(false);
+                tilePromptSelection.HideText();
                 HolmesPlayer.DisableSwapClueCards();
                 MoriartyPlayer.DisableSwapClueCards();
 
@@ -217,28 +231,28 @@ public class gameManager : MonoBehaviour {
                 break;
 
             case TurnStatus.PickTileMoriarty:
-                tilePromptSelection.gameObject.SetActive(false);
+                tilePromptSelection.HideText();
+                //tilePromptSelection.gameObject.SetActive(false);
                 if (CheckForPickTileHolmes())
                 {
-                    CurrentTurnStatus = TurnStatus.PickTileHolmes;
+                    ChangeTurn(TurnStatus.PickTileHolmes);
                 }
                 else
                 {
                     CheckForTotalScore();
-                    CurrentTurnStatus = TurnStatus.Turn1;
                 }
                 tileArea.ConfirmTiles();
                 break;
             case TurnStatus.PickTileHolmes:
-                tilePromptSelection.gameObject.SetActive(false);
+                tilePromptSelection.HideText();
+                //tilePromptSelection.gameObject.SetActive(false);
                 tileArea.ConfirmTiles();
                 CheckForTotalScore();
-                CurrentTurnStatus = TurnStatus.Turn1;
                 break;
             case TurnStatus.BoardInspect:
                 tileArea.ConfirmTiles();
                 CheckForTotalScore();
-                CurrentTurnStatus = TurnStatus.Turn1;
+
                 break;
 
         }
@@ -252,6 +266,7 @@ public class gameManager : MonoBehaviour {
         StartCoroutine("Reset");
         StartCoroutine("PlayersDrawCards");
         CurrentCaseOn = 1;
+      
     }
 
     bool CheckForPickTileHolmes()
@@ -274,8 +289,9 @@ public class gameManager : MonoBehaviour {
             if (HolmesPlayer.GetComponent<PlayerController>())
             {         
                 if (HolmesPlayer.GetComponent<PlayerController>() != null) {
-                    tilePromptSelection.gameObject.SetActive(true);
-                    tilePromptSelection.gameObject.GetComponent<Text>().text = " Select " + HolmesCaseWon.Count + " Tiles for Holmes that meet the Case";
+                    tilePromptSelection.SetText(" Select " + HolmesCaseWon.Count + " Tiles for Holmes that meet the Case");
+                    //tilePromptSelection.gameObject.SetActive(true);
+                    //tilePromptSelection.gameObject.GetComponent<Text>().text = " Select " + HolmesCaseWon.Count + " Tiles for Holmes that meet the Case";
                 }
             }
             return true;
@@ -303,22 +319,26 @@ public class gameManager : MonoBehaviour {
         if (MoriartyScore == 2)
         {
             if (HolmesPlayer.GetComponent<PlayerController>() != null) {
-                tilePromptSelection.gameObject.SetActive(true);
-                tilePromptSelection.gameObject.GetComponent<Text>().text = " Select " + (MoriartyScore - 1) + " open tiles for Moriarty";
+                tilePromptSelection.SetText(" Select " + (MoriartyScore - 1) + " open tiles for Moriarty");
+               // tilePromptSelection.gameObject.SetActive(true);
+               // tilePromptSelection.gameObject.GetComponent<Text>().text = " Select " + (MoriartyScore - 1) + " open tiles for Moriarty";
             }
-            CurrentTurnStatus = TurnStatus.PickTileMoriarty;
+           
             HolmesPlayer.PlaceMoriartyTiles(MoriartTile, 1);
+            //ChangeTurn(TurnStatus.PickTileMoriarty);
             return true;
         }
         else if (MoriartyScore == 3)
         {
            
             if (HolmesPlayer.GetComponent<PlayerController>() != null) {
-                tilePromptSelection.gameObject.SetActive(true);
-                tilePromptSelection.gameObject.GetComponent<Text>().text = " Select " + (MoriartyScore - 1) + " open tiles for Moriarty";
+                tilePromptSelection.SetText(" Select " + (MoriartyScore - 1) + " open tiles for Moriarty");
+                //tilePromptSelection.gameObject.SetActive(true);
+                //tilePromptSelection.gameObject.GetComponent<Text>().text = " Select " + (MoriartyScore - 1) + " open tiles for Moriarty";
             }
-            CurrentTurnStatus = TurnStatus.PickTileMoriarty;
+           
             HolmesPlayer.PlaceMoriartyTiles(MoriartTile, 2);
+           // ChangeTurn(TurnStatus.PickTileMoriarty);
             return true;
         }
         else
@@ -356,6 +376,15 @@ public class gameManager : MonoBehaviour {
         FindObjectOfType<LevelManager>().LoadNextLevel();
     }
 
+    IEnumerator PopUpCaseCard(int Case)
+    {
+        CaseCard card = caseArea.FindCaseCard(Case);
+        card.GetComponent<BoxCollider>().enabled = false;
+        card.MoveUp(4);
+        yield return new WaitForSeconds(3);
+        card.MoveBackDown();
+        card.GetComponent<BoxCollider>().enabled = true;
+    }
 
     IEnumerator SwapCards()
     {
@@ -421,15 +450,15 @@ public class gameManager : MonoBehaviour {
 
         if (CheckForPickTileMoriarty())
         {
-            CurrentTurnStatus = TurnStatus.PickTileMoriarty;
+            ChangeTurn(TurnStatus.PickTileMoriarty);
         }
         else if (CheckForPickTileHolmes())
         {
-            CurrentTurnStatus = TurnStatus.PickTileHolmes;
+            ChangeTurn(TurnStatus.PickTileHolmes);
         }
         else
         {
-            CurrentTurnStatus = TurnStatus.BoardInspect;
+            ChangeTurn(TurnStatus.BoardInspect);
         }
         yield return null;
     }

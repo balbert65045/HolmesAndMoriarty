@@ -16,6 +16,8 @@ public class LevelPropertyManager : MonoBehaviour {
     public int NumberofMoriartyCaseWon;
 
     public TileType[,] Tile2DSaved;
+
+    public bool PlotTwistExpansionOn = false;
        
 	void Awake () {
         Screen.orientation = ScreenOrientation.LandscapeLeft;
@@ -57,6 +59,16 @@ public class LevelPropertyManager : MonoBehaviour {
         TotalNumberofRounds = TotRounds;
         NumberofHolmesCaseWon = HolmsWins;
         NumberofMoriartyCaseWon = MoriartyWins;
+    }
+
+    public void SetPlotTwist(bool val)
+    {
+        PlotTwistExpansionOn = val;
+    }
+
+    public bool GetPlotTwist()
+    {
+        return PlotTwistExpansionOn;
     }
 
     // Update is called once per frame

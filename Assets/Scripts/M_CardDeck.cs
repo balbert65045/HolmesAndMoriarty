@@ -16,7 +16,6 @@ public class M_CardDeck : Photon.PunBehaviour, IPunObservable
     {
         foreach (Card card in CardsInDeck)
         {
-            InitialCards.Add(card);
             NumerOfCardsLeft++;
         }
 
@@ -37,6 +36,7 @@ public class M_CardDeck : Photon.PunBehaviour, IPunObservable
 // Using a counter to keep track of the Number of cards removed 
     public int SetCard()
     {
+        Debug.Log(NumerOfCardsLeft);
         int CardIndex = Random.Range(0, NumerOfCardsLeft);
         NumerOfCardsLeft--;
         return (CardIndex);

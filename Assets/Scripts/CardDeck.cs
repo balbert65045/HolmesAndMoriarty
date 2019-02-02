@@ -9,10 +9,10 @@ public class CardDeck : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
-        foreach (Card card in CardsInDeck)
-        {
-            InitialCards.Add(card);
-        }
+        //foreach (Card card in CardsInDeck)
+        //{
+        //    InitialCards.Add(card);
+        //}
 
     }
 
@@ -29,7 +29,9 @@ public class CardDeck : MonoBehaviour {
 
     public Card DrawCard()
     {
+        
         int RandomCardIndex = Random.Range(0, CardsInDeck.Count);
+        Debug.Log(RandomCardIndex);
         Card CardPicked = CardsInDeck[RandomCardIndex];
         CardsInDeck.Remove(CardPicked);
         return (CardPicked);

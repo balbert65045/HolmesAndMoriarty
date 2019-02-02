@@ -14,6 +14,8 @@ public class CardArea : MonoBehaviour {
 
     public RowAreaPosition[] Positions;
 
+    public Card[] Cards = new Card[3];
+
     void Start () {
         Positions = GetComponentsInChildren<RowAreaPosition>();
         for (int i = 0; i < Positions.Length; i++)
@@ -51,7 +53,7 @@ public class CardArea : MonoBehaviour {
 
     public ClueCard GetCard(int Pos)
     {
-        return Positions[Pos - 1].GetComponent<RowAreaPosition>().GetComponentInChildren<ClueCard>();
+        return (ClueCard)Cards[Pos - 1];
     }
 
     public void ActiveSpot(int CaseN)
@@ -89,7 +91,7 @@ public class CardArea : MonoBehaviour {
                 if (RP.GetComponentInChildren<ClueCard>().Number == card.Number)
                 {
                     RP.InUse = false;
-                //    Destroy(RP.GetComponentInChildren<ClueCard>().gameObject);
+                    Cards[RP.Case - 1] = null;
                 }
             }
         }
@@ -120,6 +122,7 @@ public class CardArea : MonoBehaviour {
         card.transform.localRotation = Quaternion.Euler(0, y, z);
         card.transform.localScale = new Vector3(.7f, .246f, .07f);
         Positions[CaseN - 1].InUse = true;
+        Cards[CaseN - 1] = (card);
 
     }
 
@@ -134,10 +137,16 @@ public class CardArea : MonoBehaviour {
         card.transform.localRotation = Quaternion.Euler(0, y, z);
         card.transform.localScale = new Vector3(.7f, .246f, .07f);
         Positions[CaseN - 1].InUse = true;
-
+        Cards[CaseN - 1] = (card);
     }
 
-
+    public void SetCard(ClueCard card, int CaseN)
+    {
+        Cards[CaseN - 1] = card;
+        card.transform.SetParent(Positions[CaseN - 1].transform);
+        Positions[CaseN - 1].InUse = true;
+       // Cards.Add(card);
+    }
 
 
     public void PlaceCard(ClueCard card, int CaseN)
@@ -151,12 +160,12 @@ public class CardArea : MonoBehaviour {
         card.transform.localRotation = Quaternion.Euler(0, y, z);
         card.transform.localScale = new Vector3(.7f, .246f, .07f);
         Positions[CaseN - 1].InUse = true;
-
+        Cards[CaseN - 1] = (card);
     }
 
     public ClueCard FlipCard(int Case)
     {
-        ClueCard card = Positions[Case - 1].GetComponentInChildren<ClueCard>();
+        ClueCard card = (ClueCard)Cards[Case - 1];
 
         // currently flipping card when placing down 
         card.transform.SetParent(Positions[Case - 1].transform);
@@ -167,15 +176,18 @@ public class CardArea : MonoBehaviour {
         card.transform.localRotation = Quaternion.Euler(0, y, z);
         card.transform.localScale = new Vector3(.7f, .246f, .07f);
 
+
         return card;
     }
 
     public void ClearCards()
     {
-        foreach (RowAreaPosition RP in Positions)
+        foreach (ClueCard card in Cards)
         {
+            RowAreaPosition RP = card.GetComponentInParent<RowAreaPosition>();
+            if (RP == null) { Debug.Log("Card got into the wrong area"); }
             RP.InUse = false;
-            ClueCard card = RP.GetComponentInChildren<ClueCard>();
+           // ClueCard card = RP.GetComponentInChildren<ClueCard>();
 
             if (FindObjectOfType<ClueDeck>() == null)
             {
@@ -186,8 +198,11 @@ public class CardArea : MonoBehaviour {
             card.transform.position = FindObjectOfType<CardSpot>().transform.position;
             card.transform.localRotation = Quaternion.Euler(new Vector3(90, 0, 0));
             card.UnfadeCard();
+
+            Cards[RP.Case - 1] = null;
             //    Destroy(RP.GetComponentInChildren<ClueCard>().gameObject);
         }
+       // Cards.Clear();
     }
 
 

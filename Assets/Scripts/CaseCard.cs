@@ -19,13 +19,15 @@ public class CaseCard : Card {
         MovedUp = true;
         OldParent = transform.parent.gameObject;
         Transform MovePos;
+        Debug.Log(this.name);
+        Debug.Log(GetComponentInParent<CaseArea>());
+        Debug.Log(this.transform.parent);
         if (GetComponentInParent<CaseArea>() != null)
         {
              MovePos = GetComponentInParent<CaseArea>().HighPositions[pos - 1];
         }
         else
         {
-            Debug.Log("Finding new Case area");
              MovePos = GetComponentInParent<M_CaseArea>().HighPositions[pos - 1];
         }
         transform.SetParent(MovePos);

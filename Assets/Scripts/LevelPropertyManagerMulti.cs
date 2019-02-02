@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.Networking;
 
 
@@ -18,6 +19,8 @@ public class LevelPropertyManagerMulti : Photon.PunBehaviour, IPunObservable
     public int NumberofMoriartyCaseWon;
 
     public TileType[,] Tile2DSaved;
+
+    public bool LostInThoughtEnabled;
 
     void Awake()
     {

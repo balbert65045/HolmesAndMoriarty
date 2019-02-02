@@ -70,6 +70,7 @@ public class GamePlayer : NetworkBehaviour {
 
     IEnumerator DrawingCards(int Number)
     {
+        Debug.Log("Drawing cards");
         List<ClueCard> cards = new List<ClueCard>();
         for (int i = 0; i < Number; i++)
         {
@@ -91,6 +92,7 @@ public class GamePlayer : NetworkBehaviour {
 
     public void AddNewCards(List<ClueCard> NewCards)
     {
+        Debug.Log("Adding new cards");
         int StartingPosition = 0;
         if (NewCards.Count == 5) { StartingPosition = 1; }
         else if (NewCards.Count == 3) { StartingPosition = 2; }
